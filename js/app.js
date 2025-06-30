@@ -80,6 +80,21 @@ function showMainScreen() {
     mainScreen.classList.add('active');
 }
 
+// Obsługa dodawania znajomych
+function addFriend(userId) {
+  db.collection('users').doc(currentUser.uid).update({
+    friends: firebase.firestore.FieldValue.arrayUnion(userId)
+  });
+}
+
+// Pobieranie listy znajomych
+function loadFriends() {
+  db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
+    const friends = doc.data().friends || [];
+    // Wyświetl znajomych w UI
+  });
+}
+
 // Obsługa wyboru zdjęcia profilowego
 avatarInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
