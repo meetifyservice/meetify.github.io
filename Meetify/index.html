@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetify - Poznawaj nowych ludzi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Ekran logowania -->
+        <div id="login-screen" class="screen active">
+            <div class="logo">
+                <div class="logo-people">
+                    <div class="person" style="background-color: #2263FA;"></div>
+                    <div class="person" style="background-color: #22D4CD;"></div>
+                </div>
+                <h1>Meetify</h1>
+            </div>
+            <p class="subtitle">Poznawaj nowych ludzi</p>
+            <button id="google-login" class="btn login-btn">
+                Zaloguj się przez Google
+            </button>
+        </div>
+
+        <!-- Ekran tworzenia profilu -->
+        <div id="profile-screen" class="screen">
+            <h2>Stwórz swój profil</h2>
+            <div class="avatar-upload">
+                <div class="avatar-preview" id="avatar-preview"></div>
+                <input type="file" id="avatar-input" accept="image/*">
+                <label for="avatar-input" class="btn">Wybierz zdjęcie</label>
+            </div>
+            <div class="form-group">
+                <label for="username">Nazwa użytkownika</label>
+                <input type="text" id="username" placeholder="Wpisz swoją nazwę">
+            </div>
+            <button id="save-profile" class="btn">Zapisz profil</button>
+        </div>
+
+        <!-- Ekran główny -->
+        <div id="main-screen" class="screen">
+            <header>
+                <h2>Meetify</h2>
+                <div class="user-avatar" id="header-avatar"></div>
+            </header>
+            
+            <div class="search-container">
+                <input type="text" id="search-user" placeholder="Szukaj użytkowników...">
+                <button id="search-btn" class="btn">Szukaj</button>
+            </div>
+            
+            <div class="users-list" id="users-list">
+                <!-- Lista użytkowników będzie się tu pojawiać -->
+            </div>
+            
+            <div class="chat-container" id="chat-container">
+                <!-- Czaty będą się tu pojawiać -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
