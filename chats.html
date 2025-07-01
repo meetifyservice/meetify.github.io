@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetify - Czaty</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="js/firebase-config.js" defer></script>
+    <script src="js/chats.js" defer></script>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <img src="images/logo.png" alt="Meetify" class="nav-logo">
+            
+            <div class="nav-icons">
+                <a href="search.html">
+                    <img src="images/lupa.png" alt="Wyszukaj">
+                    <span class="tooltip">Wyszukaj</span>
+                </a>
+                <a href="app.html">
+                    <img src="images/domek.png" alt="Dom">
+                    <span class="tooltip">Dom</span>
+                </a>
+                <a href="create-post.html">
+                    <img src="images/plus.png" alt="Dodaj post">
+                    <span class="tooltip">Dodaj post</span>
+                </a>
+                <a href="discover.html">
+                    <img src="images/strzalki.png" alt="Odkrywaj">
+                    <span class="tooltip">Odkrywaj</span>
+                </a>
+                <a href="chats.html" class="active">
+                    <img src="images/chmura.png" alt="Czaty">
+                    <span class="tooltip">Czaty</span>
+                </a>
+            </div>
+            
+            <div class="profile-icon">
+                <img src="images/av.png" alt="Profil" id="user-avatar">
+                <span class="tooltip">Mój profil</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="chat-container">
+        <div class="chat-sidebar">
+            <div class="chat-list" id="chat-list">
+                <!-- Chaty będą dynamicznie dodawane -->
+            </div>
+        </div>
+
+        <div class="chat-messages">
+            <div class="message-list" id="message-list">
+                <!-- Wiadomości będą dynamicznie dodawane -->
+            </div>
+
+            <div class="message-input">
+                <input type="text" id="message-input" placeholder="Napisz wiadomość...">
+                <button id="send-btn">Wyślij</button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
