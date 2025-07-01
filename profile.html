@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetify - Profil</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/profile.js"></script>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <img src="images/logo.png" alt="Meetify" class="nav-logo">
+            </div>
+            
+            <div class="nav-center">
+                <div class="nav-buttons">
+                    <a href="app.html" class="nav-button">
+                        <img src="images/domek.png" alt="Dom">
+                        <span class="tooltip">Dom</span>
+                    </a>
+                    <a href="search.html" class="nav-button">
+                        <img src="images/lupa.png" alt="Wyszukaj">
+                        <span class="tooltip">Wyszukaj</span>
+                    </a>
+                    <a href="create-post.html" class="nav-button">
+                        <img src="images/plus.png" alt="Dodaj post">
+                        <span class="tooltip">Dodaj post</span>
+                    </a>
+                    <a href="discover.html" class="nav-button">
+                        <img src="images/strzalki.png" alt="Odkrywaj">
+                        <span class="tooltip">Odkrywaj</span>
+                    </a>
+                    <a href="chats.html" class="nav-button">
+                        <img src="images/chmura.png" alt="Czaty">
+                        <span class="tooltip">Czaty</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-right">
+                <div class="profile-icon">
+                    <img src="images/av.png" alt="Profil" id="user-avatar">
+                    <span class="tooltip">Mój profil</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-info">
+                    <img src="images/av.png" alt="Avatar" class="profile-avatar">
+                    <div class="profile-details">
+                        <h1 id="profile-name">Imię Nazwisko</h1>
+                        <p id="profile-bio">Opis użytkownika</p>
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <span id="posts-count">0</span>
+                                <span>Posty</span>
+                            </div>
+                            <div class="stat-item">
+                                <span id="matches-count">0</span>
+                                <span>Matche</span>
+                            </div>
+                            <div class="stat-item">
+                                <span id="followers-count">0</span>
+                                <span>Obserwujący</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn edit-profile-btn">Edytuj profil</button>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="posts">Posty</button>
+                <button class="tab-btn" data-tab="matches">Matche</button>
+                <button class="tab-btn" data-tab="followers">Obserwujący</button>
+            </div>
+
+            <div class="tab-content active" id="posts">
+                <div class="posts-container" id="profile-posts">
+                    <!-- Posty będą ładowane dynamicznie -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="matches">
+                <div class="matches-container" id="profile-matches">
+                    <!-- Matche będą ładowane dynamicznie -->
+                </div>
+            </div>
+
+            <div class="tab-content" id="followers">
+                <div class="followers-container" id="profile-followers">
+                    <!-- Obserwujący będą ładowani dynamicznie -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal edycji profilu -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edytuj profil</h2>
+            <form id="edit-profile-form">
+                <div class="form-group">
+                    <label for="profile-name">Imię i nazwisko</label>
+                    <input type="text" id="profile-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="profile-bio">Bio</label>
+                    <textarea id="profile-bio" placeholder="Opisz siebie..." maxlength="150"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="profile-avatar">Zdjęcie profilowe</label>
+                    <input type="file" id="profile-avatar" accept="image/*">
+                </div>
+                <button type="submit" class="btn">Zapisz zmiany</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
