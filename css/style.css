@@ -32,7 +32,7 @@ body {
     left: 0;
     width: 100%;
     background: white;
-    padding: 10px 0;
+    padding: 15px 0;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     z-index: 1000;
 }
@@ -47,7 +47,6 @@ body {
 }
 
 .nav-left {
-    flex: 1;
     display: flex;
     align-items: center;
 }
@@ -61,45 +60,60 @@ body {
     flex: 2;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    align-items: center;
 }
 
-.nav-icon {
+.nav-buttons {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-button {
     display: flex;
     flex-direction: column;
     align-items: center;
     color: var(--text);
     text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
-.nav-icon img {
+.nav-button img {
     width: 24px;
     height: 24px;
 }
 
-.nav-icon .tooltip {
+.nav-button .tooltip {
     font-size: 12px;
     margin-top: 5px;
+    line-height: 1;
 }
 
-.nav-icon.active {
+.nav-button:hover {
+    background: var(--primary-light);
     color: var(--primary);
 }
 
-.nav-icon.active img {
-    filter: brightness(0) saturate(100%) invert(85%) sepia(1%) saturate(6441%) hue-rotate(195deg) brightness(97%) contrast(97%);
+.nav-button.active {
+    background: var(--primary);
+    color: white;
+}
+
+.nav-button.active img {
+    filter: brightness(1);
 }
 
 .nav-right {
-    flex: 1;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
 }
 
 .profile-icon {
     position: relative;
     cursor: pointer;
+    padding: 8px;
 }
 
 .profile-icon img {
