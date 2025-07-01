@@ -101,8 +101,30 @@ document.getElementById('registration-form')?.addEventListener('submit', async (
 
         window.location.href = 'app.html';
     } catch (error) {
-        errorMessage.textContent = error.message;
-        console.error('Błąd podczas rejestracji:', error);
+        let errorMessageText = '';
+        
+        switch (error.code) {
+            case 'auth/email-already-in-use':
+                errorMessageText = 'Konto z tym adresem email już istnieje!';
+                break;
+            case 'auth/invalid-email':
+                errorMessageText = 'Nieprawidłowy adres email!';
+                break;
+            case 'auth/weak-password':
+                errorMessageText = 'Hasło jest zbyt słabe!';
+                break;
+            case 'auth/user-not-found':
+                errorMessageText = 'Nie znaleziono użytkownika!';
+                break;
+            case 'auth/wrong-password':
+                errorMessageText = 'Nieprawidłowe hasło!';
+                break;
+            default:
+                errorMessageText = error.message;
+        }
+
+        errorMessage.textContent = errorMessageText;
+        console.error('Błąd:', error);
     }
 });
 
