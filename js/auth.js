@@ -13,7 +13,35 @@ document.getElementById('registration-form')?.addEventListener('submit', async (
     const confirmPassword = document.getElementById('confirm-password').value;
     const errorMessage = document.getElementById('error-message');
 
+    // Reset błędu
+    errorMessage.textContent = '';
+
     // Walidacja danych
+    if (!firstName || !lastName) {
+        errorMessage.textContent = 'Imię i nazwisko są wymagane!';
+        return;
+    }
+
+    if (!birthDay || !birthMonth || !birthYear) {
+        errorMessage.textContent = 'Data urodzenia jest wymagana!';
+        return;
+    }
+
+    if (!gender) {
+        errorMessage.textContent = 'Płeć jest wymagana!';
+        return;
+    }
+
+    if (!email) {
+        errorMessage.textContent = 'Email jest wymagany!';
+        return;
+    }
+
+    if (!password || !confirmPassword) {
+        errorMessage.textContent = 'Hasła są wymagane!';
+        return;
+    }
+
     if (password !== confirmPassword) {
         errorMessage.textContent = 'Hasła nie są zgodne!';
         return;
@@ -32,6 +60,16 @@ document.getElementById('registration-form')?.addEventListener('submit', async (
         
         if (birthDate > minDate) {
             errorMessage.textContent = 'Musisz mieć co najmniej 13 lat!';
+            return;
+        }
+
+        // Sprawdź, czy email jest unikalny
+        const existingUser = await db.collection('users')
+            .where('email', '==', email)
+            .get();
+
+        if (!existingUser.empty) {
+            errorMessage.textContent = 'Konto z tym adresem email już istnieje!';
             return;
         }
 
@@ -55,10 +93,16 @@ document.getElementById('registration-form')?.addEventListener('submit', async (
             chats: []
         });
 
-        // Użyj funkcji handleRegistrationSuccess do przekierowania
-        await handleRegistrationSuccess();
+        // Aktualizacja statusu i przekierowanie
+        await db.collection('users').doc(userCredential.user.uid).update({
+            status: 'online',
+            lastSeen: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        window.location.href = 'app.html';
     } catch (error) {
         errorMessage.textContent = error.message;
+        console.error('Błąd podczas rejestracji:', error);
     }
 });
 
