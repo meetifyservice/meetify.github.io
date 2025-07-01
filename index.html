@@ -4,15 +4,193 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meetify - Rejestracja</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-    <script src="js/firebase-config.js" defer></script>
-    <script src="js/auth.js" defer></script>
-</head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        :root {
+            --primary: #2263FA;
+            --secondary: #22D4CD;
+            --text: #333333;
+            --light-gray: #f5f5f5;
+            --border: #dddddd;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+        }
+
+        .form-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .birth-date-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .birth-date-group select {
+            flex: 1;
+            max-width: 100px;
+        }
+
+        .gender-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .gender-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .gender-label input[type="radio"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .gender-label span {
+            color: var(--text);
+            font-size: 15px;
+        }
+
+        .password-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .show-password-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .show-password-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+
+        .show-password-label span {
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(34, 99, 250, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #1a56e0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(34, 99, 250, 0.3);
+        }
+
+        .switch-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .switch-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .switch-text a:hover {
+            color: #1a56e0;
+        }
+
+        .error {
+            color: #ff4444;
+            font-size: 13px;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .form-box {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -32,7 +210,7 @@
                     <input type="text" id="last-name" placeholder="Nazwisko" required>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group birth-date-group">
                     <select id="birth-day" required>
                         <option value="" disabled selected>Dzień</option>
                         <script>
@@ -41,9 +219,7 @@
                             }
                         </script>
                     </select>
-                </div>
 
-                <div class="form-group">
                     <select id="birth-month" required>
                         <option value="" disabled selected>Miesiąc</option>
                         <option value="1">Styczeń</option>
@@ -59,9 +235,7 @@
                         <option value="11">Listopad</option>
                         <option value="12">Grudzień</option>
                     </select>
-                </div>
 
-                <div class="form-group">
                     <select id="birth-year" required>
                         <option value="" disabled selected>Rok</option>
                         <script>
@@ -73,64 +247,44 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <select id="gender" required>
-                        <option value="" disabled selected>Płeć</option>
-                        <option value="male">Mężczyzna</option>
-                        <option value="female">Kobieta</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <input type="email" id="email" placeholder="Email" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="password" id="password" placeholder="Hasło" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="password" id="confirm-password" placeholder="Potwierdź hasło" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" id="bio" placeholder="Opis (opcjonalnie)">
-                </div>
-
-                <div class="form-group">
-                    <input type="text" id="interests" placeholder="Zainteresowania (opcjonalnie)">
-                </div>
-
-                <div class="error" id="error-message"></div>
-
-                <button type="submit" class="btn">Zarejestruj się</button>
-
-                <div class="switch-text">
-                    <p>Masz już konto? <a href="login.html">Zaloguj się</a></p>
-                </div>
-                        <option value="other">Inna</option>
-                    </select>
+                <div class="form-group gender-group">
+                    <label class="gender-label" for="male">
+                        <input type="radio" id="male" name="gender" value="male" required>
+                        <span>Mężczyzna</span>
+                    </label>
+                    <label class="gender-label" for="female">
+                        <input type="radio" id="female" name="gender" value="female" required>
+                        <span>Kobieta</span>
+                    </label>
                 </div>
 
                 <div class="form-group">
                     <input type="email" id="email" placeholder="Adres Gmail" required>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group password-container">
                     <input type="password" id="password" placeholder="Hasło" required>
+                    <label class="show-password-label">
+                        <input type="checkbox" id="show-password">
+                        <span>Pokaż hasło</span>
+                    </label>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group password-container">
                     <input type="password" id="confirm-password" placeholder="Potwierdź hasło" required>
+                    <label class="show-password-label">
+                        <input type="checkbox" id="show-confirm-password">
+                        <span>Pokaż hasło</span>
+                    </label>
                 </div>
 
-                <div id="error-message" class="error"></div>
+                <div class="error" id="error-message"></div>
 
-                <button type="submit" class="btn">Zarejestruj się</button>
+                <button type="submit" class="btn">Dołącz do Meetify</button>
 
-                <p class="switch-text">
-                    Masz już konto? <a href="login.html">Zaloguj się</a>
-                </p>
+                <div class="switch-text">
+                    <p>Masz już konto? <a href="login.html">Zaloguj się</a></p>
+                </div>
             </form>
         </div>
     </div>
@@ -141,7 +295,28 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script src="js/firebase-config.js"></script>
     <script src="js/auth.js"></script>
-            
+    <script>
+        // Funkcja pokazywania/ukrywania hasła
+        function togglePasswordVisibility(inputId, checkboxId) {
+            const input = document.getElementById(inputId);
+            const checkbox = document.getElementById(checkboxId);
+            input.type = checkbox.checked ? 'text' : 'password';
+        }
 
+        // Inicjalizacja pokazywania hasła
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordFields = [
+                { input: 'password', checkbox: 'show-password' },
+                { input: 'confirm-password', checkbox: 'show-confirm-password' }
+            ];
+
+            passwordFields.forEach(field => {
+                const checkbox = document.getElementById(field.checkbox);
+                checkbox.addEventListener('change', () => {
+                    togglePasswordVisibility(field.input, field.checkbox);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

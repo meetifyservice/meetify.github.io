@@ -7,7 +7,7 @@ document.getElementById('registration-form')?.addEventListener('submit', async (
     const birthDay = parseInt(document.getElementById('birth-day').value);
     const birthMonth = parseInt(document.getElementById('birth-month').value);
     const birthYear = parseInt(document.getElementById('birth-year').value);
-    const gender = document.getElementById('gender').value;
+    const gender = document.querySelector('input[name="gender"]:checked').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
