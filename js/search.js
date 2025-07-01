@@ -24,17 +24,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Załaduj avatar użytkownika
         db.collection('users').doc(user.uid).get().then((doc) => {
-            if (doc.exists) {
-                const userData = doc.data();
-                if (userData.avatar) {
-                    userAvatar.src = userData.avatar;
-                }
+            if (!doc.exists) {
+                console.error('Nie znaleziono profilu użytkownika');
+                return;
             }
+            
+            const userData = doc.data();
+            if (userData.avatar) {
+                userAvatar.src = userData.avatar;
+            }
+        }).catch(error => {
+            console.error('Błąd podczas ładowania profilu:', error);
         });
     });
 
     // Obsługa wyszukiwania
     searchInput.addEventListener('input', async (e) => {
+        if (!auth.currentUser) {
+            alert('Musisz być zalogowany, aby wyszukiwać użytkowników');
+            return;
+        }
+
         const query = e.target.value.trim().toLowerCase();
         if (query.length < 2) {
             searchResults.innerHTML = '';
@@ -42,12 +52,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
+            searchResults.innerHTML = '<div class="loading">Wyszukiwanie...</div>';
+            
             const usersSnapshot = await db.collection('users')
                 .get();
+
+            if (!usersSnapshot) {
+                console.error('Nie udało się pobrać użytkowników');
+                searchResults.innerHTML = '<div class="error">Nie udało się załadować użytkowników</div>';
+                return;
+            }
 
             const filteredUsers = [];
             usersSnapshot.forEach((doc) => {
                 const user = doc.data();
+                if (!user) return;
+                
                 if (user.uid !== auth.currentUser.uid && 
                     (user.name?.toLowerCase().includes(query) || 
                      user.email?.toLowerCase().includes(query))) {
@@ -57,6 +77,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
             });
+
+            if (filteredUsers.length === 0) {
+                searchResults.innerHTML = '<div class="no-results">Brak wyników wyszukiwania</div>';
+                return;
+            }
 
             searchResults.innerHTML = '';
             filteredUsers.forEach(user => {
@@ -74,12 +99,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         } catch (error) {
             console.error('Błąd podczas wyszukiwania:', error);
+            searchResults.innerHTML = '<div class="error">Wystąpił błąd podczas wyszukiwania</div>';
         }
     });
 
     // Obsługa matchowania
     window.matchUser = async (userId) => {
         try {
+            if (!auth.currentUser) {
+                alert('Musisz być zalogowany, aby wysłać match');
+                return;
+            }
+
             const matchRef = db.collection('matches').doc();
             await matchRef.set({
                 userId1: auth.currentUser.uid,
