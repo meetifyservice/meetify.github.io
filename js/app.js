@@ -268,25 +268,110 @@ async function sendMessage(chatId, message) {
 
 // Setup event listeners
 function setupEventListeners() {
-    // Modal posta
-    document.getElementById('post-form')?.addEventListener('submit', handleAddPost);
-    
-    // Modal wyszukiwania
-    document.getElementById('search-input')?.addEventListener('input', (e) => {
-        handleSearch(e.target.value);
+    // Obsługa przycisku dodawania posta
+    document.getElementById('add-post-btn').addEventListener('click', () => {
+        document.getElementById('post-modal').style.display = 'block';
     });
-    
-    // Zamykanie modalów
-    document.querySelectorAll('.close').forEach(button => {
+
+    // Obsługa przycisku wyszukiwania
+    document.getElementById('search-btn').addEventListener('click', () => {
+        document.getElementById('search-modal').style.display = 'block';
+    });
+
+    // Obsługa zamykania modalów
+    const closeButtons = document.querySelectorAll('.close');
+    closeButtons.forEach(button => {
         button.addEventListener('click', closeModal);
     });
-    
-    // Obsługa kliknięć poza modalami
+
+    // Obsługa kliknięcia poza modalami
     window.addEventListener('click', (e) => {
         if (e.target.classList.contains('modal')) {
             closeModal();
         }
     });
+
+    // Obsługa wyszukiwania
+    document.getElementById('search-input').addEventListener('input', handleSearch);
+}
+
+// Obsługa wyszukiwania
+async function handleSearch(e) {
+    const query = e.target.value.toLowerCase();
+    if (!query) {
+        // Jeśli pole wyszukiwania jest puste, ukryj wyniki
+        document.querySelector('.search-results').style.display = 'none';
+        return;
+    }
+
+    try {
+        // Pobierz wszystkich użytkowników
+        const usersSnapshot = await db.collection('users').get();
+        const users = [];
+
+        usersSnapshot.forEach(doc => {
+            const userData = doc.data();
+            // Sprawdź, czy użytkownik jest zalogowanym użytkownikiem
+            if (userData.uid !== auth.currentUser.uid) {
+                users.push({
+                    id: doc.id,
+                    ...userData
+                });
+            }
+        });
+
+        // Filtruj użytkowników
+        const filteredUsers = users.filter(user => 
+            user.name.toLowerCase().includes(query) ||
+            user.email.toLowerCase().includes(query)
+        );
+
+        // Wyświetl wyniki
+        displaySearchResults(filteredUsers);
+    } catch (error) {
+        console.error('Błąd podczas wyszukiwania:', error);
+    }
+}
+
+// Wyświetlanie wyników wyszukiwania
+function displaySearchResults(users) {
+    const resultsContainer = document.querySelector('.search-results');
+    if (!resultsContainer) {
+        // Utwórz kontener wyników, jeśli nie istnieje
+        const container = document.createElement('div');
+        container.className = 'search-results';
+        container.style.cssText = `
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 10px;
+            z-index: 1001;
+        `;
+        document.querySelector('.search-bar').appendChild(container);
+    }
+
+    // Przygotuj HTML wyników
+    const html = users.map(user => `
+        <div class="search-result-item">
+            <img src="${user.avatar || 'images/default-avatar.png'}" class="search-result-avatar">
+            <div class="search-result-info">
+                <span class="search-result-name">${user.name}</span>
+                <span class="search-result-email">${user.email}</span>
+            </div>
+            <button class="search-result-action" onclick="handleMatch('${user.id}')">
+                <i class="material-icons">person_add</i>
+            </button>
+        </div>
+    `).join('');
+
+    resultsContainer.innerHTML = html;
+    resultsContainer.style.display = users.length > 0 ? 'block' : 'none';
 }
 
 // Zamykanie modalów
