@@ -68,13 +68,17 @@ body {
 .search-input-container {
     position: relative;
     width: 100%;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
 }
 
 .search-input-container input {
-    width: 100%;
-    padding: 12px 40px 12px 20px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
     font-size: 16px;
     outline: none;
     transition: all 0.3s ease;
@@ -86,13 +90,15 @@ body {
 }
 
 .search-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    margin-left: 10px;
     color: #666;
     font-size: 20px;
-    pointer-events: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-icon:hover {
+    color: var(--primary);
 }
 
 .search-container input:focus {
@@ -105,6 +111,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .loading,
