@@ -43,26 +43,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const usersSnapshot = await db.collection('users')
-                .where('searchTerms', 'array-contains', query)
-                .limit(10)
                 .get();
 
-            searchResults.innerHTML = '';
+            const filteredUsers = [];
             usersSnapshot.forEach((doc) => {
                 const user = doc.data();
-                if (user.uid !== auth.currentUser.uid) {
-                    const result = document.createElement('div');
-                    result.className = 'search-result';
-                    result.innerHTML = `
-                        <img src="${user.avatar || 'images/av.png'}" alt="${user.displayName}" class="search-avatar">
-                        <div class="search-info">
-                            <h3>${user.displayName}</h3>
-                            <p>${user.bio || 'Brak opisu'}</p>
-                        </div>
-                        <button class="match-btn" onclick="matchUser('${user.uid}')">Match</button>
-                    `;
-                    searchResults.appendChild(result);
+                if (user.uid !== auth.currentUser.uid && 
+                    (user.name?.toLowerCase().includes(query) || 
+                     user.email?.toLowerCase().includes(query))) {
+                    filteredUsers.push({
+                        ...user,
+                        id: doc.id
+                    });
                 }
+            });
+
+            searchResults.innerHTML = '';
+            filteredUsers.forEach(user => {
+                const result = document.createElement('div');
+                result.className = 'search-result';
+                result.innerHTML = `
+                    <img src="${user.avatar || 'images/av.png'}" alt="${user.name}" class="search-avatar">
+                    <div class="search-info">
+                        <h3>${user.name}</h3>
+                        <p>${user.email}</p>
+                    </div>
+                    <button class="match-btn" onclick="matchUser('${user.id}')">Match</button>
+                `;
+                searchResults.appendChild(result);
             });
         } catch (error) {
             console.error('Błąd podczas wyszukiwania:', error);
