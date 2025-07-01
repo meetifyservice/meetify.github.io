@@ -5,6 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchResults = document.getElementById('search-results');
     const userAvatar = document.getElementById('user-avatar');
 
+    // Ustawienie stylów dla kontenera wyników
+    searchResults.style.cssText = `
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    `;
+
     // Weryfikacja statusu logowania
     auth.onAuthStateChanged((user) => {
         if (!user) {
