@@ -62,17 +62,37 @@ body {
 }
 
 .search-form {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
-.search-form input {
+.search-input-container {
+    position: relative;
     width: 100%;
-    padding: 12px 20px;
+}
+
+.search-input-container input {
+    width: 100%;
+    padding: 12px 40px 12px 20px;
     border: 1px solid var(--border);
     border-radius: 8px;
     font-size: 16px;
     outline: none;
     transition: all 0.3s ease;
+}
+
+.search-input-container input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(34, 99, 250, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 20px;
+    pointer-events: none;
 }
 
 .search-container input:focus {

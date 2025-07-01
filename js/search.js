@@ -68,9 +68,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const user = doc.data();
                 if (!user) return;
                 
-                if (user.uid !== auth.currentUser.uid && 
-                    (user.name?.toLowerCase().includes(query) || 
-                     user.email?.toLowerCase().includes(query))) {
+                // Sprawdź, czy użytkownik nie jest bieżącym użytkownikiem
+                if (user.uid === auth.currentUser.uid) return;
+
+                // Sprawdź, czy użytkownik ma wymagane pola
+                if (!user.name || !user.email) return;
+
+                // Sprawdź, czy tekst wyszukania pasuje do nazwy lub emaila
+                if (user.name.toLowerCase().includes(query) || 
+                    user.email.toLowerCase().includes(query)) {
                     filteredUsers.push({
                         ...user,
                         id: doc.id
