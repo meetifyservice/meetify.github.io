@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const auth = firebase.auth();
     const db = firebase.firestore();
     
+    // Sprawdź, czy jesteśmy na stronie głównej
+    if (window.location.pathname !== '/app.html') {
+        return;
+    }
+
     // Obsługa kliknięć na logo
     const logo = document.querySelector('.nav-logo');
     if (logo) {

@@ -93,7 +93,12 @@ async function loadUserProfile(uid) {
 async function loadPosts() {
     try {
         const postsContainer = document.getElementById('posts-container');
-        postsContainer.innerHTML = ''; // Wyczyść poprzednie posty
+        if (!postsContainer) {
+            console.error('Nie znaleziono kontenera postów');
+            return;
+        }
+        
+        postsContainer.innerHTML = '<div class="loading">Ładowanie postów...</div>';
 
         // Pobierz posty z bazy danych
         const postsSnapshot = await db.collection('posts')
@@ -101,12 +106,18 @@ async function loadPosts() {
             .limit(10)
             .get();
 
+        if (postsSnapshot.empty) {
+            postsContainer.innerHTML = '<div class="no-posts">Brak postów</div>';
+            return;
+        }
+
         // Pobierz dane użytkowników dla wszystkich postów
         const promises = postsSnapshot.docs.map(async (doc) => {
             const post = doc.data();
             const userDoc = await db.collection('users').doc(post.authorId).get();
             const userData = userDoc.data();
             return {
+                id: doc.id,
                 ...post,
                 authorName: userData?.name || 'Nieznany użytkownik',
                 authorAvatar: userData?.avatar || 'images/av.png'
@@ -117,15 +128,17 @@ async function loadPosts() {
         const postsWithUserData = await Promise.all(promises);
 
         // Utwórz elementy postów
+        postsContainer.innerHTML = '';
         postsWithUserData.forEach(post => {
             const postElement = createPostElement(post);
             postsContainer.appendChild(postElement);
         });
 
-        // Dodaj scroll listener dla ładowania więcej postów
-        window.addEventListener('scroll', handleScroll);
+        // Ustaw event listeners dla nowych przycisków
+        setupEventListeners();
     } catch (error) {
         console.error('Błąd podczas ładowania postów:', error);
+        postsContainer.innerHTML = '<div class="error">Wystąpił błąd podczas ładowania postów</div>';
     }
 }
 
@@ -214,8 +227,6 @@ function createPostElement(post) {
         });
     }
 
-    return postElement;
-}
     return postElement;
 }
 
