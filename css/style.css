@@ -24,7 +24,7 @@ body {
     background: var(--light-gray);
     min-height: 100vh;
     margin: 0;
-    padding-top: 40px; /* Wysokość nagłówka */
+    padding-top: 30px; /* Wysokość nagłówka */
 }
 
 .top-nav {
@@ -35,6 +35,17 @@ body {
     background: white;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     z-index: 1000;
+}
+
+.nav-logo {
+    height: 40px;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover {
+    transform: scale(1.1);
 }
 
 /* WYSZUKIWARKA */
