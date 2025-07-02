@@ -6,8 +6,72 @@ auth.onAuthStateChanged((user) => {
         loadUserProfile(user.uid);
         loadPosts();
         setupEventListeners();
+        
+        // Dodaj obsługę przełączania trybu ciemnego
+        const themeToggle = document.createElement('button');
+        themeToggle.className = 'theme-toggle';
+        themeToggle.innerHTML = '<i class="material-icons">brightness_4</i>';
+        document.body.appendChild(themeToggle);
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+        });
     }
 });
+
+// Obsługa edycji posta
+async function handleEditPost(postId) {
+    const postRef = db.collection('posts').doc(postId);
+    const postDoc = await postRef.get();
+    if (!postDoc.exists) return;
+
+    const post = postDoc.data();
+    const newContent = prompt('Edytuj post:', post.content);
+    
+    if (newContent) {
+        await postRef.update({
+            content: newContent,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        loadPosts();
+    }
+}
+
+// Obsługa usuwania posta
+async function handleDeletePost(postId) {
+    if (!confirm('Czy na pewno chcesz usunąć ten post?')) return;
+
+    try {
+        await db.collection('posts').doc(postId).delete();
+        loadPosts();
+    } catch (error) {
+        console.error('Błąd podczas usuwania posta:', error);
+        alert('Wystąpił błąd podczas usuwania posta!');
+    }
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Like
+    document.querySelectorAll('.like-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleLike(btn.dataset.postId));
+    });
+
+    // Comment
+    document.querySelectorAll('.comment-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleComment(btn.dataset.postId));
+    });
+
+    // Edit
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleEditPost(btn.dataset.postId));
+    });
+
+    // Delete
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleDeletePost(btn.dataset.postId));
+    });
+}
 
 // Ładowanie profilu użytkownika
 async function loadUserProfile(uid) {
@@ -69,6 +133,28 @@ async function loadPosts() {
 function createPostElement(post) {
     const postElement = document.createElement('div');
     postElement.className = 'post';
+    
+    // Dodaj przycisk edycji tylko dla własnych postów
+    const editButton = post.authorId === auth.currentUser.uid ? `
+        <button class="edit-btn" data-post-id="${post.id}">
+            <i class="material-icons">edit</i>
+        </button>
+        <button class="delete-btn" data-post-id="${post.id}">
+            <i class="material-icons">delete</i>
+        </button>
+    ` : '';
+
+    // Dodaj przycisk ulubionych
+    const favoriteButton = `
+        <button class="favorite-btn" data-post-id="${post.id}">
+            <i class="material-icons">${post.favoritesCount ? 'star' : 'star_border'}</i>
+            <span class="favorites-count">${post.favoritesCount || 0}</span>
+        </button>
+    `;
+
+    // Formatuj tekst posta z hashtagami
+    const formattedContent = post.content.replace(/#(\w+)/g, '<a href="#" class="hashtag">#$1</a>');
+
     postElement.innerHTML = `
         <div class="post-header">
             <img src="${post.authorAvatar}" class="post-avatar">
@@ -76,9 +162,15 @@ function createPostElement(post) {
                 <span class="post-author">${post.authorName}</span>
                 <span class="post-time">${formatTime(post.createdAt)}</span>
             </div>
+            ${editButton}
         </div>
-        <div class="post-content">${post.content}</div>
-        ${post.image ? `<img src="${post.image}" class="post-image">` : ''}
+        <div class="post-content">${formattedContent}</div>
+        ${post.image ? `
+        <div class="post-image-container">
+            <div class="loading-spinner"></div>
+            <img src="${post.image}" class="post-image lazy-image">
+        </div>
+        ` : ''}
         <div class="post-actions">
             <button class="like-btn" data-post-id="${post.id}">
                 <i class="material-icons">favorite_border</i>
@@ -89,6 +181,41 @@ function createPostElement(post) {
             </button>
         </div>
     `;
+
+    // Inicjalizacja lazy loading
+    const image = postElement.querySelector('.lazy-image');
+    if (image) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    image.classList.add('loaded');
+                    observer.disconnect();
+                }
+            });
+        });
+        observer.observe(image);
+    }
+
+    // Obsługa hashtagów
+    const hashtags = postElement.querySelectorAll('.hashtag');
+    hashtags.forEach(hashtag => {
+        hashtag.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tag = hashtag.textContent.slice(1);
+            window.location.href = `search.html?tag=${tag}`;
+        });
+    });
+
+    // Obsługa ulubionych
+    const favoriteBtn = postElement.querySelector('.favorite-btn');
+    if (favoriteBtn) {
+        favoriteBtn.addEventListener('click', () => {
+            toggleFavorite(favoriteBtn.dataset.postId);
+        });
+    }
+
+    return postElement;
+}
     return postElement;
 }
 
