@@ -37,8 +37,23 @@ async function loadPosts() {
             .limit(10)
             .get();
 
-        postsSnapshot.forEach(doc => {
+        // Pobierz dane użytkowników dla wszystkich postów
+        const promises = postsSnapshot.docs.map(async (doc) => {
             const post = doc.data();
+            const userDoc = await db.collection('users').doc(post.authorId).get();
+            const userData = userDoc.data();
+            return {
+                ...post,
+                authorName: userData?.name || 'Nieznany użytkownik',
+                authorAvatar: userData?.avatar || 'images/av.png'
+            };
+        });
+
+        // Poczekaj na wszystkie obietnice
+        const postsWithUserData = await Promise.all(promises);
+
+        // Utwórz elementy postów
+        postsWithUserData.forEach(post => {
             const postElement = createPostElement(post);
             postsContainer.appendChild(postElement);
         });
@@ -80,7 +95,7 @@ function createPostElement(post) {
 // Formatowanie czasu posta
 function formatTime(timestamp) {
     const now = new Date();
-    const postTime = new Date(timestamp);
+    const postTime = new Date(timestamp.seconds * 1000);
     const diff = now - postTime;
     
     const minutes = Math.floor(diff / (1000 * 60));
@@ -117,11 +132,15 @@ async function handleAddPost(e) {
             imageUrl = await storageRef.getDownloadURL();
         }
 
+        // Pobierz dane użytkownika
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        const userData = userDoc.data();
+
         // Dodaj post do bazy danych
         await db.collection('posts').add({
             authorId: user.uid,
-            authorName: `${user.firstName} ${user.lastName}`,
-            authorAvatar: user.avatar,
+            authorName: userData?.name || 'Nieznany użytkownik',
+            authorAvatar: userData?.avatar || 'images/av.png',
             content,
             image: imageUrl,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
