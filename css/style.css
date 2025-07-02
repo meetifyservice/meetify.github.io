@@ -24,7 +24,7 @@ body {
     background: var(--light-gray);
     min-height: 100vh;
     margin: 0;
-    padding-top: 60px; /* Wysokość nagłówka */
+    padding-top: 40px; /* Wysokość nagłówka */
 }
 
 .top-nav {
