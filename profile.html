@@ -57,17 +57,30 @@
     <main class="content">
         <div class="profile-container">
             <div class="profile-header">
+                <div class="profile-avatar">
+                    <img id="profile-avatar" src="images/av.png" alt="Avatar">
+                    <div class="change-avatar-btn">
+                        <label for="avatar-upload" class="material-icons">camera_alt</label>
+                        <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                    </div>
+                </div>
                 <div class="profile-info">
-                    <img src="images/av.png" alt="Avatar" class="profile-avatar">
-                    <div class="profile-details">
-                        <h1 id="profile-name">Imię Nazwisko</h1>
-                        <p id="profile-bio">Opis użytkownika</p>
-                        <div class="profile-stats">
-                            <div class="stat-item">
-                                <span id="posts-count">0</span>
-                                <span>Posty</span>
-                            </div>
-                            <div class="stat-item">
+                    <h1 id="profile-name">Nazwa użytkownika</h1>
+                    <p id="profile-email">email@example.com</p>
+                </div>
+                <p id="profile-bio">Opis użytkownika</p>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span id="posts-count">0</span>
+                        <span>Posty</span>
+                    </div>
+                    <div class="stat-item">
+                        <span id="matches-count">0</span>
+                        <span>Matche</span>
+                    </div>
+                    <div class="stat-item">
+                        <span id="followers-count">0</span>
+                        <span>Obserwujący</span>
                                 <span id="matches-count">0</span>
                                 <span>Matche</span>
                             </div>
