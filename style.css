@@ -219,19 +219,20 @@ a:hover {
 .nav-buttons-container {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 }
 
 .nav-button {
     display: flex;
     align-items: center;
-    padding: 8px;
+    gap: 8px;
+    padding: 8px 12px;
     border: none;
     background: none;
     cursor: pointer;
     color: var(--text-color);
     transition: all 0.2s ease;
-    border-radius: 50%;
+    border-radius: 8px;
 }
 
 .nav-button:hover {
