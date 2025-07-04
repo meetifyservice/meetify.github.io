@@ -54,16 +54,16 @@
                         <span>Strona główna</span>
                     </a>
                     <a href="#" class="sidebar-link">
+                        <i class="material-icons">explore</i>
+                        <span>Odkrywaj</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
                         <i class="material-icons">groups</i>
-                        <span>Grupy</span>
+                        <span>Swipe</span>
                     </a>
                     <a href="#" class="sidebar-link">
                         <i class="material-icons">event</i>
-                        <span>Wydarzenia</span>
-                    </a>
-                    <a href="#" class="sidebar-link">
-                        <i class="material-icons">explore</i>
-                        <span>Odkrywaj</span>
+                        <span>Dodaj post</span>
                     </a>
                 </nav>
             </div>
@@ -78,7 +78,7 @@
                         <div class="post-options">
                             <button class="option-btn" id="add-photo-btn">
                                 <i class="material-icons">photo_camera</i>
-                                <span>Foto/Video</span>
+                                <span>Plik</span>
                             </button>
                             <button class="option-btn" id="add-gif-btn">
                                 <i class="material-icons">gif</i>
@@ -95,16 +95,10 @@
             </div>
 
             <div class="right-sidebar">
-                <div class="right-sidebar-section">
-                    <h3>Twoje zainteresowania</h3>
-                    <div class="interests-list">
-                        <!-- Zainteresowania będą wstawiane tutaj -->
-                    </div>
-                </div>
-                <div class="right-sidebar-section">
-                    <h3>Twoje zasoby</h3>
-                    <div class="resources-list">
-                        <!-- Zasoby będą wstawiane tutaj -->
+                <div class="friends-section">
+                    <h3>Znajomi</h3>
+                    <div class="friends-list">
+                        <!-- Lista znajomych będzie wstawiana tutaj -->
                     </div>
                 </div>
             </div>
@@ -140,6 +134,14 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script src="js/firebase-config.js"></script>
+    <script>
+        // Sprawdź czy użytkownik jest zalogowany
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
     <script src="js/app.js"></script>
 </body>
 </html>

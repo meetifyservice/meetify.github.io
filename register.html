@@ -29,13 +29,7 @@
                 
                 <div class="form-group">
                     <label for="password">Hasło</label>
-                    <div class="password-container">
-                        <input type="password" id="password" required>
-                        <label class="show-password">
-                            <input type="checkbox" id="show-password-checkbox">
-                            <span>Pokaż hasło</span>
-                        </label>
-                    </div>
+                    <input type="password" id="password" required>
                 </div>
                 
                 <div class="form-group">
@@ -43,7 +37,7 @@
                     <div class="password-container">
                         <input type="password" id="confirm-password" required>
                         <label class="show-password">
-                            <input type="checkbox" id="show-confirm-password-checkbox">
+                            <input type="checkbox" class="show-password-checkbox" id="show-password-checkbox">
                             <span>Pokaż hasło</span>
                         </label>
                     </div>
@@ -74,5 +68,29 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
     <script src="js/firebase-config.js"></script>
     <script src="js/auth.js"></script>
+    <script>
+        // Obsługa pokazywania/ukrywania hasła w rejestracji
+        document.addEventListener('DOMContentLoaded', function() {
+            const showPasswordCheckbox = document.getElementById('show-password-checkbox');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+
+            showPasswordCheckbox.addEventListener('change', function() {
+                const isPasswordVisible = this.checked;
+                
+                // Aktualizacja typu inputów
+                passwordInput.type = isPasswordVisible ? 'text' : 'password';
+                confirmPasswordInput.type = isPasswordVisible ? 'text' : 'password';
+            });
+        });
+    </script>
+    <script>
+        // Przekieruj po pomyślnym rejestracji
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
 </body>
 </html>

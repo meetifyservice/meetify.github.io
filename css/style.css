@@ -27,6 +27,152 @@ body {
     color: var(--text-color);
 }
 
+/* Strony logowania i rejestracji */
+.login-container, .register-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-color);
+}
+
+.login-box, .register-box {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-header, .register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-logo, .register-logo {
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.login-header h1, .register-header h1 {
+    color: var(--text-color);
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.password-container {
+    position: relative;
+}
+
+.show-password {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-light);
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.show-password input[type="checkbox"] {
+    margin: 0;
+}
+
+/* Style dla pokazywania/ukrywania hasła */
+.show-password-checkbox:checked ~ input[type="password"] {
+    position: relative;
+}
+
+.show-password-checkbox:checked ~ input[type="password"]::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: var(--text-color);
+    pointer-events: none;
+    padding: 12px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.login-btn, .register-btn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.login-btn:hover, .register-btn:hover {
+    background: var(--primary-dark);
+}
+
+.google-btn {
+    background: white;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.google-btn:hover {
+    background: var(--border-color);
+}
+
+.google-btn i {
+    color: #DB4437;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 .content {
     display: grid;
     grid-template-columns: 250px 1fr 300px;
@@ -57,6 +203,8 @@ body {
 .nav-logo {
     height: 40px;
     cursor: pointer;
+    display: block;
+    object-fit: contain;
 }
 
 .search-container {
@@ -120,6 +268,49 @@ body {
 .sidebar-link.active {
     background: var(--primary-light);
     color: white;
+}
+
+/* Sekcja znajomych */
+.friends-section {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+}
+
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 8px;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.friend-item:hover {
+    background: var(--border-color);
+}
+
+.friend-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.friend-name {
+    font-weight: 500;
+    color: var(--text-color);
 }
 
 /* Główna zawartość */
