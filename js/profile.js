@@ -111,6 +111,30 @@ document.addEventListener('DOMContentLoaded', () => {
         // Załaduj dane profilu użytkownika
         loadUserProfile(userId);
 
+        // Dodaj event listener do przycisku edycji
+        const editBtn = document.querySelector('.edit-profile-btn');
+        if (editBtn) {
+            editBtn.addEventListener('click', () => {
+                document.getElementById('edit-profile-modal').style.display = 'block';
+            });
+        }
+
+        // Dodaj event listener do przycisku zamknięcia
+        const closeBtn = document.querySelector('.modal .close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                document.getElementById('edit-profile-modal').style.display = 'none';
+            });
+        }
+
+        // Dodaj event listener do kliknięcia poza modal
+        window.addEventListener('click', (event) => {
+            const modal = document.getElementById('edit-profile-modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
         // Załaduj posty użytkownika
         async function loadPosts(userId) {
             try {
