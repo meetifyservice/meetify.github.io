@@ -12,7 +12,9 @@
     <nav class="top-nav">
         <div class="nav-container">
             <div class="nav-left">
-                <img src="images/logo.png" alt="Meetify" class="nav-logo">
+                <a href="index.html" class="logo-link">
+                    <img src="images/logo.png" alt="Meetify" class="nav-logo">
+                </a>
             </div>
             <div class="nav-center">
                 <div class="search-container">
@@ -35,77 +37,17 @@
                         <span class="tooltip">Powiadomienia</span>
                         <span class="notification-badge" id="notifications-count">0</span>
                     </button>
+                    <a href="profile.html" class="nav-button profile-btn" id="profile-btn">
+                        <img src="images/av.png" alt="Profil">
+                        <span class="tooltip">Profil</span>
+                    </a>
                 </div>
-                <button class="nav-button profile-btn" id="profile-btn">
-                    <img src="images/av.png" alt="Profil">
-                    <span class="tooltip">Profil</span>
-                </button>
             </div>
         </div>
     </nav>
 
     <main>
         <div class="content">
-            <div class="sidebar">
-                <!-- Sidebar content -->
-            </div>
-
-            <div class="main-content">
-                <div class="profile-header">
-                    <div class="profile-cover">
-                        <img src="images/default-cover.jpg" alt="Cover" class="cover-image">
-                    </div>
-                    <div class="profile-actions">
-                        <button class="edit-profile-btn" onclick="openEditModal()">Edytuj profil</button>
-                        <button class="logout-btn" onclick="logout()">Wyloguj się</button>
-                    </div>
-                    <div class="profile-info">
-                        <div class="profile-avatar-container">
-                            <img src="images/default-avatar.png" alt="Avatar" id="profile-avatar" class="profile-avatar">
-                            <label for="avatar-upload" class="change-avatar-btn">
-                                <i class="material-icons">camera_alt</i>
-                            </label>
-                            <input type="file" id="avatar-upload" accept="image/*" hidden>
-                        </div>
-                        <div class="profile-details">
-                            <h1 id="profile-name">Nazwa użytkownika</h1>
-                            <p id="profile-bio">Opis profilu</p>
-                            <div class="profile-stats">
-                                <div class="stat-item">
-                                    <span id="posts-count">0</span>
-                                    <span>Posty</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span id="followers-count">0</span>
-                                    <span>Obserwujący</span>
-                                </div>
-                                <div class="stat-item">
-                                    <span id="following-count">0</span>
-                                    <span>Obserwuję</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="profile-tabs">
-                    <button class="tab-btn active" data-tab="posts">Posty</button>
-                    <button class="tab-btn" data-tab="followers">Obserwujący</button>
-                    <button class="tab-btn" data-tab="following">Obserwuję</button>
-                </div>
-
-                <div class="profile-content">
-                    <div class="tab-content active" id="posts-tab">
-                        <!-- Posty użytkownika -->
-                    </div>
-                    <div class="tab-content" id="followers-tab">
-                        <!-- Lista obserwujących -->
-                    </div>
-                    <div class="tab-content" id="following-tab">
-                        <!-- Lista obserwowanych -->
-                    </div>
-                </div>
-            </div>
         </div>
     </main>
 
