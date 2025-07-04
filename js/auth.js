@@ -93,7 +93,13 @@ async function registerWithGoogle() {
 // Wylogowanie
 async function logout() {
     try {
+        // Wyloguj użytkownika z Firebase
         await auth.signOut();
+        
+        // Czekaj na zakończenie wylogowania
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Przekieruj na stronę logowania
         window.location.href = 'login.html';
     } catch (error) {
         console.error('Błąd wylogowania:', error);
