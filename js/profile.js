@@ -240,8 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         continue;
                     }
 
-                    post.authorName = userData.name;
-                    post.authorAvatar = userData.avatar;
+                    post.authorName = userData.name || 'Brak nazwy';
+                    post.authorAvatar = userData.avatar || 'images/default-avatar.png';
 
                     const postElement = createPostElement(post, doc.id);
                     if (postElement) {
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="post-author">
                         <img src="${post.authorAvatar || 'images/av.png'}" alt="Avatar" class="post-avatar">
                         <div class="post-author-info">
-                            <h3>${post.authorName || 'Nieznany użytkownik'}</h3>
+                            <h3>${post.authorName}</h3>
                             <span class="post-time">${timeAgo}</span>
                         </div>
                     </div>

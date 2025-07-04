@@ -119,7 +119,7 @@ async function loadPosts() {
             return {
                 id: doc.id,
                 ...post,
-                authorName: userData?.name || 'Nieznany użytkownik',
+                authorName: userData?.name || 'Brak nazwy',
                 authorAvatar: userData?.avatar || 'images/av.png'
             };
         });
@@ -277,7 +277,7 @@ async function handleAddPost(e) {
         // Dodaj post do bazy danych
         await db.collection('posts').add({
             authorId: user.uid,
-            authorName: userData?.name || 'Nieznany użytkownik',
+            authorName: userData?.name || 'Brak nazwy',
             authorAvatar: userData?.avatar || 'images/av.png',
             content,
             image: imageUrl,
