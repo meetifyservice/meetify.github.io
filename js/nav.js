@@ -10,8 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Obsługa kliknięć na logo
     const logo = document.querySelector('.nav-logo');
     if (logo) {
-        logo.addEventListener('click', () => {
-            window.location.href = 'app.html';
+        logo.addEventListener('click', (e) => {
+            e.preventDefault(); // Zapobiega domyślnemu zachowaniu
+            const currentPath = window.location.pathname;
+            if (currentPath !== '/app.html') {
+                window.location.href = 'app.html';
+            }
         });
     }
 

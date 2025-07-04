@@ -20,10 +20,32 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Błąd połączenia z bazą danych:', err);
         });
 
+    // Inicjalizacja Firebase
     const auth = firebase.auth();
     const db = firebase.firestore();
+
+    // Sprawdź połączenie z bazą danych
+    db.settings({
+        cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+    });
     
-    // Dodajmy funkcję do debugowania
+    db.enablePersistence()
+        .catch(err => {
+            console.log('Persistence failed: ' + err);
+        });
+
+    db.collection('users').doc('test-connection')
+        .set({
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+            console.log('Połączenie z bazą danych działa');
+        })
+        .catch(err => {
+            console.error('Błąd połączenia z bazą danych:', err);
+        });
+
+    // Debugowanie danych
     async function debugUserData(userId) {
         try {
             const userRef = db.collection('users').doc(userId);
@@ -44,7 +66,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Dodajmy funkcję do debugowania postów
     async function debugPosts() {
         try {
             const postsSnapshot = await db.collection('posts')
@@ -62,13 +83,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Uruchom debugowanie
-    const user = auth.currentUser;
-    if (user) {
-        debugUserData(user.uid);
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+        debugUserData(currentUser.uid);
         debugPosts();
     }
-    const auth = firebase.auth();
-    const db = firebase.firestore();
     const profilePosts = document.getElementById('profile-posts');
     const postsCount = document.getElementById('posts-count');
     const profileName = document.getElementById('profile-name');
@@ -118,6 +137,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     profileName.textContent = userData.name;
                     profileBio.textContent = userData.bio || 'Brak opisu';
                     postsCount.textContent = userData.posts || 0;
+                    // Usuń wyświetlanie emaila
+                    const profileEmail = document.getElementById('profile-email');
+                    if (profileEmail) {
+                        profileEmail.style.display = 'none';
+                    }
                     
                     // Ustaw avatar
                     const profileAvatar = document.getElementById('profile-avatar');
@@ -199,21 +223,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Inicjalizacja modalu
         if (editBtn) {
-            editBtn.addEventListener('click', () => {
+            editBtn.addEventListener('click', async () => {
                 if (modal.style.display === 'block') {
                     modal.style.display = 'none';
                     return;
                 }
                 modal.style.display = 'block';
-                // Wypełnij formularz aktualnymi danymi
-                const userData = db.collection('users').doc(userId).get();
-                userData.then(userDoc => {
+                try {
+                    const userDoc = await db.collection('users').doc(userId).get();
                     if (userDoc.exists) {
                         const data = userDoc.data();
                         form.elements['name'].value = data.name || '';
                         form.elements['bio'].value = data.bio || '';
                     }
-                });
+                } catch (error) {
+                    console.error('Błąd podczas ładowania danych profilu:', error);
+                    alert('Wystąpił błąd podczas ładowania danych profilu');
+                    modal.style.display = 'none';
+                }
             });
         }
 

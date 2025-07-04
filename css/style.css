@@ -123,6 +123,17 @@ body {
     gap: 10px;
 }
 
+.post-author-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.post-author-link:hover {
+    color: var(--primary-dark);
+}
+
 .post-avatar {
     width: 40px;
     height: 40px;
