@@ -124,6 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Inicjalizacja modalu
         if (editBtn) {
             editBtn.addEventListener('click', () => {
+                if (modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                    return;
+                }
                 modal.style.display = 'block';
                 // Wypełnij formularz aktualnymi danymi
                 const userData = db.collection('users').doc(userId).get();
