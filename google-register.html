@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meetify - Rejestracja</title>
+    <title>Meetify - Uzupełnij dane</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -13,10 +13,10 @@
         <div class="register-box">
             <div class="register-header">
                 <img src="images/logo.png" alt="Meetify" class="register-logo">
-                <h1>Dołącz do Meetify</h1>
+                <h1>Uzupełnij swoje dane</h1>
             </div>
             
-            <form id="register-form">
+            <form id="google-register-form">
                 <div class="form-group">
                     <label for="name">Nazwa użytkownika</label>
                     <input type="text" id="name" required>
@@ -43,12 +43,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Hasło</label>
+                    <label for="password">Ustaw hasło</label>
                     <input type="password" id="password" required>
                 </div>
                 
@@ -64,20 +59,13 @@
                 </div>
                 
                 <div class="form-group">
-                    <button type="submit" class="register-btn">Zarejestruj się</button>
-                </div>
-                
-                <div class="form-group">
-                    <button type="button" class="google-btn" onclick="registerWithGoogle()">
-                        <i class="material-icons">google</i>
-                        <span>Zarejestruj się z Google</span>
-                    </button>
-                </div>
-                
-                <div class="form-group">
-                    <p>Masz już konto? <a href="login.html">Zaloguj się</a></p>
+                    <button type="submit" class="register-btn">Zapisz dane</button>
                 </div>
             </form>
+            
+            <div class="form-group">
+                <p>Masz już konto? <a href="login.html">Zaloguj się</a></p>
+            </div>
         </div>
     </div>
 
@@ -89,27 +77,66 @@
     <script src="js/firebase-config.js"></script>
     <script src="js/auth.js"></script>
     <script>
-        // Obsługa pokazywania/ukrywania hasła w rejestracji
+        // Czekaj na załadowanie DOM
         document.addEventListener('DOMContentLoaded', function() {
+            // Sprawdź czy użytkownik jest zalogowany
+            auth.onAuthStateChanged(user => {
+                if (!user) {
+                    window.location.href = 'login.html';
+                }
+            });
+
+            // Obsługa formularza
+            const form = document.getElementById('google-register-form');
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const name = document.getElementById('name').value;
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const gender = document.getElementById('gender').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    alert('Hasła nie są takie same!');
+                    return;
+                }
+
+                try {
+                    // Ustaw hasło dla użytkownika
+                    await auth.currentUser.updatePassword(password);
+
+                    // Zapisz dane użytkownika do Firestore
+                    const userRef = db.collection('users').doc(auth.currentUser.uid);
+                    await userRef.set({
+                        name: name,
+                        firstName: firstName,
+                        lastName: lastName,
+                        gender: gender,
+                        email: auth.currentUser.email,
+                        photoURL: auth.currentUser.photoURL || '',
+                        createdAt: new Date()
+                    });
+
+                    // Przekieruj do strony głównej
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Błąd:', error);
+                    alert('Wystąpił błąd podczas zapisywania danych. Spróbuj ponownie.');
+                }
+            });
+
+            // Obsługa pokazywania hasła
             const showPasswordCheckbox = document.getElementById('show-password-checkbox');
             const passwordInput = document.getElementById('password');
             const confirmPasswordInput = document.getElementById('confirm-password');
 
-            showPasswordCheckbox.addEventListener('change', function() {
-                const isPasswordVisible = this.checked;
-                
-                // Aktualizacja typu inputów
-                passwordInput.type = isPasswordVisible ? 'text' : 'password';
-                confirmPasswordInput.type = isPasswordVisible ? 'text' : 'password';
+            showPasswordCheckbox.addEventListener('change', () => {
+                const type = showPasswordCheckbox.checked ? 'text' : 'password';
+                passwordInput.type = type;
+                confirmPasswordInput.type = type;
             });
-        });
-    </script>
-    <script>
-        // Przekieruj po pomyślnym rejestracji
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                window.location.href = 'index.html';
-            }
         });
     </script>
 </body>

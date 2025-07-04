@@ -21,7 +21,7 @@ async function loadUserProfile(userId) {
             
             // Ustaw avatar
             const profileAvatar = document.getElementById('profile-avatar');
-            profileAvatar.src = userData.avatar;
+            profileAvatar.src = userData.avatar || 'images/av.png';
         }
     } catch (error) {
         console.error('Błąd podczas ładowania profilu:', error);

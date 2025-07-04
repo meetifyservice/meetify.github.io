@@ -19,7 +19,7 @@ async function register(name, email, password) {
         await db.collection('users').doc(user.uid).set({
             name,
             email,
-            avatar: 'images/default-avatar.png',
+            avatar: 'images/av.png',
             bio: '',
             posts: 0,
             followers: 0,
@@ -35,31 +35,24 @@ async function register(name, email, password) {
 }
 
 // Logowanie z Google
-async function signInWithGoogle() {
+async function googleSignIn() {
     try {
         const provider = new firebase.auth.GoogleAuthProvider();
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
-
-        // Sprawdzenie czy użytkownik już istnieje
-        const userDoc = await db.collection('users').doc(user.uid).get();
+        
+        // Sprawdź czy użytkownik już istnieje
+        const userRef = db.collection('users').doc(user.uid);
+        const userDoc = await userRef.get();
+        
         if (!userDoc.exists) {
-            // Utworzenie nowego profilu
-            await db.collection('users').doc(user.uid).set({
-                name: user.displayName,
-                email: user.email,
-                avatar: user.photoURL || 'images/default-avatar.png',
-                bio: '',
-                posts: 0,
-                followers: 0,
-                following: 0,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            // Przekieruj do strony uzupełniania danych
+            window.location.href = 'google-register.html';
+        } else {
+            window.location.href = 'index.html';
         }
-
-        return user;
     } catch (error) {
-        console.error('Błąd logowania z Google:', error);
+        console.error('Błąd logowania:', error);
         throw error;
     }
 }
