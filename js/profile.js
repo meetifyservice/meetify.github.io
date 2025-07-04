@@ -51,8 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     profileBio.textContent = userData.bio || 'Brak opisu';
                     postsCount.textContent = userData.posts || 0;
                     
+                    // Ustaw avatar
+                    const profileAvatar = document.getElementById('profile-avatar');
+                    const userAvatar = document.getElementById('user-avatar');
+                    
                     if (userData.avatar) {
-                        document.getElementById('profile-avatar').src = userData.avatar;
+                        profileAvatar.src = userData.avatar;
+                        userAvatar.src = userData.avatar;
+                    } else {
+                        profileAvatar.src = 'images/default-avatar.png';
+                        userAvatar.src = 'images/default-avatar.png';
                     }
                 }
             } catch (error) {
