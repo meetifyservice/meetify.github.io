@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetify - Rejestracja</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-box">
+            <div class="register-header">
+                <img src="images/logo.png" alt="Meetify" class="register-logo">
+                <h1>Dołącz do Meetify</h1>
+            </div>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="name">Nazwa użytkownika</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Hasło</label>
+                    <div class="password-container">
+                        <input type="password" id="password" required>
+                        <label class="show-password">
+                            <input type="checkbox" id="show-password-checkbox">
+                            <span>Pokaż hasło</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">Potwierdź hasło</label>
+                    <div class="password-container">
+                        <input type="password" id="confirm-password" required>
+                        <label class="show-password">
+                            <input type="checkbox" id="show-confirm-password-checkbox">
+                            <span>Pokaż hasło</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="register-btn">Zarejestruj się</button>
+                </div>
+                
+                <div class="form-group">
+                    <button type="button" class="google-btn" onclick="registerWithGoogle()">
+                        <i class="material-icons">google</i>
+                        <span>Zarejestruj się z Google</span>
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <p>Masz już konto? <a href="login.html">Zaloguj się</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

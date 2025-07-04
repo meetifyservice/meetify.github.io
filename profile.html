@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetify - Profil</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <img src="images/logo.png" alt="Meetify" class="nav-logo">
+            </div>
+            <div class="nav-center">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Szukaj w Meetify">
+                    <i class="material-icons">search</i>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="nav-button" id="create-post-btn">
+                    <img src="images/icons/create-post.svg" alt="Utwórz post">
+                    <span class="tooltip">Utwórz post</span>
+                </button>
+                <button class="nav-button" id="notifications-btn">
+                    <img src="images/icons/notifications.svg" alt="Powiadomienia">
+                    <span class="tooltip">Powiadomienia</span>
+                    <span class="notification-badge" id="notifications-count">0</span>
+                </button>
+                <button class="nav-button" id="messages-btn">
+                    <img src="images/icons/messages.svg" alt="Wiadomości">
+                    <span class="tooltip">Wiadomości</span>
+                </button>
+                <div class="profile-icon" id="profile-btn">
+                    <img src="images/default-avatar.png" alt="Avatar">
+                    <span class="tooltip">Profil</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-banner">
+                    <div class="profile-cover">
+                        <img src="images/default-cover.jpg" alt="Cover">
+                    </div>
+                    <div class="profile-info">
+                        <div class="profile-avatar-container">
+                            <img src="images/default-avatar.png" alt="Avatar" id="profile-avatar">
+                            <label for="avatar-upload" class="change-avatar-btn">
+                                <i class="material-icons">camera_alt</i>
+                            </label>
+                            <input type="file" id="avatar-upload" accept="image/*" hidden>
+                        </div>
+                        <div class="profile-details">
+                            <h1 id="profile-name">Nazwa użytkownika</h1>
+                            <p id="profile-bio">Opis profilu</p>
+                            <div class="profile-stats">
+                                <div class="stat-item">
+                                    <span id="posts-count">0</span>
+                                    <span>Posty</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span id="followers-count">0</span>
+                                    <span>Obserwujący</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span id="following-count">0</span>
+                                    <span>Obserwuję</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="posts">Posty</button>
+                <button class="tab-btn" data-tab="followers">Obserwujący</button>
+                <button class="tab-btn" data-tab="following">Obserwuję</button>
+            </div>
+
+            <div class="profile-content">
+                <div class="tab-content active" id="posts-tab">
+                    <!-- Posty użytkownika -->
+                </div>
+                <div class="tab-content" id="followers-tab">
+                    <!-- Lista obserwujących -->
+                </div>
+                <div class="tab-content" id="following-tab">
+                    <!-- Lista obserwowanych -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal edycji profilu -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edytuj profil</h2>
+            <form id="edit-profile-form">
+                <div class="form-group">
+                    <label for="edit-name">Nazwa użytkownika</label>
+                    <input type="text" id="edit-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-bio">Opis</label>
+                    <textarea id="edit-bio" rows="4"></textarea>
+                </div>
+                <button type="submit" class="save-btn">Zapisz zmiany</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

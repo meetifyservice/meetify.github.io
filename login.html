@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetify - Logowanie</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <img src="images/logo.png" alt="Meetify" class="login-logo">
+                <h1>Logowanie do Meetify</h1>
+            </div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Hasło</label>
+                    <div class="password-container">
+                        <input type="password" id="password" required>
+                        <label class="show-password">
+                            <input type="checkbox" id="show-password-checkbox">
+                            <span>Pokaż hasło</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="login-btn">Zaloguj się</button>
+                </div>
+                
+                <div class="form-group">
+                    <button type="button" class="google-btn" onclick="signInWithGoogle()">
+                        <i class="material-icons">google</i>
+                        <span>Zaloguj się z Google</span>
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <p>Nie masz konta? <a href="register.html">Zarejestruj się</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
