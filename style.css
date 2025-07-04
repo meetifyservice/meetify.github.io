@@ -220,7 +220,7 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 8px 0;
+    flex-wrap: nowrap;
 }
 
 .nav-button {
@@ -235,6 +235,10 @@ a:hover {
     transition: all 0.2s ease;
     border-radius: 8px;
     white-space: nowrap;
+}
+
+.nav-button:hover {
+    background: var(--border-color);
 }
 
 .nav-button:hover {
