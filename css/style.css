@@ -220,7 +220,6 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 8px 0;
     flex-wrap: nowrap;
 }
 
@@ -236,52 +235,10 @@ a:hover {
     transition: all 0.2s ease;
     border-radius: 8px;
     white-space: nowrap;
-    min-width: 120px;
 }
 
 .nav-button:hover {
     background: var(--border-color);
-}
-
-.nav-button img {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.nav-button i {
-    font-size: 24px;
-    margin-right: 8px;
-}
-
-.notification-badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: var(--error-color);
-    color: white;
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 12px;
-    min-width: 16px;
-    text-align: center;
-}
-
-.tooltip {
-    display: none;
-    position: absolute;
-    background: var(--text-color);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 1000;
-}
-
-.nav-button:hover .tooltip {
-    display: block;
 }
 
 .nav-button:hover {
