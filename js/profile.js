@@ -6,6 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const profileName = document.getElementById('profile-name');
     const profileBio = document.getElementById('profile-bio');
     const navLogo = document.querySelector('.nav-logo');
+    const editBtn = document.querySelector('.edit-profile-btn');
+    const modal = document.getElementById('edit-profile-modal');
+    const closeBtn = modal ? modal.querySelector('.close') : null;
+    const form = document.getElementById('edit-profile-form');
+
+    // Sprawdź czy wszystkie elementy są obecne
+    if (!profilePosts || !postsCount || !profileName || !profileBio || !navLogo || !editBtn || !modal || !closeBtn || !form) {
+        console.error('Brak wymaganych elementów w DOM');
+        return;
+    }
 
     // Dodaj event listener do logo
     if (navLogo) {
@@ -111,8 +121,59 @@ document.addEventListener('DOMContentLoaded', () => {
         // Załaduj dane profilu użytkownika
         loadUserProfile(userId);
 
-        // Dodaj event listener do przycisku edycji
-        const editBtn = document.querySelector('.edit-profile-btn');
+        // Inicjalizacja modalu
+        if (editBtn) {
+            editBtn.addEventListener('click', () => {
+                modal.style.display = 'block';
+                // Wypełnij formularz aktualnymi danymi
+                const userData = db.collection('users').doc(userId).get();
+                userData.then(userDoc => {
+                    if (userDoc.exists) {
+                        const data = userDoc.data();
+                        form.elements['name'].value = data.name || '';
+                        form.elements['bio'].value = data.bio || '';
+                    }
+                });
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Obsługa formularza edycji
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = form.elements['name'].value.trim();
+                const bio = form.elements['bio'].value.trim();
+
+                if (!name) {
+                    alert('Imię jest wymagane');
+                    return;
+                }
+
+                try {
+                    await db.collection('users').doc(userId).update({
+                        name,
+                        bio,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                    // Zaktualizuj wyświetlone dane
+                    profileName.textContent = name;
+                    profileBio.textContent = bio;
+
+                    alert('Profil został zaktualizowany!');
+                    modal.style.display = 'none';
+                } catch (error) {
+                    console.error('Błąd podczas edycji profilu:', error);
+                    alert('Wystąpił błąd podczas edycji profilu');
+                }
+            });
+        }
         if (editBtn) {
             editBtn.addEventListener('click', () => {
                 document.getElementById('edit-profile-modal').style.display = 'block';
@@ -138,6 +199,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Załaduj posty użytkownika
         async function loadPosts(userId) {
             try {
+                if (!profilePosts) return;
+
+                // Pokaż spinner ładowania
+                profilePosts.innerHTML = '<div class="loading-spinner"></div>';
+
                 const postsSnapshot = await db.collection('posts')
                     .where('userId', '==', userId)
                     .orderBy('createdAt', 'desc')
@@ -157,11 +223,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     const userDoc = await userRef.get();
                     const userData = userDoc.data();
 
+                    if (!userData) {
+                        console.warn('Nie znaleziono danych użytkownika:', post.userId);
+                        continue;
+                    }
+
                     post.authorName = userData.name;
                     post.authorAvatar = userData.avatar;
 
                     const postElement = createPostElement(post, doc.id);
-                    profilePosts.appendChild(postElement);
+                    if (postElement) {
+                        profilePosts.appendChild(postElement);
+                    }
                 }
             } catch (error) {
                 console.error('Błąd podczas ładowania postów:', error);
