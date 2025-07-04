@@ -216,6 +216,14 @@ a:hover {
 }
 
 /* Przyciski w nagłówku */
+.nav-buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0;
+    flex-wrap: nowrap;
+}
+
 .nav-button {
     display: flex;
     align-items: center;
@@ -226,22 +234,104 @@ a:hover {
     cursor: pointer;
     color: var(--text-color);
     transition: all 0.2s ease;
-    border-radius: 50%;
+    border-radius: 8px;
+    white-space: nowrap;
+    min-width: 120px;
 }
 
 .nav-button:hover {
     background: var(--border-color);
-    border-radius: 8px;
+}
+
+.nav-button img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.nav-button i {
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--error-color);
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    min-width: 16px;
+    text-align: center;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    background: var(--text-color);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+.nav-button:hover .tooltip {
+    display: block;
+}
+
+.nav-button:hover {
+    background: var(--border-color);
+}
+
+.nav-button i {
+    font-size: 24px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--error-color);
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    min-width: 16px;
+    text-align: center;
+}
+
+.profile-btn {
+    position: relative;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.profile-btn:hover {
+    background: var(--border-color);
+}
+
+.profile-btn img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#profile-btn.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 /* Ikonki w przyciskach */
 .nav-button img {
     width: 24px;
     height: 24px;
-}
-
-.nav-button i {
-    font-size: 24px;
 }
 
 .nav-logo {
