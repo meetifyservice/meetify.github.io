@@ -2,33 +2,17 @@
 document.getElementById('registration-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const firstName = document.getElementById('first-name').value;
-    const lastName = document.getElementById('last-name').value;
-    const birthDay = parseInt(document.getElementById('birth-day').value);
-    const birthMonth = parseInt(document.getElementById('birth-month').value);
-    const birthYear = parseInt(document.getElementById('birth-year').value);
-    const gender = document.querySelector('input[name="gender"]:checked').value;
+    const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
     const errorMessage = document.getElementById('error-message');
 
     // Reset błędu
     errorMessage.textContent = '';
 
     // Walidacja danych
-    if (!firstName || !lastName) {
-        errorMessage.textContent = 'Imię i nazwisko są wymagane!';
-        return;
-    }
-
-    if (!birthDay || !birthMonth || !birthYear) {
-        errorMessage.textContent = 'Data urodzenia jest wymagana!';
-        return;
-    }
-
-    if (!gender) {
-        errorMessage.textContent = 'Płeć jest wymagana!';
+    if (!name) {
+        errorMessage.textContent = 'Nazwa użytkownika jest wymagana!';
         return;
     }
 
@@ -37,13 +21,8 @@ document.getElementById('registration-form')?.addEventListener('submit', async (
         return;
     }
 
-    if (!password || !confirmPassword) {
-        errorMessage.textContent = 'Hasła są wymagane!';
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        errorMessage.textContent = 'Hasła nie są zgodne!';
+    if (!password) {
+        errorMessage.textContent = 'Hasło jest wymagane!';
         return;
     }
 
@@ -53,16 +32,6 @@ document.getElementById('registration-form')?.addEventListener('submit', async (
     }
 
     try {
-        // Sprawdź wiek
-        const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
-        const minDate = new Date();
-        minDate.setFullYear(minDate.getFullYear() - 13);
-        
-        if (birthDate > minDate) {
-            errorMessage.textContent = 'Musisz mieć co najmniej 13 lat!';
-            return;
-        }
-
         // Sprawdź, czy email jest unikalny
         const existingUser = await db.collection('users')
             .where('email', '==', email)
@@ -78,10 +47,7 @@ document.getElementById('registration-form')?.addEventListener('submit', async (
         
         // Zapisz dane użytkownika
         await db.collection('users').doc(userCredential.user.uid).set({
-            firstName,
-            lastName,
-            birthDate: new Date(birthYear, birthMonth - 1, birthDay),
-            gender,
+            name,
             email,
             avatar: 'images/av.png',
             bio: '',

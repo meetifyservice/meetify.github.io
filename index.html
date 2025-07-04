@@ -64,8 +64,7 @@
             position: relative;
         }
 
-        .form-group input,
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid var(--border);
@@ -74,65 +73,7 @@
             transition: all 0.3s ease;
         }
 
-        .birth-date-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .birth-date-group select {
-            flex: 1;
-            max-width: 100px;
-        }
-
-        .gender-group {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .gender-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .gender-label input[type="radio"] {
-            width: 20px;
-            height: 20px;
-        }
-
-        .gender-label span {
-            color: var(--text);
-            font-size: 15px;
-        }
-
-        .password-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .show-password-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-
-        .show-password-label input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-        }
-
-        .show-password-label span {
-            color: var(--text);
-            font-size: 14px;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 2px rgba(34, 99, 250, 0.1);
         }
@@ -203,47 +144,7 @@
 
             <form id="registration-form">
                 <div class="form-group">
-                    <input type="text" id="first-name" placeholder="Imię" required>
-                </div>
-
-                <div class="form-group">
-                    <input type="text" id="last-name" placeholder="Nazwisko" required>
-                </div>
-
-                <div class="form-group birth-date-group">
-                    <select id="birth-day" required>
-                        <option value="" disabled selected>Dzień</option>
-                        <script>
-                            for(let i = 1; i <= 31; i++) {
-                                document.write(`<option value="${i}">${i}</option>`);
-                            }
-                        </script>
-                    </select>
-
-                    <select id="birth-month" required>
-                        <option value="" disabled selected>Miesiąc</option>
-                        <option value="1">Styczeń</option>
-                        <option value="2">Luty</option>
-                        <option value="3">Marzec</option>
-                        <option value="4">Kwiecień</option>
-                        <option value="5">Maj</option>
-                        <option value="6">Czerwiec</option>
-                        <option value="7">Lipiec</option>
-                        <option value="8">Sierpień</option>
-                        <option value="9">Wrzesień</option>
-                        <option value="10">Październik</option>
-                        <option value="11">Listopad</option>
-                        <option value="12">Grudzień</option>
-                    </select>
-
-                    <select id="birth-year" required>
-                        <option value="" disabled selected>Rok</option>
-                        <script>
-                            const currentYear = new Date().getFullYear();
-                            for(let i = currentYear; i >= currentYear - 100; i--) {
-                                document.write(`<option value="${i}">${i}</option>`);
-                            }
-                        </script>
+                    <input type="text" id="name" placeholder="Twoja nazwa użytkownika" required>
                     </select>
                 </div>
 

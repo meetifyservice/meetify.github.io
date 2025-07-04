@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Załaduj dane użytkownika
+        // Funkcja do ładowania profilu użytkownika
         async function loadUserProfile(userId) {
             try {
                 const userRef = db.collection('users').doc(userId);
@@ -134,26 +134,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (userDoc.exists) {
                     const userData = userDoc.data();
-                    const fullName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim();
-                    profileName.textContent = fullName || 'Brak nazwy';
-                    profileBio.textContent = userData.bio || 'Brak opisu';
-                    postsCount.textContent = userData.posts || 0;
-                    // Usuń wyświetlanie emaila
-                    const profileEmail = document.getElementById('profile-email');
-                    if (profileEmail) {
-                        profileEmail.style.display = 'none';
-                    }
+                    
+                    // Ustawienie elementów profilu
+                    document.getElementById('profile-name').textContent = userData.name || 'Brak nazwy';
+                    document.getElementById('profile-bio').textContent = userData.bio || 'Brak opisu';
+                    document.getElementById('posts-count').textContent = userData.posts || 0;
                     
                     // Ustaw avatar
                     const profileAvatar = document.getElementById('profile-avatar');
-                    const userAvatar = document.getElementById('user-avatar');
-                    
                     if (userData.avatar) {
                         profileAvatar.src = userData.avatar;
-                        userAvatar.src = userData.avatar;
                     } else {
                         profileAvatar.src = 'images/default-avatar.png';
-                        userAvatar.src = 'images/default-avatar.png';
                     }
                 }
             } catch (error) {
@@ -161,8 +153,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // Obsługa zmiany zdjęcia profilowego
-        async function handleAvatarUpload(event) {
+        // Funkcja do zmiany avataru
+        async function changeAvatar(event) {
             const file = event.target.files[0];
             if (!file) return;
 
