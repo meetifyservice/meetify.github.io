@@ -134,7 +134,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 if (userDoc.exists) {
                     const userData = userDoc.data();
-                    profileName.textContent = userData.name;
+                    const fullName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim();
+                    profileName.textContent = fullName || 'Brak nazwy';
                     profileBio.textContent = userData.bio || 'Brak opisu';
                     postsCount.textContent = userData.posts || 0;
                     // Usuń wyświetlanie emaila
