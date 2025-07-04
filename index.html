@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetify</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-left">
+                <img src="images/logo.png" alt="Meetify" class="nav-logo">
+            </div>
+            <div class="nav-center">
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Szukaj w Meetify">
+                    <i class="material-icons">search</i>
+                </div>
+            </div>
+            <div class="nav-right">
+                <button class="nav-button" id="create-post-btn">
+                    <img src="images/icons/create-post.svg" alt="Utwórz post">
+                    <span class="tooltip">Utwórz post</span>
+                </button>
+                <button class="nav-button" id="notifications-btn">
+                    <img src="images/icons/notifications.svg" alt="Powiadomienia">
+                    <span class="tooltip">Powiadomienia</span>
+                    <span class="notification-badge" id="notifications-count">0</span>
+                </button>
+                <button class="nav-button" id="messages-btn">
+                    <img src="images/icons/messages.svg" alt="Wiadomości">
+                    <span class="tooltip">Wiadomości</span>
+                </button>
+                <div class="profile-icon" id="profile-btn">
+                    <img src="images/default-avatar.png" alt="Avatar">
+                    <span class="tooltip">Profil</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="content">
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <h3>Menu główne</h3>
+                </div>
+                <nav class="sidebar-nav">
+                    <a href="#" class="sidebar-link active">
+                        <i class="material-icons">home</i>
+                        <span>Strona główna</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="material-icons">groups</i>
+                        <span>Grupy</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="material-icons">event</i>
+                        <span>Wydarzenia</span>
+                    </a>
+                    <a href="#" class="sidebar-link">
+                        <i class="material-icons">explore</i>
+                        <span>Odkrywaj</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="main-content">
+                <div class="create-post-section">
+                    <div class="create-post-box">
+                        <div class="post-author">
+                            <img src="images/default-avatar.png" alt="Avatar" class="post-avatar">
+                            <textarea placeholder="O czym chcesz opowiedzieć?" id="post-content"></textarea>
+                        </div>
+                        <div class="post-options">
+                            <button class="option-btn" id="add-photo-btn">
+                                <i class="material-icons">photo_camera</i>
+                                <span>Foto/Video</span>
+                            </button>
+                            <button class="option-btn" id="add-gif-btn">
+                                <i class="material-icons">gif</i>
+                                <span>GIF</span>
+                            </button>
+                            <button class="post-btn">Opublikuj</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="posts-container" id="posts-container">
+                    <!-- Posty będą wstawiane tutaj -->
+                </div>
+            </div>
+
+            <div class="right-sidebar">
+                <div class="right-sidebar-section">
+                    <h3>Twoje zainteresowania</h3>
+                    <div class="interests-list">
+                        <!-- Zainteresowania będą wstawiane tutaj -->
+                    </div>
+                </div>
+                <div class="right-sidebar-section">
+                    <h3>Twoje zasoby</h3>
+                    <div class="resources-list">
+                        <!-- Zasoby będą wstawiane tutaj -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal dodawania zdjęcia -->
+    <div id="add-photo-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Dodaj zdjęcie</h2>
+            <form id="photo-upload-form">
+                <input type="file" id="photo-file" accept="image/*" required>
+                <button type="submit">Dodaj zdjęcie</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal dodawania GIF -->
+    <div id="add-gif-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Dodaj GIF</h2>
+            <div id="gif-search-container">
+                <!-- Kontener dla wyszukiwarki GIF -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
