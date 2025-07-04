@@ -1,4 +1,72 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Sprawdź połączenie z bazą danych
+    firebase.firestore().settings({
+        cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+    });
+    
+    firebase.firestore().enablePersistence()
+        .catch(err => {
+            console.log('Persistence failed: ' + err);
+        });
+
+    firebase.firestore().collection('users').doc('test-connection')
+        .set({
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+            console.log('Połączenie z bazą danych działa');
+        })
+        .catch(err => {
+            console.error('Błąd połączenia z bazą danych:', err);
+        });
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
+    // Dodajmy funkcję do debugowania
+    async function debugUserData(userId) {
+        try {
+            const userRef = db.collection('users').doc(userId);
+            const userDoc = await userRef.get();
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                console.log('Dane użytkownika:', {
+                    id: userId,
+                    name: userData.name,
+                    email: userData.email,
+                    avatar: userData.avatar
+                });
+            } else {
+                console.log('Brak danych użytkownika:', userId);
+            }
+        } catch (error) {
+            console.error('Błąd podczas debugowania:', error);
+        }
+    }
+
+    // Dodajmy funkcję do debugowania postów
+    async function debugPosts() {
+        try {
+            const postsSnapshot = await db.collection('posts')
+                .orderBy('createdAt', 'desc')
+                .limit(5)
+                .get();
+
+            console.log('Debug postów:', postsSnapshot.docs.map(doc => ({
+                id: doc.id,
+                data: doc.data()
+            })));
+        } catch (error) {
+            console.error('Błąd podczas debugowania postów:', error);
+        }
+    }
+
+    // Uruchom debugowanie
+    const user = auth.currentUser;
+    if (user) {
+        debugUserData(user.uid);
+        debugPosts();
+    }
     const auth = firebase.auth();
     const db = firebase.firestore();
     const profilePosts = document.getElementById('profile-posts');
@@ -198,100 +266,13 @@ document.addEventListener('DOMContentLoaded', () => {
             closeBtn.addEventListener('click', () => {
                 document.getElementById('edit-profile-modal').style.display = 'none';
             });
-        }
-
-        // Dodaj event listener do kliknięcia poza modal
-        window.addEventListener('click', (event) => {
-            const modal = document.getElementById('edit-profile-modal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-
-        // Załaduj posty użytkownika
-        async function loadPosts(userId) {
-            try {
-                if (!profilePosts) return;
-
-                // Pokaż spinner ładowania
-                profilePosts.innerHTML = '<div class="loading-spinner"></div>';
-
-                const postsSnapshot = await db.collection('posts')
-                    .where('userId', '==', userId)
-                    .orderBy('createdAt', 'desc')
-                    .get();
-
-                postsCount.textContent = postsSnapshot.size;
-                
-                if (postsSnapshot.empty) {
-                    profilePosts.innerHTML = '<div class="no-posts">Brak postów</div>';
-                    return;
-                }
-
-                profilePosts.innerHTML = '';
-                for (const doc of postsSnapshot.docs) {
-                    const post = doc.data();
-                    const userRef = db.collection('users').doc(post.userId);
-                    const userDoc = await userRef.get();
-                    const userData = userDoc.data();
-
-                    if (!userData) {
-                        console.warn('Nie znaleziono danych użytkownika:', post.userId);
-                        continue;
-                    }
-
-                    post.authorName = userData.name || 'Brak nazwy';
-                    post.authorAvatar = userData.avatar || 'images/default-avatar.png';
-
-                    const postElement = createPostElement(post, doc.id);
-                    if (postElement) {
-                        profilePosts.appendChild(postElement);
-                    }
-                }
-            } catch (error) {
-                console.error('Błąd podczas ładowania postów:', error);
-                profilePosts.innerHTML = '<div class="error">Wystąpił błąd podczas ładowania postów</div>';
-            }
-        }
-
-        // Funkcja do tworzenia elementu posta
-        function createPostElement(post, postId) {
-            const postElement = document.createElement('div');
-            postElement.className = 'post';
-            
-            // Formatowanie czasu
-            const timeAgo = formatTimeAgo(post.createdAt);
-            
-            postElement.innerHTML = `
-                <div class="post-header">
-                    <div class="post-author">
-                        <img src="${post.authorAvatar || 'images/av.png'}" alt="Avatar" class="post-avatar">
-                        <div class="post-author-info">
-                            <h3>${post.authorName}</h3>
-                            <span class="post-time">${timeAgo}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    <p>${post.content}</p>
-                </div>
-                ${post.imageUrl ? `
-                <div class="post-image">
-                    <img src="${post.imageUrl}" alt="Zdjęcie posta">
-                </div>` : ''}
-                <div class="post-actions">
-                    <button class="like-btn">
-                        <span class="material-icons">favorite_border</span>
-                        <span class="like-count">${post.likes || 0}</span>
-                    </button>
-                </div>
-            `;
-
-            return postElement;
-        }
+    }
 
         // Funkcja do formatowania czasu "x czas temu"
         function formatTimeAgo(date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const now = new Date();
             const seconds = Math.floor((now - date) / 1000);
 
