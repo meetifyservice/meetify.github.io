@@ -99,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Przewiń do ostatniej wiadomości
             messageList.scrollTop = messageList.scrollHeight;
+            messageList.scrollTop = messageList.scrollHeight;
         } catch (error) {
             console.error('Błąd podczas ładowania wiadomości:', error);
         }

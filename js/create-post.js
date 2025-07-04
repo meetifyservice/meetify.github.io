@@ -44,6 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const content = postContent.value.trim();
         const file = postImage.files[0];
 
+        // Sprawdź rozmiar zdjęcia
+        if (file && file.size > 5 * 1024 * 1024) { // 5MB
+            alert('Rozmiar zdjęcia nie może przekroczyć 5MB!');
+            return;
+        }
+
         if (!content && !file) {
             alert('Post musi zawierać tekst lub zdjęcie!');
             return;

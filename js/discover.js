@@ -32,7 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const usersSnapshot = await db.collection('users')
                 .where('uid', '!=', auth.currentUser.uid)
                 .limit(10)
+                .orderBy('createdAt', 'desc')
                 .get();
+
+            // Sprawdź czy mamy więcej użytkowników do pokazania
+            const lastVisible = usersSnapshot.docs[usersSnapshot.docs.length - 1];
+            if (lastVisible) {
+                document.getElementById('load-more').style.display = 'block';
+            } else {
+                document.getElementById('load-more').style.display = 'none';
+            }
 
             matchesContainer.innerHTML = '';
             usersSnapshot.forEach((doc) => {

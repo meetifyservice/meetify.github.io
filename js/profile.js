@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const postsCount = document.getElementById('posts-count');
     const profileName = document.getElementById('profile-name');
     const profileBio = document.getElementById('profile-bio');
+    const navLogo = document.querySelector('.nav-logo');
+
+    // Dodaj event listener do logo
+    if (navLogo) {
+        navLogo.addEventListener('click', () => {
+            window.location.href = 'app.html';
+        });
+    }
 
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
@@ -119,11 +127,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 profilePosts.innerHTML = '';
-                postsSnapshot.forEach((doc) => {
+                for (const doc of postsSnapshot.docs) {
                     const post = doc.data();
+                    const userRef = db.collection('users').doc(post.userId);
+                    const userDoc = await userRef.get();
+                    const userData = userDoc.data();
+
+                    post.authorName = userData.name;
+                    post.authorAvatar = userData.avatar;
+
                     const postElement = createPostElement(post, doc.id);
                     profilePosts.appendChild(postElement);
-                });
+                }
             } catch (error) {
                 console.error('Błąd podczas ładowania postów:', error);
                 profilePosts.innerHTML = '<div class="error">Wystąpił błąd podczas ładowania postów</div>';
@@ -141,9 +156,9 @@ document.addEventListener('DOMContentLoaded', () => {
             postElement.innerHTML = `
                 <div class="post-header">
                     <div class="post-author">
-                        <img src="${post.authorAvatar}" alt="Avatar" class="post-avatar">
+                        <img src="${post.authorAvatar || 'images/av.png'}" alt="Avatar" class="post-avatar">
                         <div class="post-author-info">
-                            <h3>${post.authorName}</h3>
+                            <h3>${post.authorName || 'Nieznany użytkownik'}</h3>
                             <span class="post-time">${timeAgo}</span>
                         </div>
                     </div>
