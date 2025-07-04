@@ -241,6 +241,20 @@ a:hover {
     background: var(--border-color);
 }
 
+/* Tooltipy */
+.tooltip {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.nav-button:hover .tooltip {
+    opacity: 1;
+}
+
 .nav-button:hover {
     background: var(--border-color);
 }
