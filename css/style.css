@@ -200,6 +200,51 @@ a:hover {
     align-items: center;
 }
 
+/* Avatar w nagłówku */
+#profile-btn {
+    position: relative;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#profile-btn img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 8px;
+}
+
+/* Przyciski w nagłówku */
+.nav-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--text-color);
+    transition: all 0.2s ease;
+}
+
+.nav-button:hover {
+    background: var(--border-color);
+    border-radius: 8px;
+}
+
+/* Ikonki w przyciskach */
+.nav-button img {
+    width: 24px;
+    height: 24px;
+}
+
+.nav-button i {
+    font-size: 24px;
+}
+
 .nav-logo {
     height: 40px;
     cursor: pointer;
