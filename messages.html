@@ -12,7 +12,9 @@
     <nav class="top-nav">
         <div class="nav-container">
             <div class="nav-left">
-                <img src="images/logo.png" alt="Meetify" class="nav-logo">
+                <a href="index.html" class="logo-link">
+                    <img src="images/logo.png" alt="Meetify" class="nav-logo">
+                </a>
             </div>
             <div class="nav-center">
                 <div class="search-container">
@@ -21,33 +23,26 @@
                 </div>
             </div>
             <div class="nav-right">
-                <button class="nav-button" id="create-post-btn">
-                    <img src="images/icons/create-post.svg" alt="Utwórz post">
-                    <span class="tooltip">Utwórz post</span>
-                </button>
-                <button class="nav-button" id="notifications-btn">
-                    <img src="images/icons/notifications.svg" alt="Powiadomienia">
-                    <span class="tooltip">Powiadomienia</span>
-                    <span class="notification-badge" id="notifications-count">0</span>
-                </button>
-                <div class="profile-icon" id="profile-btn">
-                    <img src="images/default-avatar.png" alt="Avatar">
-                    <span class="tooltip">Profil</span>
+                <div class="nav-buttons-container">
+                    <button class="nav-button" id="create-post-btn">
+                        <i class="material-icons">add</i>
+                        <span class="tooltip">Utwórz post</span>
+                    </button>
+                    <button class="nav-button" id="notifications-btn">
+                        <div class="notification-icon">
+                            <i class="material-icons">mail</i>
+                            <span class="notification-badge" id="notifications-count">0</span>
+                        </div>
+                        <span class="tooltip">Powiadomienia</span>
+                    </button>
+                    <a href="profile.html" class="nav-button profile-btn" id="profile-btn">
+                        <img src="images/av.png" alt="Profil">
+                        <span class="tooltip">Profil</span>
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
-
-    <main>
-        <div class="messages-container">
-            <div class="messages-sidebar">
-                <div class="messages-header">
-                    <h2>Wiadomości</h2>
-                    <button class="new-message-btn">
-                        <i class="material-icons">chat</i>
-                        <span>Nowa wiadomość</span>
-                    </button>
-                </div>
                 
                 <div class="messages-list">
                     <!-- Lista rozmów -->
