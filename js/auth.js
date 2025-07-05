@@ -27,20 +27,25 @@ async function register(username, email, password, day, month, year, firstName, 
         const user = userCredential.user;
 
         // Zapisanie danych użytkownika w Firestore
-        await db.collection('users').doc(user.uid).set({
-            username: username,  // zmieniono z name na username
-            email: email,
-            avatar: 'images/av.png',
-            bio: '',
-            posts: 0,
-            followers: 0,
-            following: 0,
-            birthDate: birthDate.toISOString(),
-            firstName: firstName,
-            lastName: lastName,
-            gender: gender,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
+        try {
+            await db.collection('users').doc(user.uid).set({
+                username: username,
+                email: email,
+                avatar: 'images/av.png',
+                bio: '',
+                posts: 0,
+                followers: 0,
+                following: 0,
+                birthDate: birthDate.toISOString(),
+                firstName: firstName,
+                lastName: lastName,
+                gender: gender,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (firestoreError) {
+            console.error('Błąd zapisu do Firestore:', firestoreError);
+            throw new Error('Nie udało się zapisać danych użytkownika');
+        }
 
         return user;
     } catch (error) {
