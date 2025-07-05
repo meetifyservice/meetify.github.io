@@ -10,10 +10,14 @@ async function login(email, password) {
 }
 
 // Rejestracja
-async function register(name, email, password) {
+async function register(name, email, password, day, month, year) {
     try {
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
+
+        // Utwórz datę urodzenia
+        const birthDate = new Date(year, month - 1, day);
+        const birthDateStr = birthDate.toISOString();
 
         // Zapisanie danych użytkownika w Firestore
         await db.collection('users').doc(user.uid).set({
@@ -24,6 +28,7 @@ async function register(name, email, password) {
             posts: 0,
             followers: 0,
             following: 0,
+            birthDate: birthDateStr,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 

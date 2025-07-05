@@ -3,12 +3,26 @@ function formatDate(date) {
     return new Date(date).toLocaleString();
 }
 
-// Ładowanie profilu użytkownika
-async function loadUserProfile(userId) {
-    try {
-        const userRef = db.collection('users').doc(userId);
-        const userDoc = await userRef.get();
+// Funkcja do obliczania wieku
+function calculateAge(birthDate) {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+        age--;
+    }
+    return age;
+}
 
+// Funkcja do ładowania profilu
+async function loadUserProfile() {
+    try {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const userDoc = await db.collection('users').doc(user.uid).get();
         if (userDoc.exists) {
             const userData = userDoc.data();
             
@@ -22,6 +36,20 @@ async function loadUserProfile(userId) {
             // Ustaw avatar
             const profileAvatar = document.getElementById('profile-avatar');
             profileAvatar.src = userData.avatar || 'images/av.png';
+
+            // Ustawiamy zdjęcie profilowe
+            const profileImage = document.getElementById('profile-image');
+            profileImage.src = userData.avatar || 'images/default-avatar.png';
+
+            // Ustawiamy nazwę użytkownika
+            const profileName = document.getElementById('profile-name');
+            profileName.textContent = userData.name || user.displayName || 'Nazwa użytkownika';
+
+            // Obliczamy i wyświetlamy wiek
+            if (userData.birthDate) {
+                const age = calculateAge(userData.birthDate);
+                document.getElementById('age').textContent = age;
+            }
         }
     } catch (error) {
         console.error('Błąd podczas ładowania profilu:', error);
