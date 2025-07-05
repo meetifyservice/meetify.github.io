@@ -12,12 +12,19 @@ async function login(email, password) {
 // Rejestracja
 async function register(name, email, password, day, month, year) {
     try {
+        // Sprawdź poprawność danych
+        if (!name || !email || !password || !day || !month || !year) {
+            throw new Error('Wszystkie pola są wymagane');
+        }
+
+        // Sprawdź czy rok jest poprawny
+        const birthDate = new Date(year, month - 1, day);
+        if (birthDate > new Date()) {
+            throw new Error('Data urodzenia nie może być w przyszłości');
+        }
+
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
-
-        // Utwórz datę urodzenia
-        const birthDate = new Date(year, month - 1, day);
-        const birthDateStr = birthDate.toISOString();
 
         // Zapisanie danych użytkownika w Firestore
         await db.collection('users').doc(user.uid).set({
@@ -28,7 +35,7 @@ async function register(name, email, password, day, month, year) {
             posts: 0,
             followers: 0,
             following: 0,
-            birthDate: birthDateStr,
+            birthDate: birthDate.toISOString(),
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
 
@@ -117,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             try {
                 await login(email, password);
-                window.location.href = 'app.html';
+                window.location.href = 'index.html';
             } catch (error) {
                 alert('Błąd logowania: ' + error.message);
             }
@@ -141,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 await register(name, email, password);
-                window.location.href = 'app.html';
+                window.location.href = 'index.html';
             } catch (error) {
                 alert('Błąd rejestracji: ' + error.message);
             }
