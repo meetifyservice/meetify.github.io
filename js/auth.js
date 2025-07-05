@@ -10,10 +10,10 @@ async function login(email, password) {
 }
 
 // Rejestracja
-async function register(name, email, password, day, month, year) {
+async function register(name, email, password, day, month, year, firstName, lastName, gender) {
     try {
         // Sprawdź poprawność danych
-        if (!name || !email || !password || !day || !month || !year) {
+        if (!name || !email || !password || !day || !month || !year || !firstName || !lastName || !gender) {
             throw new Error('Wszystkie pola są wymagane');
         }
 
@@ -36,6 +36,9 @@ async function register(name, email, password, day, month, year) {
             followers: 0,
             following: 0,
             birthDate: birthDate.toISOString(),
+            firstName: firstName,
+            lastName: lastName,
+            gender: gender,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
 

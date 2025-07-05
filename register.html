@@ -306,6 +306,9 @@
                     const day = document.getElementById('day').value;
                     const month = document.getElementById('month').value;
                     const year = document.getElementById('year').value;
+                    const firstName = document.getElementById('firstName').value;
+                    const lastName = document.getElementById('lastName').value;
+                    const gender = document.getElementById('gender').value;
 
                     if (password !== confirmPassword) {
                         alert('Hasła nie są takie same!');
@@ -317,7 +320,7 @@
                     }
 
                     try {
-                        await register(name, email, password, day, month, year);
+                        await register(name, email, password, day, month, year, firstName, lastName, gender);
                         window.location.href = 'index.html';
                     } catch (error) {
                         alert('Błąd rejestracji: ' + error.message);

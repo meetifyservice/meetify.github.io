@@ -33,12 +33,14 @@ async function loadUserProfile() {
             const profileImage = document.getElementById('profile-image');
             if (profileImage) {
                 profileImage.src = userData.avatar || 'images/av.png';
+                console.log('Ustawiono zdjęcie profilowe:', userData.avatar || 'images/av.png');
             }
 
             // Wczytaj nazwę użytkownika
             const profileName = document.getElementById('profile-name');
             if (profileName) {
-                profileName.textContent = userData.name;
+                profileName.textContent = userData.name || 'Nazwa użytkownika';
+                console.log('Ustawiono nazwę użytkownika:', userData.name || 'Nazwa użytkownika');
             }
 
             // Wczytaj wiek
@@ -47,6 +49,7 @@ async function loadUserProfile() {
                 const ageElement = document.getElementById('age');
                 if (ageElement) {
                     ageElement.textContent = age;
+                    console.log('Ustawiono wiek:', age);
                 }
             }
 
@@ -54,22 +57,26 @@ async function loadUserProfile() {
             const postsCount = document.getElementById('posts-count');
             if (postsCount) {
                 postsCount.textContent = userData.posts || 0;
+                console.log('Ustawiono liczbę postów:', userData.posts || 0);
             }
 
             const followersCount = document.getElementById('followers-count');
             if (followersCount) {
                 followersCount.textContent = userData.followers || 0;
+                console.log('Ustawiono liczbę obserwujących:', userData.followers || 0);
             }
 
             const followingCount = document.getElementById('following-count');
             if (followingCount) {
                 followingCount.textContent = userData.following || 0;
+                console.log('Ustawiono liczbę obserwowanych:', userData.following || 0);
             }
 
             // Wczytaj bio
             const bioElement = document.getElementById('profile-bio').querySelector('p');
             if (bioElement) {
                 bioElement.textContent = userData.bio || 'Brak opisu';
+                console.log('Ustawiono bio:', userData.bio || 'Brak opisu');
             }
         } else {
             console.error('Nie znaleziono dokumentu użytkownika');
