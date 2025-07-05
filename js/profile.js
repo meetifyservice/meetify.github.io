@@ -21,27 +21,45 @@ async function loadUserProfile() {
     try {
         const user = auth.currentUser;
         if (!user) {
+            console.log('Brak zalogowanego użytkownika');
             window.location.href = 'login.html';
             return;
         }
 
+        console.log('UID użytkownika:', user.uid);
+        
         const userDoc = await db.collection('users').doc(user.uid).get();
+        console.log('Dokument użytkownika:', userDoc.exists ? 'istnieje' : 'nie istnieje');
+        
         if (userDoc.exists) {
             const userData = userDoc.data();
+            console.log('Dane użytkownika:', userData);
             
             // Ustawiamy zdjęcie profilowe
             const profileImage = document.getElementById('profile-image');
-            profileImage.src = userData.avatar || 'images/av.png';
+            if (profileImage) {
+                profileImage.src = userData.avatar || 'images/av.png';
+                console.log('Ustawiono zdjęcie profilowe:', userData.avatar || 'images/av.png');
+            }
 
             // Ustawiamy nazwę użytkownika
             const profileName = document.getElementById('profile-name');
-            profileName.textContent = userData.name || 'Nazwa użytkownika';
+            if (profileName) {
+                profileName.textContent = userData.name || 'Nazwa użytkownika';
+                console.log('Ustawiono nazwę użytkownika:', userData.name || 'Nazwa użytkownika');
+            }
 
             // Obliczamy i wyświetlamy wiek
             if (userData.birthDate) {
                 const age = calculateAge(userData.birthDate);
-                document.getElementById('age').textContent = age;
+                const ageElement = document.getElementById('age');
+                if (ageElement) {
+                    ageElement.textContent = age;
+                    console.log('Ustawiono wiek:', age);
+                }
             }
+        } else {
+            console.log('Nie znaleziono dokumentu użytkownika');
         }
     } catch (error) {
         console.error('Błąd podczas ładowania profilu:', error);
