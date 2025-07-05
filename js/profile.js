@@ -5,11 +5,11 @@ function formatDate(date) {
 
 // Funkcja do obliczania wieku
 function calculateAge(birthDate) {
+    if (!birthDate) return null;
     const today = new Date();
     const birth = new Date(birthDate);
     let age = today.getFullYear() - birth.getFullYear();
     const m = today.getMonth() - birth.getMonth();
-    
     if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
         age--;
     }
@@ -36,22 +36,26 @@ async function loadUserProfile() {
                 console.log('Ustawiono zdjęcie profilowe:', userData.avatar || 'images/av.png');
             }
 
-            // Wczytaj nazwę użytkownika
+            // Wczytaj nazwę użytkownika i username
             const profileName = document.getElementById('profile-name');
             if (profileName) {
-                profileName.textContent = userData.name || 'Nazwa użytkownika';
-                console.log('Ustawiono nazwę użytkownika:', userData.name || 'Nazwa użytkownika');
+                // Utwórz pełną nazwę: "Imię Nazwisko, wiek"
+                const fullName = `${userData.firstName} ${userData.lastName}`;
+                const age = calculateAge(userData.birthDate);
+                const fullNameWithAge = `${fullName}, ${age}`;
+                
+                // Ustaw pełną nazwę
+                profileName.textContent = fullNameWithAge;
+                console.log('Ustawiono pełną nazwę:', fullNameWithAge);
             }
 
-            // Wczytaj wiek
-            if (userData.birthDate) {
-                const age = calculateAge(userData.birthDate);
-                const ageElement = document.getElementById('age');
-                if (ageElement) {
-                    ageElement.textContent = age;
-                    console.log('Ustawiono wiek:', age);
-                }
-            }
+            // Dodaj username poniżej nazwy
+            const usernameElement = document.createElement('p');
+            usernameElement.className = 'username';
+            usernameElement.textContent = `@${userData.username}`;
+            profileName.parentNode.insertBefore(usernameElement, profileName.nextSibling);
+
+
 
             // Wczytaj statystyki
             const postsCount = document.getElementById('posts-count');

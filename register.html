@@ -21,8 +21,8 @@
 
             <form id="register-form">
                 <div class="form-group">
-                    <label for="name">Nazwa użytkownika</label>
-                    <input type="text" id="name" required>
+                    <label for="username">Nazwa użytkownika</label>
+                    <input type="text" id="username" required>
                 </div>
                 
                 <div class="form-group">
@@ -299,7 +299,7 @@
                 document.getElementById('register-form').addEventListener('submit', async (e) => {
                     e.preventDefault();
                     
-                    const name = document.getElementById('name').value;
+                    const username = document.getElementById('username').value;
                     const email = document.getElementById('email').value;
                     const password = document.getElementById('password').value;
                     const confirmPassword = document.getElementById('confirm-password').value;
@@ -320,7 +320,7 @@
                     }
 
                     try {
-                        await register(name, email, password, day, month, year, firstName, lastName, gender);
+                        await register(username, email, password, day, month, year, firstName, lastName, gender);
                         window.location.href = 'index.html';
                     } catch (error) {
                         alert('Błąd rejestracji: ' + error.message);

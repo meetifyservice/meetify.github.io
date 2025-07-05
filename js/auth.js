@@ -10,10 +10,10 @@ async function login(email, password) {
 }
 
 // Rejestracja
-async function register(name, email, password, day, month, year, firstName, lastName, gender) {
+async function register(username, email, password, day, month, year, firstName, lastName, gender) {
     try {
         // Sprawdź poprawność danych
-        if (!name || !email || !password || !day || !month || !year || !firstName || !lastName || !gender) {
+        if (!username || !email || !password || !day || !month || !year || !firstName || !lastName || !gender) {
             throw new Error('Wszystkie pola są wymagane');
         }
 
@@ -28,7 +28,7 @@ async function register(name, email, password, day, month, year, firstName, last
 
         // Zapisanie danych użytkownika w Firestore
         await db.collection('users').doc(user.uid).set({
-            name: name,
+            username: username,  // zmieniono z name na username
             email: email,
             avatar: 'images/av.png',
             bio: '',
