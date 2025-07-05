@@ -23,7 +23,7 @@ function createPostElement(postData) {
         <div class="post-header">
             <img src="${postData.avatar || 'images/default-avatar.png'}" class="post-avatar">
             <div>
-                <h4>${postData.name}</h4>
+                <h4>@${postData.username}</h4>
                 <span class="post-time">${formatDate(postData.timestamp)}</span>
             </div>
         </div>
@@ -68,6 +68,7 @@ async function loadUserProfile(userId) {
         if (userDoc.exists) {
             const userData = userDoc.data();
             document.getElementById('profile-btn').querySelector('img').src = userData.avatar || 'images/default-avatar.png';
+            document.getElementById('profile-btn').querySelector('span').textContent = `@${userData.username}`;
         }
     } catch (error) {
         console.error('Błąd podczas ładowania profilu:', error);
