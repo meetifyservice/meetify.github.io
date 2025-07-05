@@ -7,24 +7,35 @@ function initializeNavbarButtons() {
     const messagesBtn = document.getElementById('messages-btn');
     const profileBtn = document.getElementById('profile-btn');
 
+    // Funkcja do bezpiecznego przekierowania
+    function safeRedirect(url) {
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                window.location.href = url;
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+    }
+
     // Obsługa przycisku powiadomień
     if (notificationsBtn) {
         notificationsBtn.addEventListener('click', () => {
-            window.location.href = 'notifications.html';
+            safeRedirect('notifications.html');
         });
     }
 
     // Obsługa przycisku wiadomości
     if (messagesBtn) {
         messagesBtn.addEventListener('click', () => {
-            window.location.href = 'messages.html';
+            safeRedirect('messages.html');
         });
     }
 
     // Obsługa przycisku profilu
     if (profileBtn) {
         profileBtn.addEventListener('click', () => {
-            window.location.href = 'profile.html';
+            safeRedirect('profile.html');
         });
     }
 }
