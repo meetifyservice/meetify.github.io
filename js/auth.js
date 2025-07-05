@@ -139,10 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('name').value;
+            const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
+            const day = document.getElementById('day').value;
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const gender = document.getElementById('gender').value;
 
             if (password !== confirmPassword) {
                 alert('Hasła nie są takie same!');
@@ -150,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                await register(name, email, password);
+                await register(username, email, password, day, month, year, firstName, lastName, gender);
                 window.location.href = 'index.html';
             } catch (error) {
                 alert('Błąd rejestracji: ' + error.message);
