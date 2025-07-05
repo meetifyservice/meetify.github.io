@@ -2,11 +2,6 @@
 
 // Inicjalizacja przycisków banera
 function initializeNavbarButtons() {
-    // Przyciski banera
-    const notificationsBtn = document.getElementById('notifications-btn');
-    const messagesBtn = document.getElementById('messages-btn');
-    const profileBtn = document.getElementById('profile-btn');
-
     // Funkcja do bezpiecznego przekierowania
     function safeRedirect(url) {
         auth.onAuthStateChanged(user => {
@@ -18,26 +13,22 @@ function initializeNavbarButtons() {
         });
     }
 
-    // Obsługa przycisku powiadomień
-    if (notificationsBtn) {
-        notificationsBtn.addEventListener('click', () => {
-            safeRedirect('notifications.html');
-        });
-    }
-
-    // Obsługa przycisku wiadomości
-    if (messagesBtn) {
-        messagesBtn.addEventListener('click', () => {
-            safeRedirect('messages.html');
-        });
-    }
-
-    // Obsługa przycisku profilu
-    if (profileBtn) {
-        profileBtn.addEventListener('click', () => {
-            safeRedirect('profile.html');
-        });
-    }
+    // Inicjalizacja przycisków
+    const buttons = document.querySelectorAll('.nav-button');
+    buttons.forEach(button => {
+        const id = button.id;
+        const urls = {
+            'notifications-btn': 'notifications.html',
+            'messages-btn': 'messages.html',
+            'profile-btn': 'profile.html'
+        };
+        
+        if (urls[id]) {
+            button.addEventListener('click', () => {
+                safeRedirect(urls[id]);
+            });
+        }
+    });
 }
 
 // Inicjalizacja po załadowaniu strony
