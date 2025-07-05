@@ -21,8 +21,8 @@ async function register(name, email, password, day, month, year) {
 
         // Zapisanie danych użytkownika w Firestore
         await db.collection('users').doc(user.uid).set({
-            name,
-            email,
+            name: name,
+            email: email,
             avatar: 'images/av.png',
             bio: '',
             posts: 0,
@@ -30,7 +30,7 @@ async function register(name, email, password, day, month, year) {
             following: 0,
             birthDate: birthDateStr,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        }, { merge: true });
 
         return user;
     } catch (error) {
