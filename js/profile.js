@@ -20,30 +20,22 @@ function calculateAge(birthDate) {
 async function loadUserProfile() {
     try {
         const user = auth.currentUser;
-        if (!user) return;
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
 
         const userDoc = await db.collection('users').doc(user.uid).get();
         if (userDoc.exists) {
             const userData = userDoc.data();
             
-            // Ustawienie danych profilu
-            document.getElementById('profile-name').textContent = userData.name;
-            document.getElementById('profile-bio').textContent = userData.bio;
-            document.getElementById('posts-count').textContent = userData.posts;
-            document.getElementById('followers-count').textContent = userData.followers;
-            document.getElementById('following-count').textContent = userData.following;
-            
-            // Ustaw avatar
-            const profileAvatar = document.getElementById('profile-avatar');
-            profileAvatar.src = userData.avatar || 'images/av.png';
-
             // Ustawiamy zdjęcie profilowe
             const profileImage = document.getElementById('profile-image');
-            profileImage.src = userData.avatar || 'images/default-avatar.png';
+            profileImage.src = userData.avatar || 'images/av.png';
 
             // Ustawiamy nazwę użytkownika
             const profileName = document.getElementById('profile-name');
-            profileName.textContent = userData.name || user.displayName || 'Nazwa użytkownika';
+            profileName.textContent = userData.name || 'Nazwa użytkownika';
 
             // Obliczamy i wyświetlamy wiek
             if (userData.birthDate) {

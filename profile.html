@@ -60,7 +60,23 @@
                 </div>
             </div>
             <div class="profile-content">
-                <!-- Dodatkowe sekcje profilu -->
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="posts-count">0</span>
+                        <span class="stat-label">Posty</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="followers-count">0</span>
+                        <span class="stat-label">Obserwujący</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="following-count">0</span>
+                        <span class="stat-label">Obserwowani</span>
+                    </div>
+                </div>
+                <div class="profile-bio" id="profile-bio">
+                    <p>Brak opisu</p>
+                </div>
             </div>
         </div>
     </main>
@@ -94,7 +110,7 @@
         // Sprawdź czy użytkownik jest zalogowany
         auth.onAuthStateChanged(user => {
             }
-        });
+        );
     </script>
     <script src="js/common.js"></script>
 </body>
