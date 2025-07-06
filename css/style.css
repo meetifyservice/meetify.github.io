@@ -55,6 +55,7 @@ body {
 }
 
 .edit-profile-btn {
+    margin-left:auto;
 
     padding: 8px 16px;
     background-color: var(--primary-color);
@@ -358,6 +359,7 @@ a:hover {
 }
 
 .profile-avatar {
+    flex:0 0 auto;
     width: 150px;
     height: 150px;
     border-radius: 50%;
