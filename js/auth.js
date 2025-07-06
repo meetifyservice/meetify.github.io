@@ -37,7 +37,8 @@ async function register(username, email, password, day, month, year, firstName, 
 
         // Zapisanie danych użytkownika w Firestore
         try {
-            await db.collection('users').doc(user.uid).set({
+            console.log('Próba zapisu do Firestore dla UID:', user.uid);
+            const userData = {
                 username: username,
                 email: email,
                 avatar: 'images/av.png',
@@ -50,10 +51,19 @@ async function register(username, email, password, day, month, year, firstName, 
                 lastName: lastName,
                 gender: gender,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            };
+            console.log('Dane użytkownika:', userData);
+            
+            await db.collection('users').doc(user.uid).set(userData);
+            console.log('Zapisano dane użytkownika pomyślnie');
         } catch (firestoreError) {
-            console.error('Błąd zapisu do Firestore:', firestoreError);
-            throw new Error('Nie udało się zapisać danych użytkownika');
+            console.error('Szczegóły błędu Firestore:', {
+                message: firestoreError.message,
+                code: firestoreError.code,
+                name: firestoreError.name,
+                stack: firestoreError.stack
+            });
+            throw new Error('Nie udało się zapisać danych użytkownika. Szczegóły: ' + firestoreError.message);
         }
 
         return user;
@@ -153,26 +163,44 @@ document.addEventListener('DOMContentLoaded', () => {
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
+            
+            // Pobierz wartości z formularza
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
-            const day = document.getElementById('day').value;
-            const month = document.getElementById('month').value;
-            const year = document.getElementById('year').value;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
+            const day = parseInt(document.getElementById('day').value);
+            const month = parseInt(document.getElementById('month').value);
+            const year = parseInt(document.getElementById('year').value);
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
             const gender = document.getElementById('gender').value;
+
+            // Sprawdź poprawność danych
+            if (!username || !email || !password || !confirmPassword || !day || !month || !year || !firstName || !lastName || !gender) {
+                alert('Wszystkie pola są wymagane!');
+                return;
+            }
 
             if (password !== confirmPassword) {
                 alert('Hasła nie są takie same!');
                 return;
             }
 
+            // Sprawdź czy email ma poprawny format
+            if (!email.includes('@') || !email.includes('.')) {
+                alert('Nieprawidłowy format email!');
+                return;
+            }
+
             try {
+                console.log('Próba rejestracji z danymi:', {
+                    username, email, day, month, year, firstName, lastName, gender
+                });
                 await register(username, email, password, day, month, year, firstName, lastName, gender);
                 window.location.href = 'index.html';
             } catch (error) {
+                console.error('Błąd rejestracji:', error);
                 alert('Błąd rejestracji: ' + error.message);
             }
         });
