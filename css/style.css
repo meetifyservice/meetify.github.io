@@ -55,6 +55,7 @@ body {
 }
 
 .edit-profile-btn {
+    margin-left: auto;
     padding: 8px 16px;
     background-color: var(--primary-color);
     color: white;
