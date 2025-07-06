@@ -1,6 +1,11 @@
 // Logowanie
 async function login(email, password) {
     try {
+        // Sprawdź czy Firebase jest zainicjalizowane
+        if (!auth) {
+            throw new Error('Firebase nie jest zainicjalizowane');
+        }
+
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
         return userCredential.user;
     } catch (error) {
@@ -12,6 +17,10 @@ async function login(email, password) {
 // Rejestracja
 async function register(username, email, password, day, month, year, firstName, lastName, gender) {
     try {
+        // Sprawdź czy Firebase jest zainicjalizowane
+        if (!auth) {
+            throw new Error('Firebase nie jest zainicjalizowane');
+        }
         // Sprawdź poprawność danych
         if (!username || !email || !password || !day || !month || !year || !firstName || !lastName || !gender) {
             throw new Error('Wszystkie pola są wymagane');
