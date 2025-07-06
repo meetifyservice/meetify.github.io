@@ -359,6 +359,8 @@ a:hover {
 }
 
 .profile-header .edit-profile-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
     margin-left: auto;
 }
 
@@ -376,7 +378,7 @@ a:hover {
 .profile-header {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 20px;
     flex-wrap: nowrap;
     margin-bottom: 30px;
