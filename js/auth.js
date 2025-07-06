@@ -50,8 +50,8 @@ async function register(username, email, password, day, month, year, firstName, 
                 firstName: firstName,
                 lastName: lastName,
                 gender: gender,
-                // Zapisujemy natywną datę JS
-                createdAt: new Date()
+                // Zapisujemy Timestamp Firestore
+                createdAt: firebase.firestore.Timestamp.now()
             };
             console.log('Dane użytkownika:', userData);
             
@@ -113,7 +113,8 @@ async function registerWithGoogle() {
             posts: 0,
             followers: 0,
             following: 0,
-            createdAt: new Date()
+            // Zapisujemy Timestamp Firestore
+            createdAt: firebase.firestore.Timestamp.now()
         });
 
         return user;
