@@ -49,11 +49,11 @@ async function loadUserProfile() {
                 console.log('Ustawiono pełną nazwę:', fullNameWithAge);
             }
 
-            // Dodaj username poniżej nazwy
-            const usernameElement = document.createElement('p');
-            usernameElement.className = 'username';
-            usernameElement.textContent = `@${userData.username}`;
-            profileName.parentNode.insertBefore(usernameElement, profileName.nextSibling);
+            // Ustaw username w przygotowanym elemencie
+            const usernameElement = document.getElementById('profile-username');
+            if (usernameElement) {
+                usernameElement.textContent = `@${userData.username}`;
+            }
 
 
 
