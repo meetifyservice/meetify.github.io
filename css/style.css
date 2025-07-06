@@ -376,7 +376,9 @@ a:hover {
 .profile-header {
     display: flex;
     align-items: center;
-    gap: 30px;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: nowrap;
     margin-bottom: 30px;
 }
 
