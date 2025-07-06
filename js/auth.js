@@ -51,7 +51,7 @@ async function register(username, email, password, day, month, year, firstName, 
                 lastName: lastName,
                 gender: gender,
                 // Używamy globalnego FieldValue
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: FieldValue.serverTimestamp()
             };
             console.log('Dane użytkownika:', userData);
             
