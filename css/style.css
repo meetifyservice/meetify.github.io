@@ -27,6 +27,48 @@ body {
     color: var(--text-color);
 }
 
+/* Style dla profilu */
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-info {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+}
+
+.profile-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+#profile-name {
+    font-size: 24px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.edit-profile-btn {
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.edit-profile-btn:hover {
+    background-color: var(--primary-dark);
+}
+
 /* Strony logowania i rejestracji */
 .login-container, .register-container {
     min-height: 100vh;
