@@ -30,15 +30,17 @@ body {
 /* Style dla profilu */
 .profile-header {
     display: flex;
-    flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
+    padding: 20px;
+    gap: 20px;
 }
 
 .profile-info {
-    width: 100%;
-    max-width: 600px;
-    margin-top: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .profile-header-row {
@@ -369,6 +371,14 @@ a:hover {
     color: var(--text-light);
 }
 
+.profile-name-age {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
 .profile-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -385,12 +395,11 @@ a:hover {
 }
 
 .profile-avatar {
-    flex:0 0 auto;
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid var(--primary-color);
+    margin-right: 20px;
 }
 
 .profile-avatar img {
