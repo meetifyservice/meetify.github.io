@@ -16,6 +16,23 @@ function calculateAge(birthDate) {
     return age;
 }
 
+// Funkcje modalu edycji profilu
+window.openModal = function() {
+    const modal = document.getElementById('edit-profile-modal');
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+window.closeModal = function() {
+    const modal = document.getElementById('edit-profile-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
 // Funkcja do ładowania profilu
 async function loadUserProfile() {
     try {
@@ -97,23 +114,6 @@ async function loadUserProfile() {
         }
     } catch (error) {
         console.error('Błąd podczas ładowania profilu:', error);
-    }
-}
-
-// Funkcje modalu edycji profilu
-window.openModal = function() {
-    const modal = document.getElementById('edit-profile-modal');
-    if (modal) {
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-window.closeModal = function() {
-    const modal = document.getElementById('edit-profile-modal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
     }
 }
 
