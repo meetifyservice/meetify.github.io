@@ -67,7 +67,7 @@ body {
     cursor: pointer;
     font-size: 12px;
     transition: background-color 0.2s;
-    min-width: 20px;
+    min-width: auto;
     white-space: nowrap;
 }
 
@@ -199,7 +199,6 @@ input[type="password"]:focus {
 }
 
 button {
-    width: 100%;
     padding: 12px;
     border: none;
     border-radius: 8px;
@@ -207,6 +206,8 @@ button {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    width: auto;
+    white-space: nowrap;
 }
 
 .login-btn, .register-btn {
