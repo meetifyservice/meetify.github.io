@@ -430,7 +430,28 @@ a:hover {
 .profile-content {
     margin-top: 20px;
     padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.profile-bio {
+    margin-bottom: 20px;
+}
+
+.profile-bio h3 {
+    font-size: 16px;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.profile-bio p {
+    color: var(--text-light);
+    line-height: 1.5;
+    font-size: 14px;
+    word-break: break-word;
+    max-width: 600px;
 }
 
 .profile-btn:hover {
