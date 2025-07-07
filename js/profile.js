@@ -101,7 +101,7 @@ async function loadUserProfile() {
 }
 
 // Funkcje modalu edycji profilu
-function openModal() {
+window.openModal = function() {
     const modal = document.getElementById('edit-profile-modal');
     if (modal) {
         modal.style.display = 'block';
@@ -109,7 +109,7 @@ function openModal() {
     }
 }
 
-function closeModal() {
+window.closeModal = function() {
     const modal = document.getElementById('edit-profile-modal');
     if (modal) {
         modal.style.display = 'none';
