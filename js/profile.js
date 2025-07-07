@@ -17,21 +17,26 @@ function calculateAge(birthDate) {
 }
 
 // Funkcje modalu edycji profilu
-window.openModal = function() {
-    const modal = document.getElementById('edit-profile-modal');
-    if (modal) {
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
+window.modal = {
+    open: function() {
+        const modal = document.getElementById('edit-profile-modal');
+        if (modal) {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        } else {
+            console.error('Nie znaleziono modalu edycji profilu');
+        }
+    },
+    close: function() {
+        const modal = document.getElementById('edit-profile-modal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        } else {
+            console.error('Nie znaleziono modalu edycji profilu');
+        }
     }
-}
-
-window.closeModal = function() {
-    const modal = document.getElementById('edit-profile-modal');
-    if (modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-    }
-}
+};
 
 // Funkcja do ładowania profilu
 async function loadUserProfile() {
@@ -136,7 +141,7 @@ window.saveProfileChanges = async function() {
             }
 
             // Zamknij modal
-            closeModal();
+            window.modal.close();
         }
     } catch (error) {
         console.error('Błąd podczas zapisywania zmian profilu:', error);
@@ -255,47 +260,61 @@ async function savePost(content, image) {
 }
 
 // Inicjalizacja po załadowaniu strony
-document.addEventListener('DOMContentLoaded', () => {
-    // Dodanie event listenerów
+window.addEventListener('DOMContentLoaded', () => {
+    console.log('Strona załadowana, inicjalizacja event listenerów');
+    
+    // Przycisk edycji profilu
     const editProfileBtn = document.getElementById('edit-profile-btn');
     if (editProfileBtn) {
-        editProfileBtn.addEventListener('click', openModal);
+        console.log('Dodawanie event listenera dla przycisku edycji profilu');
+        editProfileBtn.addEventListener('click', window.modal.open);
+    } else {
+        console.error('Nie znaleziono przycisku edycji profilu');
     }
 
+    // Zamykanie modalu
     const closeBtn = document.querySelector('.close');
     if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
+        console.log('Dodawanie event listenera dla przycisku zamknięcia modalu');
+        closeBtn.addEventListener('click', window.modal.close);
+    } else {
+        console.error('Nie znaleziono przycisku zamknięcia modalu');
     }
 
+    // Formularz edycji profilu
     const editForm = document.getElementById('edit-profile-form');
     if (editForm) {
+        console.log('Dodawanie event listenera dla formularza edycji profilu');
         editForm.addEventListener('submit', (e) => {
             e.preventDefault();
             window.saveProfileChanges();
         });
+    } else {
+        console.error('Nie znaleziono formularza edycji profilu');
     }
 
+    // Zmiana avataru
     const avatarInput = document.getElementById('edit-avatar');
     if (avatarInput) {
+        console.log('Dodawanie event listenera dla zmiany avataru');
         avatarInput.addEventListener('change', (e) => {
             window.changeAvatar(e);
         });
+    } else {
+        console.error('Nie znaleziono pola input dla avataru');
     }
 
+    // Przycisk zapisu zmian
     const saveBtn = document.querySelector('.save-btn');
     if (saveBtn) {
+        console.log('Dodawanie event listenera dla przycisku zapisu zmian');
         saveBtn.addEventListener('click', (e) => {
             e.preventDefault();
             window.saveProfileChanges();
         });
+    } else {
+        console.error('Nie znaleziono przycisku zapisu zmian');
     }
-
-    // Obsługa zmiany avataru
-    const avatarUpload = document.getElementById('avatar-upload');
-    if (avatarUpload) {
-        avatarUpload.addEventListener('change', changeAvatar);
-    }
-
     // Obsługa edycji profilu
     const editProfileForm = document.getElementById('edit-profile-form');
     if (editProfileForm) {
