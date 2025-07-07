@@ -41,7 +41,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
     margin-right: auto;
 }
 
@@ -377,10 +377,10 @@ a:hover {
 .profile-name-age {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     font-size: 24px;
     font-weight: 600;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
 .profile-container {
