@@ -31,6 +31,7 @@ body {
 .profile-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 20px;
     padding: 20px;
     gap: 20px;
@@ -41,6 +42,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    margin-right: auto;
 }
 
 .profile-header-row {
@@ -57,8 +59,6 @@ body {
 }
 
 .edit-profile-btn {
-    margin-left:auto;
-
     padding: 8px 16px;
     background-color: var(--primary-color);
     color: white;
@@ -377,6 +377,7 @@ a:hover {
     gap: 10px;
     font-size: 24px;
     font-weight: 600;
+    margin-bottom: 5px;
 }
 
 .profile-container {
