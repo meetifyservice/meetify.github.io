@@ -67,7 +67,7 @@ body {
     cursor: pointer;
     font-size: 12px;
     transition: background-color 0.2s;
-    min-width: 100px;
+    min-width: 20px;
     white-space: nowrap;
 }
 
