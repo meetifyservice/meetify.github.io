@@ -55,8 +55,6 @@ async function loadUserProfile() {
                 usernameElement.textContent = `@${userData.username}`;
             }
 
-
-
             // Wczytaj statystyki
             const postsCount = document.getElementById('posts-count');
             if (postsCount) {
@@ -82,11 +80,86 @@ async function loadUserProfile() {
                 bioElement.textContent = userData.bio || 'Brak opisu';
                 console.log('Ustawiono bio:', userData.bio || 'Brak opisu');
             }
+
+            // Wypełnij formularz edycji profilu
+            const editName = document.getElementById('edit-name');
+            const editBio = document.getElementById('edit-bio');
+            if (editName) editName.value = userData.username;
+            if (editBio) editBio.value = userData.bio;
+
+            // Ustaw podgląd zdjęcia
+            const previewImage = document.getElementById('preview-image');
+            if (previewImage) {
+                previewImage.src = userData.avatar || 'images/av.png';
+            }
         } else {
             console.error('Nie znaleziono dokumentu użytkownika');
         }
     } catch (error) {
         console.error('Błąd podczas ładowania profilu:', error);
+    }
+}
+
+// Funkcje modalu edycji profilu
+function openModal() {
+    const modal = document.getElementById('edit-profile-modal');
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeModal() {
+    const modal = document.getElementById('edit-profile-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+// Zapisz zmiany profilu
+async function saveProfileChanges() {
+    try {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const editName = document.getElementById('edit-name');
+        const editBio = document.getElementById('edit-bio');
+
+        if (editName && editBio) {
+            await db.collection('users').doc(user.uid).update({
+                username: editName.value,
+                bio: editBio.value
+            });
+
+            // Zaktualizuj wyświetlane dane
+            const usernameElement = document.getElementById('profile-username');
+            if (usernameElement) {
+                usernameElement.textContent = `@${editName.value}`;
+            }
+
+            const bioElement = document.getElementById('profile-bio').querySelector('p');
+            if (bioElement) {
+                bioElement.textContent = editBio.value;
+            }
+
+            // Zamknij modal
+            closeModal();
+        }
+    } catch (error) {
+        console.error('Błąd podczas zapisywania zmian profilu:', error);
+    }
+}
+
+// Usuń podgląd zdjęcia
+function clearPreview() {
+    const previewImage = document.getElementById('preview-image');
+    if (previewImage) {
+        previewImage.src = '';
+    }
+    const fileInput = document.getElementById('edit-avatar');
+    if (fileInput) {
+        fileInput.value = '';
     }
 }
 
@@ -99,27 +172,39 @@ async function changeAvatar(event) {
         const user = auth.currentUser;
         if (!user) return;
 
-        // Tworzenie unikalnej nazwy dla pliku
+        // Zaktualizuj podgląd zdjęcia
+        const previewImage = document.getElementById('preview-image');
+        if (previewImage) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Zapisz zdjęcie do Firebase Storage
         const storageRef = storage.ref();
-        const avatarRef = storageRef.child(`avatars/${user.uid}/${Date.now()}-${file.name}`);
+        const avatarRef = storageRef.child(`avatars/${user.uid}`);
+        await avatarRef.put(file);
 
-        // Upload pliku
-        const uploadTask = avatarRef.put(file);
+        // Pobierz URL zdjęcia
+        const url = await avatarRef.getDownloadURL();
         
-        // Czekanie na zakończenie uploadu
-        await uploadTask;
-        
-        // Pobieranie URL do pliku
-        const downloadURL = await avatarRef.getDownloadURL();
-
-        // Aktualizacja URL w bazie danych
+        // Zaktualizuj dane użytkownika
         await db.collection('users').doc(user.uid).update({
-            avatar: downloadURL
+            avatar: url
         });
 
-        // Aktualizacja wyświetlanego avataru
-        const profileAvatar = document.getElementById('profile-avatar');
-        profileAvatar.src = downloadURL;
+        // Zaktualizuj zdjęcie profilowe
+        const profileImage = document.getElementById('profile-image');
+        if (profileImage) {
+            profileImage.src = url;
+        }
+
+        // Zaktualizuj podgląd w modalu
+        if (previewImage) {
+            previewImage.src = url;
+        }
 
     } catch (error) {
         console.error('Błąd podczas zmiany avataru:', error);

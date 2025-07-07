@@ -97,6 +97,19 @@
                     <label for="edit-bio">Opis</label>
                     <textarea id="edit-bio" rows="4"></textarea>
                 </div>
+                <div class="form-group">
+                    <label for="edit-avatar">Zdjęcie profilowe</label>
+                    <div class="avatar-upload">
+                        <div class="preview-container">
+                            <img id="preview-image" src="" alt="Preview">
+                        </div>
+                        <div class="upload-buttons">
+                            <input type="file" id="edit-avatar" accept="image/*" style="display: none">
+                            <button type="button" onclick="document.getElementById('edit-avatar').click()">Wybierz zdjęcie</button>
+                            <button type="button" onclick="clearPreview()">Usuń zdjęcie</button>
+                        </div>
+                    </div>
+                </div>
                 <button type="submit" class="save-btn">Zapisz zmiany</button>
             </form>
         </div>
