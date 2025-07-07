@@ -32,8 +32,10 @@ async function loadUserProfile() {
             // Wczytaj zdjęcie profilowe
             const profileImage = document.getElementById('profile-image');
             if (profileImage) {
-                profileImage.src = userData.avatar || 'images/av.png';
-                console.log('Ustawiono zdjęcie profilowe:', userData.avatar || 'images/av.png');
+                // Użyj domyślnego av.png jeśli użytkownik nie ma swojego zdjęcia
+                const avatarUrl = userData.avatar ? userData.avatar : 'images/av.png';
+                profileImage.src = avatarUrl;
+                console.log('Ustawiono zdjęcie profilowe:', avatarUrl);
             }
 
             // Wczytaj nazwę użytkownika i username
@@ -82,9 +84,7 @@ async function loadUserProfile() {
             }
 
             // Wypełnij formularz edycji profilu
-            const editName = document.getElementById('edit-name');
             const editBio = document.getElementById('edit-bio');
-            if (editName) editName.value = userData.username;
             if (editBio) editBio.value = userData.bio;
 
             // Ustaw podgląd zdjęcia
@@ -205,6 +205,9 @@ async function changeAvatar(event) {
         if (previewImage) {
             previewImage.src = url;
         }
+
+        // Zapisz URL zdjęcia w localStorage na wypadek odświeżenia strony
+        localStorage.setItem('userAvatar', url);
 
     } catch (error) {
         console.error('Błąd podczas zmiany avataru:', error);
