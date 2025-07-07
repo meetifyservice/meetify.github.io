@@ -118,26 +118,18 @@ window.closeModal = function() {
 }
 
 // Zapisz zmiany profilu
-async function saveProfileChanges() {
+window.saveProfileChanges = async function() {
     try {
         const user = auth.currentUser;
         if (!user) return;
 
-        const editName = document.getElementById('edit-name');
         const editBio = document.getElementById('edit-bio');
-
-        if (editName && editBio) {
+        if (editBio) {
             await db.collection('users').doc(user.uid).update({
-                username: editName.value,
                 bio: editBio.value
             });
 
             // Zaktualizuj wyświetlane dane
-            const usernameElement = document.getElementById('profile-username');
-            if (usernameElement) {
-                usernameElement.textContent = `@${editName.value}`;
-            }
-
             const bioElement = document.getElementById('profile-bio').querySelector('p');
             if (bioElement) {
                 bioElement.textContent = editBio.value;
@@ -164,7 +156,7 @@ function clearPreview() {
 }
 
 // Zmiana avataru
-async function changeAvatar(event) {
+window.changeAvatar = async function(event) {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -264,6 +256,40 @@ async function savePost(content, image) {
 
 // Inicjalizacja po załadowaniu strony
 document.addEventListener('DOMContentLoaded', () => {
+    // Dodanie event listenerów
+    const editProfileBtn = document.getElementById('edit-profile-btn');
+    if (editProfileBtn) {
+        editProfileBtn.addEventListener('click', openModal);
+    }
+
+    const closeBtn = document.querySelector('.close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+
+    const editForm = document.getElementById('edit-profile-form');
+    if (editForm) {
+        editForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            window.saveProfileChanges();
+        });
+    }
+
+    const avatarInput = document.getElementById('edit-avatar');
+    if (avatarInput) {
+        avatarInput.addEventListener('change', (e) => {
+            window.changeAvatar(e);
+        });
+    }
+
+    const saveBtn = document.querySelector('.save-btn');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.saveProfileChanges();
+        });
+    }
+
     // Obsługa zmiany avataru
     const avatarUpload = document.getElementById('avatar-upload');
     if (avatarUpload) {
