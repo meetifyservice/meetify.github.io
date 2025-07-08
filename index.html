@@ -21,6 +21,15 @@
                     <input type="text" id="search-input" placeholder="Szukaj w Meetify">
                     <i class="material-icons">search</i>
                 </div>
+                <div id="search-results" class="search-results" style="display: none;">
+                    <div class="search-results-header">
+                        <h4>Wyniki wyszukiwania</h4>
+                        <button class="close-results-btn" onclick="hideSearchResults()">
+                            <i class="material-icons">close</i>
+                        </button>
+                    </div>
+                    <div id="search-results-content" class="search-results-content"></div>
+                </div>
             </div>
             <div class="nav-right">
                 <div class="nav-buttons-container">
