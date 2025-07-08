@@ -4,13 +4,17 @@
 function initializeNavbarButtons() {
     // Funkcja do bezpiecznego przekierowania
     function safeRedirect(url) {
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                window.location.href = url;
-            } else {
-                window.location.href = 'login.html';
-            }
-        });
+        if (window.auth) {
+            window.auth.onAuthStateChanged(user => {
+                if (user) {
+                    window.location.href = url;
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+        } else {
+            window.location.href = 'login.html';
+        }
     }
 
     // Inicjalizacja przycisków
