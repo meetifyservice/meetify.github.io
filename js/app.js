@@ -36,6 +36,8 @@ const profileBtn = document.getElementById('profile-btn');
 const postsContainer = document.getElementById('posts-container');
 const searchResults = document.getElementById('search-results');
 const searchResultsContent = document.getElementById('search-results-content');
+const addFriendBtn = document.getElementById('add-friend-btn');
+const sendMessageBtn = document.getElementById('send-message-btn');
 
 // Funkcje pomocnicze
 function formatDate(date) {
@@ -45,20 +47,9 @@ function formatDate(date) {
 // Funkcja do wyszukiwania użytkowników
 async function searchUsers(query) {
     try {
-        // Wyczyść poprzednie wyniki
-        searchResultsContent.innerHTML = '';
-        
-        // Jeśli pole wyszukiwania jest puste, ukryj wyniki
-        if (!query.trim()) {
-            hideSearchResults();
-            return;
-        }
-
-        // Pobierz wyniki wyszukiwania
         const usersRef = db.collection('users');
         const queryLower = query.toLowerCase();
         
-        // Wyszukaj użytkowników po nazwie użytkownika, imieniu lub nazwisku
         const snapshot = await usersRef.get();
         const results = [];
         
@@ -74,10 +65,139 @@ async function searchUsers(query) {
             }
         });
 
-        // Wyświetl wyniki
         if (results.length > 0) {
             showSearchResults(results);
         } else {
+            searchResultsContent.innerHTML = '<p style="color: var(--text-light);">Brak wyników wyszukiwania</p>';
+        }
+    } catch (error) {
+        console.error('Błąd wyszukiwania użytkowników:', error);
+        searchResultsContent.innerHTML = '<p style="color: var(--error-color);">Wystąpił błąd podczas wyszukiwania</p>';
+    }
+}
+
+// Funkcja do wyświetlania wyników wyszukiwania
+function showSearchResults(users) {
+    searchResultsContent.innerHTML = users.map(user => `
+        <div class="search-result-item" onclick="navigateToProfile('${user.id}')">
+            <img src="${user.avatar || 'images/av.png'}" class="search-result-avatar" alt="Avatar">
+            <div class="search-result-info">
+                <div class="search-result-name">${user.firstName} ${user.lastName}</div>
+                <div class="search-result-username">@${user.username}</div>
+            </div>
+        </div>
+    `).join('');
+    
+    searchResults.style.display = 'block';
+}
+
+// Funkcja do ukrywania wyników wyszukiwania
+function hideSearchResults() {
+    searchResults.style.display = 'none';
+}
+
+// Funkcja do nawigacji do profilu
+async function navigateToProfile(userId) {
+    hideSearchResults();
+    window.location.href = `profile.html?userId=${userId}`;
+}
+
+// Funkcja do dodawania znajomego
+async function addFriend(userId) {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            alert('Musisz być zalogowany, aby dodać znajomego');
+            return;
+        }
+
+        const userRef = db.collection('users').doc(currentUser.uid);
+        const userDoc = await userRef.get();
+        const userData = userDoc.data();
+        
+        if (userData.following.includes(userId)) {
+            alert('Już dodano tego użytkownika do znajomych');
+            return;
+        }
+
+        await userRef.update({
+            following: firebase.firestore.FieldValue.arrayUnion(userId)
+        });
+
+        await db.collection('users').doc(userId).update({
+            followers: firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
+        });
+
+        alert('Dodano użytkownika do znajomych!');
+        addFriendBtn.disabled = true;
+    } catch (error) {
+        console.error('Błąd przy dodawaniu znajomego:', error);
+        alert('Wystąpił błąd przy dodawaniu znajomego');
+    }
+}
+
+// Funkcja do wysyłania wiadomości
+async function sendMessage(userId) {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            alert('Musisz być zalogowany, aby wysłać wiadomość');
+            return;
+        }
+
+        window.location.href = `messages.html?recipientId=${userId}`;
+    } catch (error) {
+        console.error('Błąd przy wysyłaniu wiadomości:', error);
+        alert('Wystąpił błąd przy wysyłaniu wiadomości');
+    }
+}
+
+// Funkcja do wyszukiwania użytkowników
+async function searchUsers(query) {
+    try {
+        console.log('Próba wyszukiwania:', query);
+        
+        // Wyczyść poprzednie wyniki
+        searchResultsContent.innerHTML = '';
+        
+        // Jeśli pole wyszukiwania jest puste, ukryj wyniki
+        if (!query.trim()) {
+            console.log('Pole wyszukiwania jest puste');
+            hideSearchResults();
+            return;
+        }
+
+        // Pobierz wyniki wyszukiwania
+        const usersRef = db.collection('users');
+        const queryLower = query.toLowerCase();
+        console.log('Wyszukiwanie w kolekcji:', usersRef);
+        
+        // Wyszukaj użytkowników po nazwie użytkownika, imieniu lub nazwisku
+        const snapshot = await usersRef.get();
+        console.log('Pobrano dokumenty:', snapshot.docs.length);
+        const results = [];
+        
+        snapshot.forEach(doc => {
+            const user = doc.data();
+            console.log('Sprawdzany użytkownik:', user);
+            
+            if (user.username?.toLowerCase()?.includes(queryLower) ||
+                user.firstName?.toLowerCase()?.includes(queryLower) ||
+                user.lastName?.toLowerCase()?.includes(queryLower)) {
+                console.log('Znaleziono pasujący użytkownik:', user);
+                results.push({
+                    id: doc.id,
+                    ...user
+                });
+            }
+        });
+
+        // Wyświetl wyniki
+        if (results.length > 0) {
+            console.log('Znaleziono użytkowników:', results);
+            showSearchResults(results);
+        } else {
+            console.log('Brak wyników wyszukiwania');
             searchResultsContent.innerHTML = '<p style="color: var(--text-light);">Brak wyników wyszukiwania</p>';
         }
     } catch (error) {
@@ -112,9 +232,62 @@ function hideSearchResults() {
 }
 
 // Funkcja do nawigacji do profilu
-function navigateToProfile(userId) {
+async function navigateToProfile(userId) {
     hideSearchResults();
     window.location.href = `profile.html?userId=${userId}`;
+}
+
+// Funkcja do dodawania znajomego
+async function addFriend(userId) {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            alert('Musisz być zalogowany, aby dodać znajomego');
+            return;
+        }
+
+        // Sprawdź, czy już dodano tego użytkownika
+        const userRef = db.collection('users').doc(currentUser.uid);
+        const userDoc = await userRef.get();
+        const userData = userDoc.data();
+        
+        if (userData.following.includes(userId)) {
+            alert('Już dodano tego użytkownika do znajomych');
+            return;
+        }
+
+        // Dodaj do znajomych
+        await userRef.update({
+            following: firebase.firestore.FieldValue.arrayUnion(userId)
+        });
+
+        // Dodaj do followers innego użytkownika
+        await db.collection('users').doc(userId).update({
+            followers: firebase.firestore.FieldValue.arrayUnion(currentUser.uid)
+        });
+
+        alert('Dodano użytkownika do znajomych!');
+        addFriendBtn.disabled = true;
+    } catch (error) {
+        console.error('Błąd przy dodawaniu znajomego:', error);
+        alert('Wystąpił błąd przy dodawaniu znajomego');
+    }
+}
+
+// Funkcja do wysyłania wiadomości
+async function sendMessage(userId) {
+    try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            alert('Musisz być zalogowany, aby wysłać wiadomość');
+            return;
+        }
+
+        window.location.href = `messages.html?recipientId=${userId}`;
+    } catch (error) {
+        console.error('Błąd przy wysyłaniu wiadomości:', error);
+        alert('Wystąpił błąd przy wysyłaniu wiadomości');
+    }
 }
 
 function createPostElement(postData) {
