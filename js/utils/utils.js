@@ -1,39 +1,39 @@
 // Funkcje pomocnicze
 
 // Formatowanie daty
-function formatDate(date) {
+window.formatDate = function(date) {
     return new Date(date).toLocaleString();
 }
 
 // Generowanie unikalnego ID
-function generateId() {
+window.generateId = function() {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
 }
 
 // Walidacja email
-function validateEmail(email) {
+window.validateEmail = function(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
 
 // Walidacja hasła
-function validatePassword(password) {
+window.validatePassword = function(password) {
     // Hasło musi mieć co najmniej 6 znaków
     return password.length >= 6;
 }
 
 // Funkcja do ładowania elementu
-function showLoading(element) {
+window.showLoading = function(element) {
     element.style.display = 'block';
 }
 
 // Funkcja do ukrywania elementu
-function hideLoading(element) {
+window.hideLoading = function(element) {
     element.style.display = 'none';
 }
 
 // Funkcja do wyświetlenia komunikatu
-function showMessage(message, type = 'success') {
+window.showMessage = function(message, type = 'success') {
     const messageContainer = document.createElement('div');
     messageContainer.className = `message ${type}`;
     messageContainer.textContent = message;
