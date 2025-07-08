@@ -4,15 +4,31 @@
 function initializeNavbarButtons() {
     // Funkcja do bezpiecznego przekierowania
     function safeRedirect(url) {
-        if (window.auth) {
-            window.auth.onAuthStateChanged(user => {
-                if (user) {
-                    window.location.href = url;
-                } else {
-                    window.location.href = 'login.html';
-                }
-            });
+        // Sprawdź, czy jesteśmy już na stronie login
+        if (window.location.pathname === '/login.html') {
+            return;
+        }
+
+        // Sprawdź, czy Firebase jest zainicjalizowane
+        if (!window.auth) {
+            console.error('Firebase nie jest zainicjalizowane');
+            return;
+        }
+
+        // Sprawdź stan autentykacji
+        const user = window.auth.currentUser;
+        
+        if (user) {
+            // Jeśli użytkownik jest zalogowany i próbuje wejść na login, przekieruj go na index
+            if (window.location.pathname === '/login.html') {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Jeśli użytkownik jest zalogowany, przejdź do wybranej strony
+            window.location.href = url;
         } else {
+            // Jeśli użytkownik nie jest zalogowany, przejdź do login
             window.location.href = 'login.html';
         }
     }
