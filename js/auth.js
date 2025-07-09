@@ -1,21 +1,25 @@
-// Referencje do Firebase
-let auth, db;
-
-// Poczekaj na zainicjalizowanie Firebase
-window.addEventListener('firebase-initialized', () => {
-    if (typeof firebase !== 'undefined') {
+// Inicjalizacja referencji Firebase
+function initializeFirebaseReferences() {
+    if (typeof firebase !== 'undefined' && window.firebaseInitialized) {
         auth = firebase.auth();
         db = firebase.firestore();
+        return true;
     }
-});
+    return false;
+}
+
+// Sprawdź czy Firebase jest gotowe
+function isFirebaseReady() {
+    return typeof firebase !== 'undefined' && window.firebaseInitialized && auth && db;
+}
 
 // Logowanie
 async function login(email, password) {
     try {
-        // Sprawdź czy Firebase jest zainicjalizowane
-        if (typeof firebase === 'undefined' || !auth) {
-            console.error('Firebase nie jest zainicjalizowane');
-            return;
+        // Sprawdź czy Firebase jest gotowe
+        if (!isFirebaseReady()) {
+            console.error('Firebase nie jest gotowy do użycia');
+            throw new Error('Firebase nie jest gotowy do użycia');
         }
 
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
@@ -29,10 +33,10 @@ async function login(email, password) {
 // Rejestracja
 async function register(username, email, password, day, month, year, firstName, lastName, gender) {
     try {
-        // Sprawdź czy Firebase jest zainicjalizowane
-        if (typeof firebase === 'undefined' || !auth) {
-            console.error('Firebase nie jest zainicjalizowane');
-            return;
+        // Sprawdź czy Firebase jest gotowe
+        if (!isFirebaseReady()) {
+            console.error('Firebase nie jest gotowy do użycia');
+            throw new Error('Firebase nie jest gotowy do użycia');
         }
         // Sprawdź poprawność danych
         if (!username || !email || !password || !day || !month || !year || !firstName || !lastName || !gender) {

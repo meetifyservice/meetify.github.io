@@ -54,18 +54,6 @@ function initializeFirebase() {
 window.addEventListener('load', async () => {
     try {
         await initializeFirebase();
-        // Wyślij event o zakończeniu inicjalizacji
-        const event = new Event('firebase-initialized');
-        window.dispatchEvent(event);
-    } catch (error) {
-        console.error('Błąd podczas inicjalizacji Firebase:', error);
-    }
-});
-
-// Zainicjalizuj Firebase po załadowaniu strony
-window.addEventListener('load', async () => {
-    try {
-        await initializeFirebase();
         window.firebaseInitialized = true;
         // Wyślij event o zakończeniu inicjalizacji
         const event = new Event('firebase-initialized');
