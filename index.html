@@ -17,44 +17,49 @@
 <body>
     <!-- Obsługa autentykacji -->
     <script>
-        // Sprawdź, czy Firebase jest zainicjalizowane
-        if (typeof firebase === 'undefined') {
-            console.error('Firebase nie jest zdefiniowane');
-            // Pokaż komunikat błędu użytkownikowi
+        // Funkcja do obsługi błędów Firebase
+        function showError(message) {
             const errorDiv = document.createElement('div');
             errorDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 5px; z-index: 1000;';
-            errorDiv.textContent = 'Błąd podczas inicjalizacji aplikacji. Proszę odświeżyć stronę.';
+            errorDiv.textContent = message;
             document.body.appendChild(errorDiv);
-            return;
         }
 
-        // Poczekaj na zainicjalizowanie Firebase
-        window.addEventListener('firebase-initialized', async () => {
-            if (window.auth) {
-                try {
-                    await window.auth.onAuthStateChanged(user => {
-                        if (!user) {
-                            // Sprawdź czy jesteśmy na stronie login
-                            if (window.location.pathname !== '/login.html') {
-                                window.location.href = 'login.html';
-                            }
-                        } else {
-                            // Sprawdź czy jesteśmy na stronie login
-                            if (window.location.pathname === '/login.html') {
-                                window.location.href = 'index.html';
-                            }
-                        }
-                    });
-                } catch (error) {
-                    console.error('Błąd podczas sprawdzania stanu autentykacji:', error);
-                    // Pokaż komunikat błędu użytkownikowi
-                    const errorDiv = document.createElement('div');
-                    errorDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 5px; z-index: 1000;';
-                    errorDiv.textContent = 'Błąd podczas sprawdzania stanu autentykacji. Proszę odświeżyć stronę.';
-                    document.body.appendChild(errorDiv);
-                }
+        // Sprawdź, czy Firebase jest zainicjalizowane
+        function checkFirebase() {
+            if (typeof firebase === 'undefined') {
+                console.error('Firebase nie jest zdefiniowane');
+                showError('Błąd podczas inicjalizacji aplikacji. Proszę odświeżyć stronę.');
+                return;
             }
-        });
+
+            // Poczekaj na zainicjalizowanie Firebase
+            window.addEventListener('firebase-initialized', () => {
+                if (window.auth) {
+                    try {
+                        window.auth.onAuthStateChanged(user => {
+                            if (!user) {
+                                // Sprawdź czy jesteśmy na stronie login
+                                if (window.location.pathname !== '/login.html') {
+                                    window.location.href = 'login.html';
+                                }
+                            } else {
+                                // Sprawdź czy jesteśmy na stronie login
+                                if (window.location.pathname === '/login.html') {
+                                    window.location.href = 'index.html';
+                                }
+                            }
+                        });
+                    } catch (error) {
+                        console.error('Błąd podczas sprawdzania stanu autentykacji:', error);
+                        showError('Błąd podczas sprawdzania stanu autentykacji. Proszę odświeżyć stronę.');
+                    }
+                }
+            });
+        }
+
+        // Uruchom sprawdzanie po załadowaniu strony
+        checkFirebase();
     </script>
     <nav class="top-nav">
         <div class="nav-container">
@@ -229,8 +234,8 @@
     <!-- Firebase SDK -->
     <!-- Inicjalizacja po załadowaniu strony -->
     <script>
-        // Poczekaj na zainicjalizowanie Firebase
-        window.addEventListener('firebase-initialized', () => {
+        // Funkcja do inicjalizacji aplikacji
+        function initializeApp() {
             // Sprawdź czy Firebase jest zainicjalizowane
             if (typeof firebase === 'undefined') {
                 console.error('Firebase nie jest zdefiniowane');
@@ -254,7 +259,13 @@
                     }
                 });
             }
+        }
+
+        // Uruchom inicjalizację po załadowaniu strony
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
         });
+    </script>
     </script>
     </body>
 </html>

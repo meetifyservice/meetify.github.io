@@ -1,6 +1,17 @@
 // Sprawdź, czy Firebase jest zainicjalizowane
 window.firebaseInitialized = false;
 
+// Konfiguracja Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyDbRBqhDdj05vXy8oDhpDrU9l2RT3Iz3xs",
+    authDomain: "meetify-bf45c.firebaseapp.com",
+    projectId: "meetify-bf45c",
+    storageBucket: "meetify-bf45c.appspot.com",
+    messagingSenderId: "824652857715",
+    appId: "1:824652857715:web:e4a4d0a0546490fcb58506"
+};
+
+// Inicjalizacja Firebase
 function initializeFirebase() {
     if (firebaseInitialized) {
         return Promise.resolve();
@@ -20,16 +31,6 @@ function initializeFirebase() {
             return;
         }
 
-        // Konfiguracja Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDbRBqhDdj05vXy8oDhpDrU9l2RT3Iz3xs",
-            authDomain: "meetify-bf45c.firebaseapp.com",
-            projectId: "meetify-bf45c",
-            storageBucket: "meetify-bf45c.appspot.com",
-            messagingSenderId: "824652857715",
-            appId: "1:824652857715:web:e4a4d0a0546490fcb58506"
-        };
-
         try {
             // Inicjalizacja Firebase
             firebase.initializeApp(firebaseConfig);
@@ -48,6 +49,18 @@ function initializeFirebase() {
         }
     });
 }
+
+// Zainicjalizuj Firebase po załadowaniu strony
+window.addEventListener('load', async () => {
+    try {
+        await initializeFirebase();
+        // Wyślij event o zakończeniu inicjalizacji
+        const event = new Event('firebase-initialized');
+        window.dispatchEvent(event);
+    } catch (error) {
+        console.error('Błąd podczas inicjalizacji Firebase:', error);
+    }
+});
 
 // Zainicjalizuj Firebase po załadowaniu strony
 window.addEventListener('load', async () => {
