@@ -99,10 +99,6 @@
                         <img src="images/av.png" alt="Profil">
                         <span class="tooltip">Profil</span>
                     </a>
-                    <button class="nav-button logout-btn" id="logout-btn">
-                        <i class="material-icons">exit_to_app</i>
-                        <span class="tooltip">Wyloguj</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -230,6 +226,35 @@
         });
     </script>
     <script src="js/common.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <!-- Inicjalizacja Firebase i autentykacja -->
+    <script>
+        // Sprawdź, czy Firebase jest zainicjalizowane
+        if (typeof firebase === 'undefined') {
+            console.error('Firebase nie jest zdefiniowane');
+            return;
+        }
+
+        // Poczekaj na zainicjalizowanie Firebase
+        window.addEventListener('firebase-initialized', () => {
+            // Teraz możemy bezpiecznie używać funkcji logout
+            const logoutLink = document.querySelector('.sidebar-link[onclick="logout()"]');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    logout();
+                });
+            }
+        });
+    </script>
+
+    <!-- Skrypty aplikacji -->
     <script src="js/utils/utils.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/app.js"></script>

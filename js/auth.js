@@ -125,8 +125,14 @@ async function registerWithGoogle() {
 }
 
 // Wylogowanie
-async function logout() {
+window.logout = async function() {
     try {
+        // Sprawdź czy Firebase jest zainicjalizowane
+        if (!auth) {
+            console.error('Firebase nie jest zainicjalizowane');
+            return;
+        }
+
         // Wyloguj użytkownika z Firebase
         await auth.signOut();
         
@@ -137,7 +143,7 @@ async function logout() {
         window.location.href = 'login.html';
     } catch (error) {
         console.error('Błąd wylogowania:', error);
-        throw error;
+        alert('Wystąpił błąd podczas wylogowywania. Spróbuj ponownie.');
     }
 }
 

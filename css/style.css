@@ -371,12 +371,6 @@ a:hover {
     transition: background-color 0.3s ease;
 }
 
-.logout-btn {
-    background-color: var(--danger);
-    color: white;
-    background: var(--border-color);
-}
-
 /* Tooltipy */
 .tooltip {
     display: inline-block;
