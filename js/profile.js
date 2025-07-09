@@ -263,104 +263,53 @@ async function savePost(content, image) {
 window.addEventListener('DOMContentLoaded', () => {
     console.log('Strona załadowana, inicjalizacja event listenerów');
     
-    // Przycisk edycji profilu
-    const editProfileBtn = document.getElementById('edit-profile-btn');
-    if (editProfileBtn) {
-        console.log('Dodawanie event listenera dla przycisku edycji profilu');
-        editProfileBtn.addEventListener('click', window.modal.open);
-    } else {
-        console.error('Nie znaleziono przycisku edycji profilu');
-    }
-
-    // Zamykanie modalu
-    const closeBtn = document.querySelector('.close');
-    if (closeBtn) {
-        console.log('Dodawanie event listenera dla przycisku zamknięcia modalu');
-        closeBtn.addEventListener('click', window.modal.close);
-    } else {
-        console.error('Nie znaleziono przycisku zamknięcia modalu');
-    }
-
-    // Formularz edycji profilu
-    const editForm = document.getElementById('edit-profile-form');
-    if (editForm) {
-        console.log('Dodawanie event listenera dla formularza edycji profilu');
-        editForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            window.saveProfileChanges();
-        });
-    } else {
-        console.error('Nie znaleziono formularza edycji profilu');
-    }
-
-    // Zmiana avataru
-    const avatarInput = document.getElementById('edit-avatar');
-    if (avatarInput) {
-        console.log('Dodawanie event listenera dla zmiany avataru');
-        avatarInput.addEventListener('change', (e) => {
-            window.changeAvatar(e);
-        });
-    } else {
-        console.error('Nie znaleziono pola input dla avataru');
-    }
-
-    // Przycisk zapisu zmian
-    const saveBtn = document.querySelector('.save-btn');
-    if (saveBtn) {
-        console.log('Dodawanie event listenera dla przycisku zapisu zmian');
-        saveBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.saveProfileChanges();
-        });
-    } else {
-        console.error('Nie znaleziono przycisku zapisu zmian');
-    }
-    // Obsługa edycji profilu
-    const editProfileForm = document.getElementById('edit-profile-form');
-    if (editProfileForm) {
-        editProfileForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('edit-name').value;
-            const bio = document.getElementById('edit-bio').value;
-            await editProfile(name, bio);
-        });
-    }
-
-    // Obsługa zapisywania postów
-    const postForm = document.getElementById('post-form');
-    if (postForm) {
-        postForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const content = document.getElementById('post-content').value;
-            const image = document.getElementById('post-image').files[0];
-            await savePost(content, image);
-        });
-    }
-
-    // Obsługa zamykania modalu
-    const closeModal = document.querySelector('.close');
-    if (closeModal) {
-        closeModal.addEventListener('click', () => {
-            document.querySelector('.modal').style.display = 'none';
-        });
-    }
-
-    // Obsługa kliknięcia poza modal
-    window.addEventListener('click', (e) => {
-        const modal = document.querySelector('.modal');
-        if (e.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    // Sprawdź czy użytkownik jest zalogowany
-    auth.onAuthStateChanged(async (user) => {
-        if (!user) {
-            window.location.href = 'login.html';
-            return;
+    // Czekaj na zainicjalizowanie Firebase
+    window.addEventListener('firebase-initialized', () => {
+        // Przycisk edycji profilu
+        const editProfileBtn = document.getElementById('edit-profile-btn');
+        if (editProfileBtn) {
+            console.log('Dodawanie event listenera dla przycisku edycji profilu');
+            editProfileBtn.addEventListener('click', window.modal.open);
+        } else {
+            console.error('Nie znaleziono przycisku edycji profilu');
         }
 
-        // Załaduj dane profilu
-        await loadUserProfile(user.uid);
+        // Zamykanie modalu
+        const closeBtn = document.querySelector('.close');
+        if (closeBtn) {
+            console.log('Dodawanie event listenera dla przycisku zamknięcia modalu');
+            closeBtn.addEventListener('click', window.modal.close);
+        } else {
+            console.error('Nie znaleziono przycisku zamknięcia modalu');
+        }
+
+        // Formularz edycji profilu
+        const editForm = document.getElementById('edit-profile-form');
+        if (editForm) {
+            console.log('Dodawanie event listenera dla formularza edycji profilu');
+            editForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                window.saveProfileChanges();
+            });
+        }
+
+        // Obsługa kliknięcia poza modal
+        window.addEventListener('click', (e) => {
+            const modal = document.querySelector('.modal');
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Sprawdź czy użytkownik jest zalogowany
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Załaduj dane profilu
+            await loadUserProfile(user.uid);
+        });
     });
 });

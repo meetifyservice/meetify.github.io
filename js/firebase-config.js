@@ -19,8 +19,8 @@ function initializeFirebase() {
 
     return new Promise((resolve, reject) => {
         // Sprawdź czy Firebase jest zdefiniowane
-        if (typeof firebase === 'undefined') {
-            reject(new Error('Firebase nie jest zdefiniowane'));
+        if (typeof firebase === 'undefined' || typeof firebase.auth === 'undefined') {
+            reject(new Error('Firebase lub jego moduły nie są zdefiniowane'));
             return;
         }
 
