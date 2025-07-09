@@ -3,15 +3,17 @@ let auth, db;
 
 // Poczekaj na zainicjalizowanie Firebase
 window.addEventListener('firebase-initialized', () => {
-    auth = firebase.auth();
-    db = firebase.firestore();
+    if (typeof firebase !== 'undefined') {
+        auth = firebase.auth();
+        db = firebase.firestore();
+    }
 });
 
 // Logowanie
 async function login(email, password) {
     try {
         // Sprawdź czy Firebase jest zainicjalizowane
-        if (typeof firebase === 'undefined') {
+        if (typeof firebase === 'undefined' || !auth) {
             console.error('Firebase nie jest zainicjalizowane');
             return;
         }
@@ -28,7 +30,7 @@ async function login(email, password) {
 async function register(username, email, password, day, month, year, firstName, lastName, gender) {
     try {
         // Sprawdź czy Firebase jest zainicjalizowane
-        if (typeof firebase === 'undefined') {
+        if (typeof firebase === 'undefined' || !auth) {
             console.error('Firebase nie jest zainicjalizowane');
             return;
         }

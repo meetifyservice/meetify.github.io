@@ -1,57 +1,84 @@
 // Funkcje pomocnicze
 
 // Formatowanie daty
-window.formatDate = function(date) {
+export function formatDate(date) {
     return new Date(date).toLocaleString();
 }
 
 // Generowanie unikalnego ID
-window.generateId = function() {
+export function generateId() {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
 }
 
 // Walidacja email
-window.validateEmail = function(email) {
+export function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
 
 // Walidacja hasła
-window.validatePassword = function(password) {
-    // Hasło musi mieć co najmniej 6 znaków
-    return password.length >= 6;
+export function validatePassword(password) {
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    return re.test(password);
 }
 
 // Funkcja do ładowania elementu
-window.showLoading = function(element) {
-    element.style.display = 'block';
+export function showLoading(element) {
+    element.style.opacity = '0.5';
+    element.style.pointerEvents = 'none';
 }
 
 // Funkcja do ukrywania elementu
-window.hideLoading = function(element) {
-    element.style.display = 'none';
+export function hideLoading(element) {
+    element.style.opacity = '1';
+    element.style.pointerEvents = 'auto';
 }
 
 // Funkcja do wyświetlenia komunikatu
-window.showMessage = function(message, type = 'success') {
-    const messageContainer = document.createElement('div');
-    messageContainer.className = `message ${type}`;
-    messageContainer.textContent = message;
+export function showMessage(message, type = 'success') {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}`;
+    messageDiv.textContent = message;
     
-    // Dodaj do DOM
-    document.body.appendChild(messageContainer);
+    // Dodaj do body
+    document.body.appendChild(messageDiv);
     
-    // Usuń po 3 sekundach
+    // Ustaw style
+    messageDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 15px 30px;
+        border-radius: 5px;
+        color: white;
+        z-index: 1000;
+        font-family: 'Roboto', sans-serif;
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    // Ustaw kolor tła na podstawie typu
+    if (type === 'success') {
+        messageDiv.style.backgroundColor = '#4CAF50';
+    } else if (type === 'error') {
+        messageDiv.style.backgroundColor = '#F44336';
+    } else if (type === 'warning') {
+        messageDiv.style.backgroundColor = '#FFC107';
+    }
+    
+    // Animacja znikania
     setTimeout(() => {
-        messageContainer.remove();
+        messageDiv.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => messageDiv.remove(), 300);
     }, 3000);
 }
 
 // Funkcja do walidacji formularza
 export function validateForm(form) {
-    const inputs = form.querySelectorAll('input[required], textarea[required]');
     let isValid = true;
-
+    
+    // Sprawdź wszystkie pola
+    const inputs = form.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         if (!input.value.trim()) {
             isValid = false;
@@ -60,56 +87,46 @@ export function validateForm(form) {
             input.classList.remove('error');
         }
     });
-
+    
     return isValid;
 }
 
 // Funkcja do walidacji hasła
 export function validatePasswords(password, confirmPassword) {
     if (password !== confirmPassword) {
-        return 'Hasła nie są takie same!';
+        return false;
     }
-    if (!validatePassword(password)) {
-        return 'Hasło musi mieć co najmniej 6 znaków!';
-    }
-    return null;
+    return true;
 }
 
 // Funkcja do walidacji email
 export function validateEmailField(email) {
-    if (!validateEmail(email)) {
-        return 'Nieprawidłowy format email!';
-    }
-    return null;
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
 }
 
 // Funkcja do walidacji nazwy użytkownika
 export function validateUsername(username) {
-    if (username.length < 3) {
-        return 'Nazwa użytkownika musi mieć co najmniej 3 znaki!';
-    }
-    return null;
+    const re = /^[a-zA-Z0-9_]{3,20}$/;
+    return re.test(username);
 }
 
 // Funkcja do walidacji bio
 export function validateBio(bio) {
-    if (bio.length > 160) {
-        return 'Bio nie może być dłuższe niż 160 znaków!';
-    }
-    return null;
+    return bio.length <= 160;
 }
 
 // Funkcja do walidacji zdjęcia
 export function validateImage(file) {
-    if (!file) return null;
-    
+    const maxSize = 5 * 1024 * 1024; // 5MB
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    
     if (!allowedTypes.includes(file.type)) {
-        return 'Dozwolone są tylko zdjęcia w formacie JPEG, PNG lub GIF!';
+        return 'Nieprawidłowy format pliku. Dopuszczalne formaty: JPEG, PNG, GIF.';
     }
     
-    if (file.size > 5 * 1024 * 1024) {
-        return 'Zdjęcie nie może być większe niż 5MB!';
+    if (file.size > maxSize) {
+        return 'Plik jest za duży. Maksymalny rozmiar: 5MB.';
     }
     
     return null;
