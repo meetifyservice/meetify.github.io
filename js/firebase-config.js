@@ -1,5 +1,5 @@
 // Sprawdź, czy Firebase jest zainicjalizowane
-let firebaseInitialized = false;
+window.firebaseInitialized = false;
 
 function initializeFirebase() {
     if (firebaseInitialized) {
@@ -53,6 +53,7 @@ function initializeFirebase() {
 window.addEventListener('load', async () => {
     try {
         await initializeFirebase();
+        window.firebaseInitialized = true;
         // Wyślij event o zakończeniu inicjalizacji
         const event = new Event('firebase-initialized');
         window.dispatchEvent(event);

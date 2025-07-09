@@ -1,6 +1,11 @@
 // Referencje do Firebase
-const auth = window.auth;
-const db = window.db;
+let auth, db;
+
+// Poczekaj na zainicjalizowanie Firebase
+window.addEventListener('firebase-initialized', () => {
+    auth = firebase.auth();
+    db = firebase.firestore();
+});
 
 // Logowanie
 async function login(email, password) {
