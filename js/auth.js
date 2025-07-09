@@ -1,3 +1,7 @@
+// Referencje do Firebase
+const auth = firebase.auth();
+const db = firebase.firestore();
+
 // Logowanie
 async function login(email, password) {
     try {
@@ -105,17 +109,30 @@ async function registerWithGoogle() {
         const user = result.user;
 
         // Utworzenie nowego profilu
-        await db.collection('users').doc(user.uid).set({
-            name: user.displayName,
-            email: user.email,
-            avatar: user.photoURL || 'images/default-avatar.png',
-            bio: '',
-            posts: 0,
-            followers: 0,
-            following: 0,
-            // Zapisujemy Timestamp Firestore
-            createdAt: firebase.firestore.Timestamp.now()
-        });
+        try {
+            const userData = {
+                username: user.displayName,
+                email: user.email,
+                avatar: user.photoURL || 'images/av.png',
+                bio: '',
+                posts: 0,
+                followers: 0,
+                following: 0,
+                // Zapisujemy Timestamp Firestore
+                createdAt: firebase.firestore.Timestamp.now()
+            };
+            
+            await db.collection('users').doc(user.uid).set(userData);
+            console.log('Zapisano dane użytkownika pomyślnie');
+        } catch (firestoreError) {
+            console.error('Szczegóły błędu Firestore:', {
+                message: firestoreError.message,
+                code: firestoreError.code,
+                name: firestoreError.name,
+                stack: firestoreError.stack
+            });
+            throw new Error('Nie udało się zapisać danych użytkownika. Szczegóły: ' + firestoreError.message);
+        }
 
         return user;
     } catch (error) {
