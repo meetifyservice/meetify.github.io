@@ -5,6 +5,19 @@ const storage = firebase.storage();
 
 // Inicjalizacja po załadowaniu strony
 document.addEventListener('DOMContentLoaded', () => {
+    // Obsługa wylogowania
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Błąd wylogowania:', error);
+                alert('Wystąpił błąd podczas wylogowywania. Spróbuj ponownie.');
+            }
+        });
+    }
+
     // Obsługa wyszukiwania
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value;
@@ -33,6 +46,7 @@ const createPostBtn = document.getElementById('create-post-btn');
 const notificationsBtn = document.getElementById('notifications-btn');
 const messagesBtn = document.getElementById('messages-btn');
 const profileBtn = document.getElementById('profile-btn');
+const logoutBtn = document.getElementById('logout-btn');
 const postsContainer = document.getElementById('posts-container');
 const searchResults = document.getElementById('search-results');
 const searchResultsContent = document.getElementById('search-results-content');

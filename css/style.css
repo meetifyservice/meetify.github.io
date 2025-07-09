@@ -368,12 +368,12 @@ a:hover {
     background: none;
     cursor: pointer;
     color: var(--text-color);
-    transition: all 0.2s ease;
-    border-radius: 8px;
-    white-space: nowrap;
+    transition: background-color 0.3s ease;
 }
 
-.nav-button:hover {
+.logout-btn {
+    background-color: var(--danger);
+    color: white;
     background: var(--border-color);
 }
 
