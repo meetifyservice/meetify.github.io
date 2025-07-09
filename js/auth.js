@@ -1,13 +1,14 @@
 // Referencje do Firebase
-const auth = firebase.auth();
-const db = firebase.firestore();
+const auth = window.auth;
+const db = window.db;
 
 // Logowanie
 async function login(email, password) {
     try {
         // Sprawdź czy Firebase jest zainicjalizowane
-        if (!auth) {
-            throw new Error('Firebase nie jest zainicjalizowane');
+        if (typeof firebase === 'undefined') {
+            console.error('Firebase nie jest zainicjalizowane');
+            return;
         }
 
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
@@ -22,8 +23,9 @@ async function login(email, password) {
 async function register(username, email, password, day, month, year, firstName, lastName, gender) {
     try {
         // Sprawdź czy Firebase jest zainicjalizowane
-        if (!auth) {
-            throw new Error('Firebase nie jest zainicjalizowane');
+        if (typeof firebase === 'undefined') {
+            console.error('Firebase nie jest zainicjalizowane');
+            return;
         }
         // Sprawdź poprawność danych
         if (!username || !email || !password || !day || !month || !year || !firstName || !lastName || !gender) {

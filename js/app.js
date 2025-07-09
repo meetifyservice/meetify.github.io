@@ -1,10 +1,16 @@
-// Inicjalizacja Firebase
-const auth = firebase.auth();
-const db = firebase.firestore();
-const storage = firebase.storage();
-
 // Inicjalizacja po załadowaniu strony
 document.addEventListener('DOMContentLoaded', () => {
+    // Sprawdź czy Firebase jest zainicjalizowane
+    if (typeof firebase === 'undefined') {
+        console.error('Firebase nie jest zainicjalizowane');
+        return;
+    }
+
+    // Używamy globalnych referencji do Firebase
+    const auth = window.auth;
+    const db = window.db;
+    const storage = window.storage;
+
     // Obsługa wyszukiwania
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value;

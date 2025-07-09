@@ -1,5 +1,11 @@
 // Sprawdź, czy Firebase jest zainicjalizowane
+let firebaseInitialized = false;
+
 function initializeFirebase() {
+    if (firebaseInitialized) {
+        return Promise.resolve();
+    }
+
     return new Promise((resolve, reject) => {
         // Sprawdź czy Firebase jest zdefiniowane
         if (typeof firebase === 'undefined') {
@@ -9,6 +15,7 @@ function initializeFirebase() {
 
         // Sprawdź czy Firebase jest już zainicjalizowane
         if (firebase.apps.length > 0) {
+            firebaseInitialized = true;
             resolve();
             return;
         }
@@ -34,6 +41,7 @@ function initializeFirebase() {
             window.storage = firebase.storage();
             window.FieldValue = firebase.firestore.FieldValue;
             
+            firebaseInitialized = true;
             resolve();
         } catch (error) {
             reject(error);

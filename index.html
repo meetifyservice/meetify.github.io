@@ -240,14 +240,14 @@
     
     <!-- Inicjalizacja po załadowaniu strony -->
     <script>
-        // Sprawdź, czy Firebase jest zainicjalizowane
-        if (typeof firebase === 'undefined') {
-            console.error('Firebase nie jest zdefiniowane');
-            return;
-        }
-
         // Poczekaj na zainicjalizowanie Firebase
         window.addEventListener('firebase-initialized', () => {
+            // Sprawdź czy Firebase jest zainicjalizowane
+            if (typeof firebase === 'undefined') {
+                console.error('Firebase nie jest zdefiniowane');
+                return;
+            }
+
             // Teraz możemy bezpiecznie używać funkcji logout
             const logoutLink = document.querySelector('.sidebar-link[onclick="logout()"]');
             if (logoutLink) {
