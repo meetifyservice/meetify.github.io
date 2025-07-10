@@ -1,6 +1,16 @@
 // Sprawdź, czy Firebase jest zainicjalizowane
 window.firebaseInitialized = false;
 
+// Import Firebase SDK
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+import { getAuth } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
+import { getStorage } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js';
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js';
+
+// Sprawdź, czy Firebase jest zainicjalizowane
+window.firebaseInitialized = false;
+
 // Konfiguracja Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDbRBqhDdj05vXy8oDhpDrU9l2RT3Iz3xs",
@@ -18,29 +28,15 @@ function initializeFirebase() {
     }
 
     return new Promise((resolve, reject) => {
-        // Sprawdź czy Firebase jest zdefiniowane
-        if (typeof firebase === 'undefined' || typeof firebase.auth === 'undefined') {
-            reject(new Error('Firebase lub jego moduły nie są zdefiniowane'));
-            return;
-        }
-
-        // Sprawdź czy Firebase jest już zainicjalizowane
-        if (firebase.apps.length > 0) {
-            firebaseInitialized = true;
-            resolve();
-            return;
-        }
-
         try {
             // Inicjalizacja Firebase
-            firebase.initializeApp(firebaseConfig);
+            const app = initializeApp(firebaseConfig);
             
             // Ustaw globalne referencje
-            window.app = firebase.app();
-            window.auth = firebase.auth();
-            window.db = firebase.firestore();
-            window.storage = firebase.storage();
-            window.FieldValue = firebase.firestore.FieldValue;
+            window.app = app;
+            window.auth = getAuth(app);
+            window.db = getFirestore(app);
+            window.storage = getStorage(app);
             
             firebaseInitialized = true;
             resolve();
