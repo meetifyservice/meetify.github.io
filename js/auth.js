@@ -1,6 +1,21 @@
-// Import Firebase SDK
-import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
-import { getFirestore, Timestamp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
+// Inicjalizacja referencji Firebase
+let auth;
+let db;
+
+// Inicjalizacja referencji Firebase
+function initializeFirebaseReferences() {
+    if (typeof firebase !== 'undefined' && window.firebaseInitialized) {
+        auth = firebase.auth();
+        db = firebase.firestore();
+        return true;
+    }
+    return false;
+}
+
+// Sprawdź czy Firebase jest gotowe
+function isFirebaseReady() {
+    return typeof firebase !== 'undefined' && window.firebaseInitialized && auth && db;
+}
 
 // Inicjalizacja referencji Firebase
 function initializeFirebaseReferences() {
@@ -26,7 +41,7 @@ async function login(email, password) {
             throw new Error('Firebase nie jest gotowy do użycia');
         }
 
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
         return userCredential.user;
     } catch (error) {
         console.error('Błąd logowania:', error);

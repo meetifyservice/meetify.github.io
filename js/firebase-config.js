@@ -1,13 +1,6 @@
 // Sprawdź, czy Firebase jest zainicjalizowane
 window.firebaseInitialized = false;
 
-// Import Firebase SDK
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
-import { getFirestore } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
-import { getStorage } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js';
-
 // Sprawdź, czy Firebase jest zainicjalizowane
 window.firebaseInitialized = false;
 
@@ -29,14 +22,21 @@ function initializeFirebase() {
 
     return new Promise((resolve, reject) => {
         try {
+            // Sprawdź czy Firebase jest już zainicjalizowane
+            if (firebase.apps.length > 0) {
+                firebaseInitialized = true;
+                resolve();
+                return;
+            }
+
             // Inicjalizacja Firebase
-            const app = initializeApp(firebaseConfig);
+            firebase.initializeApp(firebaseConfig);
             
             // Ustaw globalne referencje
-            window.app = app;
-            window.auth = getAuth(app);
-            window.db = getFirestore(app);
-            window.storage = getStorage(app);
+            window.app = firebase.app();
+            window.auth = firebase.auth();
+            window.db = firebase.firestore();
+            window.storage = firebase.storage();
             
             firebaseInitialized = true;
             resolve();
