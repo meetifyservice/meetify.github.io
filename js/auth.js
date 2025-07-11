@@ -1,6 +1,3 @@
-// Importy Firebase
-const { getAuth, getFirestore, signInWithEmailAndPassword } = firebase;
-
 // Inicjalizacja referencji Firebase
 let auth;
 let db;
@@ -8,9 +5,9 @@ let db;
 // Inicjalizacja referencji Firebase
 function initializeFirebaseReferences() {
     if (window.firebaseInitialized) {
-        // Użyj nowego podejścia do Firebase
-        auth = getAuth(window.app);
-        db = getFirestore(window.app);
+        // Użyj wersji kompatybilnej Firebase
+        auth = firebase.auth();
+        db = firebase.firestore();
         return true;
     }
     return false;
@@ -58,7 +55,7 @@ async function login(email, password) {
             throw new Error('Firebase.auth nie jest zainicjalizowane');
         }
 
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
         return userCredential.user;
     } catch (error) {
         console.error('Błąd logowania:', error);

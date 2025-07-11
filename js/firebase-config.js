@@ -39,17 +39,14 @@ function initializeFirebase() {
             // Ustaw globalne referencje
             window.app = app;
             
-            // Użyj nowego podejścia do Firebase
-            const auth = getAuth(app);
-            window.auth = auth;
+            // Użyj wersji kompatybilnej Firebase
+            window.auth = firebase.auth();
             console.log('Firebase.auth zainicjalizowane');
             
-            const db = getFirestore(app);
-            window.db = db;
+            window.db = firebase.firestore();
             console.log('Firebase.firestore zainicjalizowane');
             
-            const storage = getStorage(app);
-            window.storage = storage;
+            window.storage = firebase.storage();
             console.log('Firebase.storage zainicjalizowane');
             
             firebaseInitialized = true;
