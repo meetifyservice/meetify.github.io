@@ -34,62 +34,174 @@ function isFirebaseReady() {
     return true;
 }
 
+// Sprawdź czy użytkownik jest zalogowany
+function isUserLoggedIn() {
+    try {
+        // Sprawdź czy SDK jest gotowy do użycia
+        if (!checkFirebaseSDK()) {
+            console.error('SDK Firebase nie jest gotowy do sprawdzania statusu zalogowania');
+            throw new Error('SDK Firebase nie jest gotowy do sprawdzania statusu zalogowania');
+        }
+
+        // Sprawdź czy SDK jest zainicjalizowane
+        if (!window.auth) {
+            console.error('Firebase.auth nie jest zainicjalizowane');
+            return false;
+        }
+
+        // Sprawdź czy metoda currentUser jest dostępna
+        if (!firebase.auth().currentUser) {
+            console.log('Brak zalogowanego użytkownika');
+            return false;
+        }
+
+        // Sprawdź czy użytkownik ma poprawne dane
+        const user = firebase.auth().currentUser;
+        if (!user.email) {
+            console.error('Zalogowany użytkownik nie ma adresu email');
+            return false;
+        }
+
+        if (!user.uid) {
+            console.error('Zalogowany użytkownik nie ma UID');
+            return false;
+        }
+
+        // Sprawdź czy użytkownik ma aktywną sesję
+        if (!user.metadata.lastSignInTime) {
+            console.error('Brak aktywnej sesji użytkownika');
+            return false;
+        }
+
+        // Sprawdź czy użytkownik nie jest anonimowy
+        if (user.isAnonymous) {
+            console.error('Użytkownik jest anonimowy');
+            return false;
+        }
+
+        console.log('Użytkownik jest zalogowany:', user.email);
+        return true;
+    } catch (error) {
+        console.error('Błąd sprawdzania statusu zalogowania:', error);
+        throw error;
+    }
+}
+
 // Logowanie
 async function login(email, password) {
     try {
-        // Sprawdź czy Firebase jest gotowe
-        if (!isFirebaseReady()) {
-            console.error('Firebase nie jest gotowy do użycia');
-            throw new Error('Firebase nie jest gotowy do użycia');
+        // Sprawdź czy SDK jest gotowy do użycia
+        if (!checkFirebaseSDK()) {
+            console.error('SDK Firebase nie jest gotowy do logowania');
+            throw new Error('SDK Firebase nie jest gotowy do logowania');
         }
 
-        // Sprawdź, czy SDK Firebase jest zdefiniowane
-        if (typeof firebase === 'undefined') {
-            console.error('Firebase SDK nie jest załadowane');
-            throw new Error('Firebase SDK nie jest załadowane');
+        // Sprawdź czy metoda signInWithEmailAndPassword jest dostępna
+        if (!firebase.auth().signInWithEmailAndPassword) {
+            console.error('signInWithEmailAndPassword nie jest dostępny');
+            throw new Error('signInWithEmailAndPassword nie jest dostępny');
         }
 
-        // Sprawdź, czy firebase.auth jest zdefiniowane
-        if (!firebase.auth) {
-            console.error('Firebase.auth nie jest zdefiniowane');
-            throw new Error('Firebase.auth nie jest zdefiniowane');
+        // Sprawdź poprawność danych wejściowych
+        if (!email || !password) {
+            console.error('Brakujące dane logowania');
+            throw new Error('Brakujące dane logowania');
         }
 
-        // Sprawdź, czy firebase.auth() działa
-        try {
-            const authInstance = firebase.auth();
-            if (!authInstance) {
-                throw new Error('Firebase.auth() zwróciło null');
-            }
-        } catch (error) {
-            console.error('Błąd podczas sprawdzania firebase.auth():', error);
-            throw new Error('Błąd podczas sprawdzania firebase.auth()');
+        // Sprawdź czy email ma poprawny format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            console.error('Nieprawidłowy format email');
+            throw new Error('Nieprawidłowy format email');
         }
 
-        // Zainicjalizuj referencje Firebase
-        if (!initializeFirebaseReferences()) {
-            console.error('Nie udało się zainicjalizować referencji Firebase');
-            throw new Error('Nie udało się zainicjalizować referencji Firebase');
+        // Sprawdź czy hasło ma odpowiednią długość
+        if (password.length < 6) {
+            console.error('Hasło musi mieć co najmniej 6 znaków');
+            throw new Error('Hasło musi mieć co najmniej 6 znaków');
         }
 
-        // Sprawdź, czy auth jest zainicjalizowane
+        // Sprawdź czy SDK jest zainicjalizowane
         if (!window.auth) {
             console.error('Firebase.auth nie jest zainicjalizowane');
             throw new Error('Firebase.auth nie jest zainicjalizowane');
         }
 
-        // Sprawdź, czy metoda signInWithEmailAndPassword jest dostępna
-        if (!window.auth.signInWithEmailAndPassword) {
-            console.error('signInWithEmailAndPassword nie jest dostępny');
-            throw new Error('signInWithEmailAndPassword nie jest dostępny');
+        // Sprawdź czy już jesteśmy zalogowani
+        const currentUser = firebase.auth().currentUser;
+        if (currentUser && currentUser.email === email) {
+            console.log('Użytkownik jest już zalogowany');
+            return currentUser;
         }
 
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-        return userCredential.user;
+        // Spróbuj zalogować użytkownika
+        try {
+            const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+            
+            // Sprawdź czy użytkownik ma poprawne dane
+            if (!user.email) {
+                console.error('Zalogowany użytkownik nie ma adresu email');
+                throw new Error('Zalogowany użytkownik nie ma adresu email');
+            }
+
+            if (!user.uid) {
+                console.error('Zalogowany użytkownik nie ma UID');
+                throw new Error('Zalogowany użytkownik nie ma UID');
+            }
+
+            // Sprawdź czy użytkownik ma aktywną sesję
+            if (!user.metadata.lastSignInTime) {
+                console.error('Brak aktywnej sesji użytkownika');
+                throw new Error('Brak aktywnej sesji użytkownika');
+            }
+
+            console.log('Użytkownik zalogowany:', user.email);
+            return user;
+        } catch (error) {
+            console.error('Błąd podczas logowania:', error);
+            throw error;
+        }
     } catch (error) {
-        console.error('Błąd logowania:', error);
+        console.error('Błąd podczas logowania:', error);
         throw error;
     }
+}
+
+// Sprawdź czy SDK Firebase jest gotowe do użycia
+function checkFirebaseSDK() {
+    if (typeof firebase === 'undefined') {
+        console.log('Firebase SDK nie jest jeszcze załadowane');
+        return false;
+    }
+    
+    if (!firebase.auth) {
+        console.log('Firebase.auth nie jest jeszcze zdefiniowane');
+        return false;
+    }
+
+    if (!firebase.auth().signInWithEmailAndPassword) {
+        console.log('signInWithEmailAndPassword nie jest jeszcze dostępny');
+        return false;
+    }
+
+    if (!firebase.auth().createUserWithEmailAndPassword) {
+        console.log('createUserWithEmailAndPassword nie jest jeszcze dostępny');
+        return false;
+    }
+
+    if (!firebase.auth().signOut) {
+        console.log('signOut nie jest jeszcze dostępny');
+        return false;
+    }
+
+    if (!firebase.auth().currentUser) {
+        console.log('currentUser nie jest jeszcze dostępny');
+        return false;
+    }
+
+    console.log('SDK Firebase jest gotowy do użycia');
+    return true;
 }
 
 // Rejestracja
