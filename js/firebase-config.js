@@ -1,5 +1,7 @@
-// Sprawdź, czy Firebase jest zainicjalizowane
-window.firebaseInitialized = false;
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 // Sprawdź, czy Firebase jest zainicjalizowane
 window.firebaseInitialized = false;
@@ -22,21 +24,14 @@ function initializeFirebase() {
 
     return new Promise((resolve, reject) => {
         try {
-            // Sprawdź czy Firebase jest już zainicjalizowane
-            if (firebase.apps.length > 0) {
-                firebaseInitialized = true;
-                resolve();
-                return;
-            }
-
             // Inicjalizacja Firebase
-            firebase.initializeApp(firebaseConfig);
+            const app = initializeApp(firebaseConfig);
             
             // Ustaw globalne referencje
-            window.app = firebase.app();
-            window.auth = firebase.auth();
-            window.db = firebase.firestore();
-            window.storage = firebase.storage();
+            window.app = app;
+            window.auth = getAuth(app);
+            window.db = getFirestore(app);
+            window.storage = getStorage(app);
             
             firebaseInitialized = true;
             resolve();
