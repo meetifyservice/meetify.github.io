@@ -39,28 +39,17 @@ function initializeFirebase() {
             // Ustaw globalne referencje
             window.app = app;
             
-            // Sprawdź, czy firebase.auth istnieje
-            if (!firebase.auth) {
-                throw new Error('Firebase.auth nie jest dostępny');
-            }
-            
-            window.auth = firebase.auth();
+            // Użyj nowego podejścia do Firebase
+            const auth = getAuth(app);
+            window.auth = auth;
             console.log('Firebase.auth zainicjalizowane');
             
-            // Sprawdź, czy firebase.firestore istnieje
-            if (!firebase.firestore) {
-                throw new Error('Firebase.firestore nie jest dostępny');
-            }
-            
-            window.db = firebase.firestore();
+            const db = getFirestore(app);
+            window.db = db;
             console.log('Firebase.firestore zainicjalizowane');
             
-            // Sprawdź, czy firebase.storage istnieje
-            if (!firebase.storage) {
-                throw new Error('Firebase.storage nie jest dostępny');
-            }
-            
-            window.storage = firebase.storage();
+            const storage = getStorage(app);
+            window.storage = storage;
             console.log('Firebase.storage zainicjalizowane');
             
             firebaseInitialized = true;
