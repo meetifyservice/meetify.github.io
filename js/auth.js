@@ -32,8 +32,6 @@ function isFirebaseReady() {
     return window.firebaseInitialized && auth && db;
 }
 
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-
 // Logowanie
 async function login(email, password) {
     try {
@@ -43,8 +41,7 @@ async function login(email, password) {
             throw new Error('Firebase nie jest gotowy do użycia');
         }
 
-        const auth = getAuth();
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
         return userCredential.user;
     } catch (error) {
         console.error('Błąd logowania:', error);
