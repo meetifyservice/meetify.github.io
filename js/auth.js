@@ -4,21 +4,6 @@ let db;
 
 // Inicjalizacja referencji Firebase
 function initializeFirebaseReferences() {
-    if (typeof firebase !== 'undefined' && window.firebaseInitialized) {
-        auth = firebase.auth();
-        db = firebase.firestore();
-        return true;
-    }
-    return false;
-}
-
-// Sprawdź czy Firebase jest gotowe
-function isFirebaseReady() {
-    return typeof firebase !== 'undefined' && window.firebaseInitialized && auth && db;
-}
-
-// Inicjalizacja referencji Firebase
-function initializeFirebaseReferences() {
     if (window.firebaseInitialized) {
         auth = getAuth();
         db = getFirestore();
@@ -41,7 +26,7 @@ async function login(email, password) {
             throw new Error('Firebase nie jest gotowy do użycia');
         }
 
-        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
         return userCredential.user;
     } catch (error) {
         console.error('Błąd logowania:', error);

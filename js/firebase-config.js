@@ -34,43 +34,6 @@ function initializeFirebase() {
             reject(error);
         }
     });
-
-// Sprawdź, czy Firebase jest zainicjalizowane
-window.firebaseInitialized = false;
-
-// Konfiguracja Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyDbRBqhDdj05vXy8oDhpDrU9l2RT3Iz3xs",
-    authDomain: "meetify-bf45c.firebaseapp.com",
-    projectId: "meetify-bf45c",
-    storageBucket: "meetify-bf45c.appspot.com",
-    messagingSenderId: "824652857715",
-    appId: "1:824652857715:web:e4a4d0a0546490fcb58506"
-};
-
-// Inicjalizacja Firebase
-function initializeFirebase() {
-    if (firebaseInitialized) {
-        return Promise.resolve();
-    }
-
-    return new Promise((resolve, reject) => {
-        try {
-            // Inicjalizacja Firebase
-            const app = initializeApp(firebaseConfig);
-            
-            // Ustaw globalne referencje
-            window.app = app;
-            window.auth = getAuth(app);
-            window.db = getFirestore(app);
-            window.storage = getStorage(app);
-            
-            firebaseInitialized = true;
-            resolve();
-        } catch (error) {
-            reject(error);
-        }
-    });
 }
 
 // Zainicjalizuj Firebase po załadowaniu strony
@@ -90,4 +53,3 @@ window.addEventListener('load', async () => {
         document.body.appendChild(errorDiv);
     }
 });
-}
