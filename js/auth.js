@@ -23,11 +23,11 @@ function isFirebaseReady() {
         console.error('Firebase.app nie jest zainicjalizowane');
         return false;
     }
-    if (!auth) {
+    if (!window.auth) {
         console.error('Firebase.auth nie jest zainicjalizowane');
         return false;
     }
-    if (!db) {
+    if (!window.db) {
         console.error('Firebase.firestore nie jest zainicjalizowane');
         return false;
     }
@@ -43,6 +43,29 @@ async function login(email, password) {
             throw new Error('Firebase nie jest gotowy do użycia');
         }
 
+        // Sprawdź, czy SDK Firebase jest zdefiniowane
+        if (typeof firebase === 'undefined') {
+            console.error('Firebase SDK nie jest załadowane');
+            throw new Error('Firebase SDK nie jest załadowane');
+        }
+
+        // Sprawdź, czy firebase.auth jest zdefiniowane
+        if (!firebase.auth) {
+            console.error('Firebase.auth nie jest zdefiniowane');
+            throw new Error('Firebase.auth nie jest zdefiniowane');
+        }
+
+        // Sprawdź, czy firebase.auth() działa
+        try {
+            const authInstance = firebase.auth();
+            if (!authInstance) {
+                throw new Error('Firebase.auth() zwróciło null');
+            }
+        } catch (error) {
+            console.error('Błąd podczas sprawdzania firebase.auth():', error);
+            throw new Error('Błąd podczas sprawdzania firebase.auth()');
+        }
+
         // Zainicjalizuj referencje Firebase
         if (!initializeFirebaseReferences()) {
             console.error('Nie udało się zainicjalizować referencji Firebase');
@@ -50,9 +73,15 @@ async function login(email, password) {
         }
 
         // Sprawdź, czy auth jest zainicjalizowane
-        if (!auth) {
+        if (!window.auth) {
             console.error('Firebase.auth nie jest zainicjalizowane');
             throw new Error('Firebase.auth nie jest zainicjalizowane');
+        }
+
+        // Sprawdź, czy metoda signInWithEmailAndPassword jest dostępna
+        if (!window.auth.signInWithEmailAndPassword) {
+            console.error('signInWithEmailAndPassword nie jest dostępny');
+            throw new Error('signInWithEmailAndPassword nie jest dostępny');
         }
 
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);

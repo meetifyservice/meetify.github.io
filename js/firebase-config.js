@@ -32,6 +32,21 @@ function initializeFirebase() {
                 throw new Error('Firebase.initializeApp nie jest dostępne');
             }
 
+            // Sprawdź, czy firebase.auth jest zdefiniowane
+            if (!firebase.auth) {
+                throw new Error('Firebase.auth nie jest zdefiniowane');
+            }
+
+            // Sprawdź, czy firebase.firestore jest zdefiniowane
+            if (!firebase.firestore) {
+                throw new Error('Firebase.firestore nie jest zdefiniowane');
+            }
+
+            // Sprawdź, czy firebase.storage jest zdefiniowane
+            if (!firebase.storage) {
+                throw new Error('Firebase.storage nie jest zdefiniowane');
+            }
+
             // Inicjalizacja Firebase
             const app = firebase.initializeApp(firebaseConfig);
             console.log('Firebase zainicjalizowane');
@@ -40,14 +55,26 @@ function initializeFirebase() {
             window.app = app;
             
             // Użyj wersji kompatybilnej Firebase
-            window.auth = firebase.auth();
-            console.log('Firebase.auth zainicjalizowane');
+            try {
+                window.auth = firebase.auth();
+                console.log('Firebase.auth zainicjalizowane');
+            } catch (error) {
+                throw new Error('Nie udało się zainicjalizować firebase.auth: ' + error.message);
+            }
             
-            window.db = firebase.firestore();
-            console.log('Firebase.firestore zainicjalizowane');
+            try {
+                window.db = firebase.firestore();
+                console.log('Firebase.firestore zainicjalizowane');
+            } catch (error) {
+                throw new Error('Nie udało się zainicjalizować firebase.firestore: ' + error.message);
+            }
             
-            window.storage = firebase.storage();
-            console.log('Firebase.storage zainicjalizowane');
+            try {
+                window.storage = firebase.storage();
+                console.log('Firebase.storage zainicjalizowane');
+            } catch (error) {
+                throw new Error('Nie udało się zainicjalizować firebase.storage: ' + error.message);
+            }
             
             firebaseInitialized = true;
             resolve();
