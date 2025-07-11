@@ -14,23 +14,59 @@ const firebaseConfig = {
 // Inicjalizacja Firebase
 function initializeFirebase() {
     if (firebaseInitialized) {
+        console.log('Firebase już zainicjalizowane');
         return Promise.resolve();
     }
 
     return new Promise((resolve, reject) => {
         try {
+            console.log('Próba inicjalizacji Firebase');
+            
+            // Sprawdź, czy firebase jest zdefiniowane
+            if (typeof firebase === 'undefined') {
+                throw new Error('Firebase SDK nie jest załadowane');
+            }
+
+            // Sprawdź, czy firebase.initializeApp istnieje
+            if (!firebase.initializeApp) {
+                throw new Error('Firebase.initializeApp nie jest dostępne');
+            }
+
             // Inicjalizacja Firebase
             const app = firebase.initializeApp(firebaseConfig);
+            console.log('Firebase zainicjalizowane');
             
             // Ustaw globalne referencje
             window.app = app;
+            
+            // Sprawdź, czy firebase.auth istnieje
+            if (!firebase.auth) {
+                throw new Error('Firebase.auth nie jest dostępny');
+            }
+            
             window.auth = firebase.auth();
+            console.log('Firebase.auth zainicjalizowane');
+            
+            // Sprawdź, czy firebase.firestore istnieje
+            if (!firebase.firestore) {
+                throw new Error('Firebase.firestore nie jest dostępny');
+            }
+            
             window.db = firebase.firestore();
+            console.log('Firebase.firestore zainicjalizowane');
+            
+            // Sprawdź, czy firebase.storage istnieje
+            if (!firebase.storage) {
+                throw new Error('Firebase.storage nie jest dostępny');
+            }
+            
             window.storage = firebase.storage();
+            console.log('Firebase.storage zainicjalizowane');
             
             firebaseInitialized = true;
             resolve();
         } catch (error) {
+            console.error('Błąd podczas inicjalizacji Firebase:', error.message);
             reject(error);
         }
     });

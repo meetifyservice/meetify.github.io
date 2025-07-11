@@ -5,8 +5,8 @@ let db;
 // Inicjalizacja referencji Firebase
 function initializeFirebaseReferences() {
     if (window.firebaseInitialized) {
-        auth = getAuth();
-        db = getFirestore();
+        auth = firebase.auth();
+        db = firebase.firestore();
         return true;
     }
     return false;
@@ -14,7 +14,19 @@ function initializeFirebaseReferences() {
 
 // Sprawdź czy Firebase jest gotowe
 function isFirebaseReady() {
-    return window.firebaseInitialized && auth && db;
+    if (!window.firebaseInitialized) {
+        console.error('Firebase nie jest zainicjalizowane');
+        return false;
+    }
+    if (!window.auth) {
+        console.error('Firebase.auth nie jest zainicjalizowane');
+        return false;
+    }
+    if (!window.db) {
+        console.error('Firebase.firestore nie jest zainicjalizowane');
+        return false;
+    }
+    return true;
 }
 
 // Logowanie
@@ -26,7 +38,19 @@ async function login(email, password) {
             throw new Error('Firebase nie jest gotowy do użycia');
         }
 
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        // Zainicjalizuj referencje Firebase
+        if (!initializeFirebaseReferences()) {
+            console.error('Nie udało się zainicjalizować referencji Firebase');
+            throw new Error('Nie udało się zainicjalizować referencji Firebase');
+        }
+
+        // Sprawdź, czy auth jest zainicjalizowane
+        if (!window.auth) {
+            console.error('Firebase.auth nie jest zainicjalizowane');
+            throw new Error('Firebase.auth nie jest zainicjalizowane');
+        }
+
+        const userCredential = await window.auth.signInWithEmailAndPassword(email, password);
         return userCredential.user;
     } catch (error) {
         console.error('Błąd logowania:', error);
