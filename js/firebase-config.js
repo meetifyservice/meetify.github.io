@@ -205,10 +205,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         window.dispatchEvent(event);
     } catch (error) {
         console.error('Błąd podczas inicjalizacji Firebase:', error);
-        // Pokaż komunikat błędu użytkownikowi
-        const errorDiv = document.createElement('div');
-        errorDiv.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 5px; z-index: 1000;';
-        errorDiv.textContent = 'Błąd podczas inicjalizacji aplikacji. Proszę odświeżyć stronę.';
-        document.body.appendChild(errorDiv);
+        // Import showMessage from utils.js and show error message
+        const { showMessage } = await import('./utils/utils.js');
+        showMessage('Błąd podczas inicjalizacji aplikacji. Proszę odświeżyć stronę.', 'error');
     }
 });
