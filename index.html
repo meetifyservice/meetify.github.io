@@ -15,118 +15,14 @@
     <script src="js/firebase-config.js"></script>
 </head>
 <body>
-    <!-- Obsługa autentykacji -->
     <script>
-        // Sprawdź czy SDK Firebase jest gotowe do użycia
-        function checkFirebaseSDK() {
-            if (typeof firebase === 'undefined') {
-                console.log('Firebase SDK nie jest jeszcze załadowane');
-                return false;
-            }
-            
-            if (!firebase.initializeApp) {
-                console.log('Firebase.initializeApp nie jest jeszcze dostępny');
-                return false;
-            }
-
-            // Sprawdź czy wszystkie wymagane metody są dostępne
-            if (!firebase.auth().signInWithEmailAndPassword) {
-                console.log('signInWithEmailAndPassword nie jest jeszcze dostępny');
-                return false;
-            }
-
-            if (!firebase.auth().createUserWithEmailAndPassword) {
-                console.log('createUserWithEmailAndPassword nie jest jeszcze dostępny');
-                return false;
-            }
-
-            if (!firebase.auth().signOut) {
-                console.log('signOut nie jest jeszcze dostępny');
-                return false;
-            }
-
-            if (!firebase.auth().currentUser) {
-                console.log('currentUser nie jest jeszcze dostępny');
-                return false;
-            }
-
-            // Sprawdź czy SDK nie jest już zainicjalizowane
-            if (firebase.apps.length > 0) {
-                console.log('Firebase SDK jest już zainicjalizowane');
-                return false;
-            }
-
-            console.log('SDK Firebase jest gotowy do użycia');
-            return true;
-        }
-
-        // Spróbuj załadować firebase-config.js po potwierdzeniu gotowości SDK
-        let firebaseSDKAttempts = 0;
-        const MAX_FIREBASE_SDK_ATTEMPTS = 10;
-        const FIREBASE_SDK_POLL_INTERVAL = 1000; // 1 sekunda
-
-        function checkFirebaseSDKAndLoadConfig() {
-            if (firebaseSDKAttempts >= MAX_FIREBASE_SDK_ATTEMPTS) {
-                console.error('Przekroczono maksymalną liczbę prób sprawdzenia gotowości SDK Firebase');
-                return;
-            }
-
-            if (checkFirebaseSDK()) {
-                // SDK jest gotowy, załaduj firebase-config.js
-                const script = document.createElement('script');
-                script.src = 'js/firebase-config.js';
-                script.defer = true;
-                script.onload = () => {
-                    console.log('firebase-config.js załadowany');
-                    // Sprawdź czy SDK jest nadal gotowy po załadowaniu firebase-config.js
-                    if (!checkFirebaseSDK()) {
-                        console.error('SDK Firebase nie jest gotowy po załadowaniu firebase-config.js');
-                        // Spróbuj ponownie załadować firebase-config.js
-                        setTimeout(checkFirebaseSDKAndLoadConfig, FIREBASE_SDK_POLL_INTERVAL);
-                        return;
-                    }
-                    console.log('SDK Firebase jest gotowy po załadowaniu firebase-config.js');
-
-                    // Sprawdź czy wszystkie wymagane referencje są dostępne
-                    if (!window.app || !window.auth || !window.db || !window.storage) {
-                        console.error('Brak wymaganych referencji po załadowaniu firebase-config.js');
-                        // Spróbuj ponownie załadować firebase-config.js
-                        setTimeout(checkFirebaseSDKAndLoadConfig, FIREBASE_SDK_POLL_INTERVAL);
-                        return;
-                    }
-                    console.log('Wszystkie wymagane referencje są dostępne');
-                };
-                script.onerror = () => {
-                    console.error('Nie udało się załadować firebase-config.js');
-                    // Spróbuj ponownie załadować firebase-config.js
-                    setTimeout(checkFirebaseSDKAndLoadConfig, FIREBASE_SDK_POLL_INTERVAL);
-                };
-                document.body.appendChild(script);
-            } else {
-                // SDK nie jest jeszcze gotowy, spróbuj ponownie
-                firebaseSDKAttempts++;
-                console.log(`Próba ${firebaseSDKAttempts}/${MAX_FIREBASE_SDK_ATTEMPTS} sprawdzenia gotowości SDK Firebase`);
-                setTimeout(checkFirebaseSDKAndLoadConfig, FIREBASE_SDK_POLL_INTERVAL);
-            }
-        }
-
-        // Sprawdź gotowość SDK po załadowaniu strony
-        window.addEventListener('load', () => {
-            console.log('Strona załadowana, sprawdzanie gotowości SDK Firebase');
-            checkFirebaseSDKAndLoadConfig();
-        });
-    </script>
-    <script>
-        // Sprawdź, czy Firebase jest zainicjalizowane
-        function checkFirebase() {
-            if (typeof firebase === 'undefined') {
-                console.error('Firebase nie jest zdefiniowane');
-                showError('Błąd podczas inicjalizacji aplikacji. Proszę odświeżyć stronę.');
-                return;
-            }
-
-            // Poczekaj na zainicjalizowanie Firebase
-            window.addEventListener('firebase-initialized', () => {
+        // Inicjalizacja Firebase po załadowaniu wszystkich SDK
+        window.addEventListener('load', async () => {
+            try {
+                // Oczekiwanie na zainicjalizowanie Firebase
+                await initializeFirebase();
+                
+                // Po zainicjalizowaniu, sprawdź stan autentykacji
                 if (window.auth) {
                     try {
                         window.auth.onAuthStateChanged(user => {
@@ -147,11 +43,11 @@
                         showError('Błąd podczas sprawdzania stanu autentykacji. Proszę odświeżyć stronę.');
                     }
                 }
-            });
-        }
-
-        // Uruchom sprawdzanie po załadowaniu strony
-        checkFirebase();
+            } catch (error) {
+                console.error('Błąd podczas inicjalizacji Firebase:', error);
+                showError('Błąd podczas inicjalizacji aplikacji. Proszę odświeżyć stronę.');
+            }
+        });
     </script>
     <nav class="top-nav">
         <div class="nav-container">
