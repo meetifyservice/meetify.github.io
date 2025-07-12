@@ -156,10 +156,20 @@ function checkFirebaseSDK() {
     return true;
 }
 
-// Zainicjalizuj Firebase po załadowaniu strony
-window.addEventListener('load', async () => {
+// Zainicjalizuj Firebase po załadowaniu DOM i gotowości SDK
+window.addEventListener('DOMContentLoaded', async () => {
     try {
         // Sprawdź czy SDK jest gotowy przed inicjalizacją
+        if (!window.firebase) {
+            throw new Error('Firebase SDK nie jest dostępny');
+        }
+
+        // Sprawdź czy wszystkie wymagane moduły są załadowane
+        const requiredModules = ['auth', 'firestore', 'storage'];
+        const missingModules = requiredModules.filter(module => !window.firebase[module]);
+        if (missingModules.length > 0) {
+            throw new Error(`Brakujące moduły Firebase: ${missingModules.join(', ')}`);
+        }
         if (!checkFirebaseSDK()) {
             console.error('SDK Firebase nie jest gotowy do inicjalizacji');
             
