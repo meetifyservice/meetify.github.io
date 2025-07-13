@@ -180,22 +180,23 @@ function checkFirebaseSDK() {
         return false;
     }
 
-    if (!firebase.auth().signInWithEmailAndPassword) {
+    // Sprawdź tylko dostępność funkcji, nie wywołuj ich
+    if (!firebase.auth.signInWithEmailAndPassword) {
         console.log('signInWithEmailAndPassword nie jest jeszcze dostępny');
         return false;
     }
 
-    if (!firebase.auth().createUserWithEmailAndPassword) {
+    if (!firebase.auth.createUserWithEmailAndPassword) {
         console.log('createUserWithEmailAndPassword nie jest jeszcze dostępny');
         return false;
     }
 
-    if (!firebase.auth().signOut) {
+    if (!firebase.auth.signOut) {
         console.log('signOut nie jest jeszcze dostępny');
         return false;
     }
 
-    if (!firebase.auth().currentUser) {
+    if (!firebase.auth.currentUser) {
         console.log('currentUser nie jest jeszcze dostępny');
         return false;
     }
