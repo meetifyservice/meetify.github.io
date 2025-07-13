@@ -112,10 +112,11 @@ function checkFirebaseSDK() {
     }
     
     if (!firebase.initializeApp) {
-        console.log('Firebase.initializeApp nie jest jeszcze dostępne');
+        console.log('Firebase.initializeApp nie jest jeszcze dostępny');
         return false;
     }
 
+    // Sprawdź tylko dostępność modułów, nie wywołuj metod
     if (!firebase.auth) {
         console.log('Firebase.auth nie jest jeszcze zdefiniowane');
         return false;
@@ -128,27 +129,6 @@ function checkFirebaseSDK() {
 
     if (!firebase.storage) {
         console.log('Firebase.storage nie jest jeszcze zdefiniowane');
-        return false;
-    }
-
-    // Sprawdź czy wszystkie metody są dostępne
-    if (!firebase.auth().signInWithEmailAndPassword) {
-        console.log('signInWithEmailAndPassword nie jest jeszcze dostępny');
-        return false;
-    }
-
-    if (!firebase.auth().createUserWithEmailAndPassword) {
-        console.log('createUserWithEmailAndPassword nie jest jeszcze dostępny');
-        return false;
-    }
-
-    if (!firebase.auth().signOut) {
-        console.log('signOut nie jest jeszcze dostępny');
-        return false;
-    }
-
-    if (!firebase.auth().currentUser) {
-        console.log('currentUser nie jest jeszcze dostępny');
         return false;
     }
 
