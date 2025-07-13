@@ -19,6 +19,16 @@
         // Inicjalizacja Firebase po załadowaniu wszystkich SDK
         window.addEventListener('load', async () => {
             try {
+                // Sprawdź czy SDK jest gotowy do użycia
+                await new Promise((resolve) => {
+                    const checkSDK = setInterval(() => {
+                        if (window.firebase && window.firebase.initializeApp) {
+                            clearInterval(checkSDK);
+                            resolve();
+                        }
+                    }, 100);
+                });
+
                 // Oczekiwanie na zainicjalizowanie Firebase
                 await initializeFirebase();
                 
