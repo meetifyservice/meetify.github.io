@@ -84,16 +84,9 @@ function checkFirebaseSDK() {
 // Zainicjalizuj Firebase po załadowaniu DOM i gotowości SDK
 window.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Sprawdź czy SDK jest gotowy przed inicjalizacją
-        if (!window.firebase) {
+        // Sprawdź czy SDK jest załadowany
+        if (typeof firebase === 'undefined') {
             throw new Error('Firebase SDK nie jest dostępny');
-        }
-
-        // Sprawdź czy wszystkie wymagane moduły są załadowane
-        const requiredModules = ['auth', 'firestore', 'storage'];
-        const missingModules = requiredModules.filter(module => !window.firebase[module]);
-        if (missingModules.length > 0) {
-            throw new Error(`Brakujące moduły Firebase: ${missingModules.join(', ')}`);
         }
 
         // Sprawdź czy SDK jest już zainicjalizowane
@@ -108,13 +101,10 @@ window.addEventListener('DOMContentLoaded', async () => {
         // Dodaj opóźnienie przed inicjalizacją, aby upewnić się, że SDK jest gotowy
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        if (!checkFirebaseSDK()) {
-            console.error('SDK Firebase nie jest gotowy do inicjalizacji');
-            throw new Error('SDK Firebase nie jest gotowy do inicjalizacji');
-        }
-
+        // Spróbuj zainicjalizować Firebase
         await initializeFirebase();
         console.log('Firebase zainicjalizowane');
+        
         // Wyślij event o zakończeniu inicjalizacji
         const event = new Event('firebase-initialized');
         window.dispatchEvent(event);

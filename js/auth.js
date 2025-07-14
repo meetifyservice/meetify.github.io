@@ -90,14 +90,24 @@ function isUserLoggedIn() {
 // Logowanie
 async function login(email, password) {
     try {
+        // Czekaj na zdarzenie inicjalizacji Firebase
+        if (!window.firebaseInitialized) {
+            console.log('Czekanie na inicjalizację Firebase...');
+            return new Promise((resolve, reject) => {
+                const observer = (event) => {
+                    if (event.type === 'firebase-initialized') {
+                        window.removeEventListener('firebase-initialized', observer);
+                        resolve(login(email, password));
+                    }
+                };
+                window.addEventListener('firebase-initialized', observer);
+            });
+        }
+
         // Sprawdź czy SDK jest gotowy do użycia
         if (!checkFirebaseSDK()) {
             console.error('SDK Firebase nie jest gotowy do logowania');
-            // Dodaj opóźnienie przed ponowną próbą
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            if (!checkFirebaseSDK()) {
-                throw new Error('SDK Firebase nie jest gotowy do logowania');
-            }
+            throw new Error('SDK Firebase nie jest gotowy do logowania');
         }
 
         // Sprawdź czy metoda signInWithEmailAndPassword jest dostępna
@@ -174,12 +184,15 @@ async function login(email, password) {
 
 // Sprawdź czy SDK Firebase jest gotowy do użycia
 function checkFirebaseSDK() {
-    // Sprawdź czy wszystkie wymagane moduły są załadowane
-    if (typeof firebase === 'undefined' || typeof firebase.auth === 'undefined' ||
-        typeof firebase.auth().signInWithEmailAndPassword === 'undefined' ||
-        typeof firebase.auth().createUserWithEmailAndPassword === 'undefined' ||
-        typeof firebase.auth().signOut === 'undefined') {
-        console.log('Firebase SDK nie jest jeszcze gotowy do użycia');
+    // Sprawdź czy SDK jest zainicjalizowane
+    if (!window.firebaseInitialized) {
+        console.log('Firebase nie jest jeszcze zainicjalizowane');
+        return false;
+    }
+
+    // Sprawdź czy wszystkie wymagane referencje są dostępne
+    if (!window.app || !window.auth || !window.db || !window.storage) {
+        console.log('Brakujące referencje Firebase');
         return false;
     }
 
