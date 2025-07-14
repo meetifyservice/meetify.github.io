@@ -1,15 +1,23 @@
 // Sprawdź, czy Firebase jest zainicjalizowane
 window.firebaseInitialized = false;
 
+// Sprawdź czy Firebase jest już zainicjalizowane
+if (window.firebaseInitialized) {
+    console.log('Firebase już zainicjalizowane');
+    return;
+}
+
 // Konfiguracja Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyDbRBqhDdj05vXy8oDhpDrU9l2RT3Iz3xs",
-    authDomain: "meetify-bf45c.firebaseapp.com",
-    projectId: "meetify-bf45c",
-    storageBucket: "meetify-bf45c.appspot.com",
-    messagingSenderId: "824652857715",
-    appId: "1:824652857715:web:e4a4d0a0546490fcb58506"
-};
+if (!window.firebaseConfig) {
+    window.firebaseConfig = {
+        apiKey: "AIzaSyDbRBqhDdj05vXy8oDhpDrU9l2RT3Iz3xs",
+        authDomain: "meetify-bf45c.firebaseapp.com",
+        projectId: "meetify-bf45c",
+        storageBucket: "meetify-bf45c.appspot.com",
+        messagingSenderId: "824652857715",
+        appId: "1:824652857715:web:e4a4d0a0546490fcb58506"
+    };
+}
 
 // Inicjalizacja Firebase
 function initializeFirebase() {
@@ -96,6 +104,11 @@ window.addEventListener('DOMContentLoaded', async () => {
             const event = new Event('firebase-initialized');
             window.dispatchEvent(event);
             return;
+        }
+
+        // Sprawdź czy konfiguracja jest już zdefiniowana
+        if (!window.firebaseConfig) {
+            throw new Error('Firebase config nie jest zdefiniowany');
         }
 
         // Dodaj opóźnienie przed inicjalizacją, aby upewnić się, że SDK jest gotowy

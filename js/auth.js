@@ -196,6 +196,14 @@ function checkFirebaseSDK() {
         return false;
     }
 
+    // Sprawdź czy wszystkie wymagane metody są dostępne
+    const requiredMethods = ['signOut', 'signInWithEmailAndPassword', 'createUserWithEmailAndPassword'];
+    const missingMethods = requiredMethods.filter(method => typeof window.auth[method] !== 'function');
+    if (missingMethods.length > 0) {
+        console.log(`Brakujące metody Firebase: ${missingMethods.join(', ')}`);
+        return false;
+    }
+
     console.log('SDK Firebase jest gotowy do użycia');
     return true;
 }
@@ -327,14 +335,14 @@ async function registerWithGoogle() {
 // Wylogowanie
 window.logout = async function() {
     try {
-        // Sprawdź czy Firebase jest zainicjalizowane
-        if (!auth) {
-            console.error('Firebase nie jest zainicjalizowane');
-            return;
+        // Sprawdź czy SDK jest gotowy do użycia
+        if (!checkFirebaseSDK()) {
+            console.error('Firebase SDK nie jest gotowy do użycia');
+            throw new Error('Firebase SDK nie jest gotowy do użycia');
         }
 
         // Wyloguj użytkownika z Firebase
-        await auth.signOut();
+        await window.auth.signOut();
         
         // Czekaj na zakończenie wylogowania
         await new Promise(resolve => setTimeout(resolve, 1000));
