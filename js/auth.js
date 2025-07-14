@@ -94,7 +94,7 @@ async function login(email, password) {
         if (!checkFirebaseSDK()) {
             console.error('SDK Firebase nie jest gotowy do logowania');
             // Dodaj opóźnienie przed ponowną próbą
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 1000));
             if (!checkFirebaseSDK()) {
                 throw new Error('SDK Firebase nie jest gotowy do logowania');
             }
@@ -174,17 +174,12 @@ async function login(email, password) {
 
 // Sprawdź czy SDK Firebase jest gotowy do użycia
 function checkFirebaseSDK() {
-    if (typeof firebase === 'undefined') {
-        console.log('Firebase SDK nie jest jeszcze załadowane');
-        return false;
-    }
-    
-    // Sprawdź czy wszystkie wymagane metody są dostępne
-    const requiredMethods = ['auth', 'signInWithEmailAndPassword', 'createUserWithEmailAndPassword', 'signOut'];
-    const missingMethods = requiredMethods.filter(method => !firebase[method]);
-    
-    if (missingMethods.length > 0) {
-        console.log(`Brakujące metody Firebase: ${missingMethods.join(', ')}`);
+    // Sprawdź czy wszystkie wymagane moduły są załadowane
+    if (typeof firebase === 'undefined' || typeof firebase.auth === 'undefined' ||
+        typeof firebase.auth().signInWithEmailAndPassword === 'undefined' ||
+        typeof firebase.auth().createUserWithEmailAndPassword === 'undefined' ||
+        typeof firebase.auth().signOut === 'undefined') {
+        console.log('Firebase SDK nie jest jeszcze gotowy do użycia');
         return false;
     }
 

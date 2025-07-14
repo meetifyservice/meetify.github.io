@@ -18,12 +18,6 @@ function initializeFirebase() {
         return Promise.resolve();
     }
 
-    // Sprawdź czy SDK jest gotowy do użycia
-    if (!checkFirebaseSDK()) {
-        console.error('SDK Firebase nie jest gotowy do inicjalizacji');
-        throw new Error('SDK Firebase nie jest gotowy do inicjalizacji');
-    }
-
     return new Promise((resolve, reject) => {
         try {
             console.log('Próba inicjalizacji Firebase');
@@ -42,18 +36,6 @@ function initializeFirebase() {
                 throw new Error('Brakujące pola w konfiguracji Firebase: ' + missingFields.join(', '));
             }
 
-            // Sprawdź czy SDK jest zainicjalizowane przed próbą inicjalizacji
-            if (window.app || window.auth || window.db || window.storage) {
-                console.error('Firebase już zainicjalizowane - nie próbuj ponownej inicjalizacji');
-                throw new Error('Firebase już zainicjalizowane - nie próbuj ponownej inicjalizacji');
-            }
-
-            // Sprawdź czy SDK jest zainicjalizowane przez inny kod
-            if (firebase.apps.length > 0) {
-                console.error('Firebase już zainicjalizowane przez inny kod');
-                throw new Error('Firebase już zainicjalizowane przez inny kod');
-            }
-
             // Inicjalizacja Firebase
             try {
                 const app = firebase.initializeApp(firebaseConfig);
@@ -61,29 +43,10 @@ function initializeFirebase() {
                 
                 // Ustaw globalne referencje
                 window.app = app;
-                
-                // Użyj wersji kompatybilnej Firebase
-                try {
-                    window.auth = firebase.auth();
-                    console.log('Firebase.auth zainicjalizowane');
-                } catch (error) {
-                    throw new Error('Nie udało się zainicjalizować firebase.auth: ' + error.message);
-                }
-                
-                try {
-                    window.db = firebase.firestore();
-                    console.log('Firebase.firestore zainicjalizowane');
-                } catch (error) {
-                    throw new Error('Nie udało się zainicjalizować firebase.firestore: ' + error.message);
-                }
-                
-                try {
-                    window.storage = firebase.storage();
-                    console.log('Firebase.storage zainicjalizowane');
-                } catch (error) {
-                    throw new Error('Nie udało się zainicjalizować firebase.storage: ' + error.message);
-                }
-                
+                window.auth = firebase.auth(app);
+                window.db = firebase.firestore(app);
+                window.storage = firebase.storage(app);
+
                 // Sprawdź czy wszystkie referencje są prawidłowe
                 if (!window.app || !window.auth || !window.db || !window.storage) {
                     console.error('Nie wszystkie referencje są prawidłowe po inicjalizacji');
@@ -106,17 +69,11 @@ function initializeFirebase() {
 
 // Sprawdź czy SDK jest gotowy do użycia
 function checkFirebaseSDK() {
-    if (typeof firebase === 'undefined') {
-        console.log('Firebase SDK nie jest jeszcze załadowane');
-        return false;
-    }
-    
-    // Sprawdź czy wszystkie wymagane metody są dostępne
-    const requiredMethods = ['initializeApp', 'auth', 'firestore', 'storage'];
-    const missingMethods = requiredMethods.filter(method => !firebase[method]);
-    
-    if (missingMethods.length > 0) {
-        console.log(`Brakujące metody Firebase: ${missingMethods.join(', ')}`);
+    // Sprawdź czy wszystkie wymagane moduły są załadowane
+    if (typeof firebase === 'undefined' || typeof firebase.app === 'undefined' ||
+        typeof firebase.auth === 'undefined' || typeof firebase.firestore === 'undefined' ||
+        typeof firebase.storage === 'undefined') {
+        console.log('Firebase SDK nie jest jeszcze załadowany');
         return false;
     }
 
