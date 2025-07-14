@@ -93,7 +93,11 @@ async function login(email, password) {
         // Sprawdź czy SDK jest gotowy do użycia
         if (!checkFirebaseSDK()) {
             console.error('SDK Firebase nie jest gotowy do logowania');
-            throw new Error('SDK Firebase nie jest gotowy do logowania');
+            // Dodaj opóźnienie przed ponowną próbą
+            await new Promise(resolve => setTimeout(resolve, 500));
+            if (!checkFirebaseSDK()) {
+                throw new Error('SDK Firebase nie jest gotowy do logowania');
+            }
         }
 
         // Sprawdź czy metoda signInWithEmailAndPassword jest dostępna
@@ -168,36 +172,19 @@ async function login(email, password) {
     }
 }
 
-// Sprawdź czy SDK Firebase jest gotowe do użycia
+// Sprawdź czy SDK Firebase jest gotowy do użycia
 function checkFirebaseSDK() {
     if (typeof firebase === 'undefined') {
         console.log('Firebase SDK nie jest jeszcze załadowane');
         return false;
     }
     
-    if (!firebase.auth) {
-        console.log('Firebase.auth nie jest jeszcze zdefiniowane');
-        return false;
-    }
-
-    // Sprawdź tylko dostępność funkcji, nie wywołuj ich
-    if (!firebase.auth.signInWithEmailAndPassword) {
-        console.log('signInWithEmailAndPassword nie jest jeszcze dostępny');
-        return false;
-    }
-
-    if (!firebase.auth.createUserWithEmailAndPassword) {
-        console.log('createUserWithEmailAndPassword nie jest jeszcze dostępny');
-        return false;
-    }
-
-    if (!firebase.auth.signOut) {
-        console.log('signOut nie jest jeszcze dostępny');
-        return false;
-    }
-
-    if (!firebase.auth.currentUser) {
-        console.log('currentUser nie jest jeszcze dostępny');
+    // Sprawdź czy wszystkie wymagane metody są dostępne
+    const requiredMethods = ['auth', 'signInWithEmailAndPassword', 'createUserWithEmailAndPassword', 'signOut'];
+    const missingMethods = requiredMethods.filter(method => !firebase[method]);
+    
+    if (missingMethods.length > 0) {
+        console.log(`Brakujące metody Firebase: ${missingMethods.join(', ')}`);
         return false;
     }
 
