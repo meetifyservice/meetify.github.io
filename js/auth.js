@@ -431,3 +431,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// Jeśli DOM został już wczytany przed załadowaniem tego skryptu (np. skrypt został dodany dynamicznie),
+// wywołaj obsługę zdarzenia ręcznie, aby zainicjalizować listenery przycisków.
+if (document.readyState !== 'loading') {
+    // Użyj setTimeout, aby mieć pewność, że listener DOMContentLoaded został już zarejestrowany powyżej
+    setTimeout(() => {
+        document.dispatchEvent(new Event('DOMContentLoaded'));
+    }, 0);
+}
