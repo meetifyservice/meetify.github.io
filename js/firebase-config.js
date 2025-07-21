@@ -77,31 +77,35 @@ function checkFirebaseSDK() {
 }
 
 // Zainicjalizuj Firebase po załadowaniu DOM i gotowości SDK
-window.addEventListener('DOMContentLoaded', async () => {
-    try {
-        // Sprawdź czy SDK jest załadowany
-        if (!checkFirebaseSDK()) {
-            throw new Error('Firebase SDK nie jest dostępny');
+window.addEventListener('DOMContentLoaded', () => {
+    // Poczekaj aż wszystkie skrypty Firebase będą dostępne
+    const waitForFirebaseSDK = setInterval(async () => {
+        if (
+            typeof window.firebase !== 'undefined' &&
+            typeof window.firebase.app !== 'undefined' &&
+            typeof window.firebase.auth !== 'undefined' &&
+            typeof window.firebase.firestore !== 'undefined' &&
+            typeof window.firebase.storage !== 'undefined'
+        ) {
+            clearInterval(waitForFirebaseSDK);
+            try {
+                if (!checkFirebaseSDK()) {
+                    throw new Error('Firebase SDK nie jest dostępny');
+                }
+                if (window.firebaseInitialized) {
+                    console.log('Firebase już zainicjalizowane');
+                    return;
+                }
+                if (!firebaseConfig) {
+                    throw new Error('Firebase config nie jest zdefiniowany');
+                }
+                await initializeFirebase();
+                console.log('Firebase zainicjalizowane');
+            } catch (error) {
+                console.error('Błąd podczas inicjalizacji Firebase:', error);
+                const { showMessage } = await import('./utils/utils.js');
+                showMessage('Błąd podczas inicjalizacji aplikacji. Proszę odświeżyć stronę.', 'error');
+            }
         }
-
-        // Sprawdź czy SDK jest już zainicjalizowane
-        if (window.firebaseInitialized) {
-            console.log('Firebase już zainicjalizowane');
-            return;
-        }
-
-        // Sprawdź czy konfiguracja jest już zdefiniowana
-        if (!firebaseConfig) {
-            throw new Error('Firebase config nie jest zdefiniowany');
-        }
-
-        // Spróbuj zainicjalizować Firebase
-        await initializeFirebase();
-        console.log('Firebase zainicjalizowane');
-    } catch (error) {
-        console.error('Błąd podczas inicjalizacji Firebase:', error);
-        // Import showMessage from utils.js and show error message
-        const { showMessage } = await import('./utils/utils.js');
-        showMessage('Błąd podczas inicjalizacji aplikacji. Proszę odświeżyć stronę.', 'error');
-    }
+    }, 100);
 });
