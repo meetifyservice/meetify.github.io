@@ -99,9 +99,6 @@ window.addEventListener('DOMContentLoaded', () => {
         ) {
             clearInterval(waitForFirebaseSDK);
             try {
-                if (!checkFirebaseSDK()) {
-                    throw new Error('Firebase SDK nie jest dostępny');
-                }
                 if (window.firebaseInitialized) {
                     console.log('Firebase już zainicjalizowane');
                     return;
