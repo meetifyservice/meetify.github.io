@@ -80,6 +80,13 @@ function checkFirebaseSDK() {
 window.addEventListener('DOMContentLoaded', () => {
     // Poczekaj aż wszystkie skrypty Firebase będą dostępne
     const waitForFirebaseSDK = setInterval(async () => {
+        console.log('[Firebase SDK DEBUG]', {
+            firebase: typeof window.firebase !== 'undefined',
+            app: typeof window.firebase !== 'undefined' && typeof window.firebase.app !== 'undefined',
+            auth: typeof window.firebase !== 'undefined' && typeof window.firebase.auth !== 'undefined',
+            firestore: typeof window.firebase !== 'undefined' && typeof window.firebase.firestore !== 'undefined',
+            storage: typeof window.firebase !== 'undefined' && typeof window.firebase.storage !== 'undefined',
+        });
         if (
             typeof window.firebase !== 'undefined' &&
             typeof window.firebase.app !== 'undefined' &&
