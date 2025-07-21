@@ -345,6 +345,10 @@
             });
         });
     </script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
     <script>
         // Przekieruj po pomyślnym rejestracji
         auth.onAuthStateChanged(user => {
@@ -353,9 +357,5 @@
             }
         });
     </script>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
-    <script src="js/auth.js"></script>
 </body>
 </html>
