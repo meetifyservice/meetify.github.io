@@ -64,14 +64,17 @@ async function initializeFirebase() {
 
 // Sprawdź czy SDK jest gotowy do użycia
 function checkFirebaseSDK() {
-    // Sprawdź czy wszystkie wymagane moduły są załadowane
-    if (typeof firebase === 'undefined' || typeof firebase.app === 'undefined' ||
-        typeof firebase.auth === 'undefined' || typeof firebase.firestore === 'undefined' ||
-        typeof firebase.storage === 'undefined') {
+    // Sprawdź czy główne moduły są załadowane
+    if (
+        typeof firebase === 'undefined' ||
+        typeof firebase.app === 'undefined' ||
+        typeof firebase.auth === 'undefined' ||
+        typeof firebase.firestore === 'undefined' ||
+        typeof firebase.storage === 'undefined'
+    ) {
         console.log('Firebase SDK nie jest jeszcze załadowany');
         return false;
     }
-
     console.log('SDK Firebase jest gotowy do użycia');
     return true;
 }
