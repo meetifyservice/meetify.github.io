@@ -61,23 +61,17 @@ async function loadUserProfile() {
             }
 
             // Wczytaj nazwę użytkownika i username
-            const profileName = document.getElementById('profile-name');
-            if (profileName) {
-                // Utwórz pełną nazwę: "Imię Nazwisko, wiek"
-                const fullName = `${userData.firstName} ${userData.lastName}`;
-                const age = calculateAge(userData.birthDate);
-                const fullNameWithAge = `${fullName}, ${age}`;
-                
-                // Ustaw pełną nazwę
-                profileName.textContent = fullNameWithAge;
-                console.log('Ustawiono pełną nazwę:', fullNameWithAge);
-            }
-
-            // Ustaw username w przygotowanym elemencie
-            const usernameElement = document.getElementById('profile-username');
-            if (usernameElement) {
-                usernameElement.textContent = `@${userData.username}`;
-            }
+const profileName = document.getElementById('profile-name');
+if (profileName) {
+    // Utwórz pełną nazwę: "Imię Nazwisko, wiek"
+    const fullName = `${userData.firstName} ${userData.lastName}`;
+    const age = calculateAge(userData.birthDate);
+    const fullNameWithAge = `${fullName}, ${age}`;
+    
+    // Ustaw pełną nazwę
+    profileName.textContent = fullNameWithAge;
+    console.log('Ustawiono pełną nazwę:', fullNameWithAge);
+}
 
             // Wczytaj statystyki
             const postsCount = document.getElementById('posts-count');
