@@ -330,16 +330,20 @@ window.addEventListener('DOMContentLoaded', () => {
         });
 
         // Sprawdź czy użytkownik jest zalogowany
-        auth.onAuthStateChanged(async (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
+        if (auth && typeof auth.onAuthStateChanged === 'function') {
+            auth.onAuthStateChanged(async (user) => {
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
 
-            // Pobierz userId z URL jeśli jest
-            const urlParams = new URLSearchParams(window.location.search);
-            const userId = urlParams.get('userId');
-            await loadUserProfile(userId);
-        });
+                // Pobierz userId z URL jeśli jest
+                const urlParams = new URLSearchParams(window.location.search);
+                const userId = urlParams.get('userId');
+                await loadUserProfile(userId);
+            });
+        } else {
+            console.error('auth lub onAuthStateChanged nie jest dostępne', auth);
+        }
     });
 });
