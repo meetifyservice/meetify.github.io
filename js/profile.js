@@ -1,3 +1,8 @@
+// Alias do globalnych referencji Firebase
+const auth = window.auth;
+const db = window.db;
+const storage = window.storage;
+
 // Funkcje pomocnicze
 function formatDate(date) {
     return new Date(date).toLocaleString();
