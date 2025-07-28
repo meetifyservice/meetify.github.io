@@ -39,15 +39,18 @@ window.modal = {
 };
 
 // Funkcja do ładowania profilu
-async function loadUserProfile() {
+async function loadUserProfile(userIdFromParam) {
     try {
-        const user = auth.currentUser;
-        if (!user) {
-            window.location.href = 'login.html';
-            return;
+        let uid = userIdFromParam;
+        if (!uid) {
+            const user = auth.currentUser;
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            uid = user.uid;
         }
-
-        const userDoc = await db.collection('users').doc(user.uid).get();
+        const userDoc = await db.collection('users').doc(uid).get();
         if (userDoc.exists) {
             const userData = userDoc.data();
             
@@ -311,8 +314,10 @@ window.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Załaduj dane profilu
-            await loadUserProfile(user.uid);
+            // Pobierz userId z URL jeśli jest
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('userId');
+            await loadUserProfile(userId);
         });
     });
 });
