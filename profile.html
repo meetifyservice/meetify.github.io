@@ -50,18 +50,16 @@
 
     <main>
         <div class="profile-container">
-            <div class="profile-header">
-    <div class="profile-avatar">
-        <img src="images/av.png" alt="Profil" id="profile-image">
-    </div>
-    <div class="profile-info" style="display: flex; align-items: center; margin-left: 20px;">
-    <span id="profile-name-age" style="font-size: 1.3em; font-weight: 500;"></span>
-</div>
-    <div class="profile-actions">
-        <button id="add-friend-btn" class="action-btn">Dodaj do znajomych</button>
-        <button id="send-message-btn" class="action-btn">Wyślij wiadomość</button>
-    </div>
-</div>
+            <div class="profile-header" style="display: flex; align-items: center; gap: 32px;">
+                <div class="profile-avatar">
+                    <img src="images/av.png" alt="Profil" id="profile-image">
+                </div>
+                <span id="profile-name-age" style="font-size: 1.3em; font-weight: 500;"></span>
+                <div class="profile-actions" style="margin-left: auto; display: flex; gap: 12px;">
+                    <button id="add-friend-btn" class="action-btn">Dodaj do znajomych</button>
+                    <button id="send-message-btn" class="action-btn">Wyślij wiadomość</button>
+                </div>
+            </div>
             <div class="profile-content">
                 <div class="profile-bio" id="profile-bio">
                     <h3>O mnie</h3>
