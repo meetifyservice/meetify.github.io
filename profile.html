@@ -118,33 +118,6 @@
     <script src="js/auth.js"></script>
     <script src="js/profile.js"></script>
     <script src="js/common.js"></script>
-    <script>
-        // Pobierz ID użytkownika z parametrów URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('userId');
 
-        // Sprawdź, czy to jest nasz profil czy czyjś inny
-        const currentUser = firebase.auth().currentUser;
-        if (currentUser && userId && currentUser.uid !== userId) {
-            // To jest profil innego użytkownika
-            // Ukryj przycisk edycji
-            document.getElementById('edit-profile-btn').style.display = 'none';
-            
-            // Pokaż przyciski akcji
-            document.querySelector('.profile-actions').style.display = 'flex';
-            
-            // Dodaj obsługę kliknięć dla przycisków
-            document.getElementById('add-friend-btn').addEventListener('click', () => {
-                addFriend(userId);
-            });
-            
-            document.getElementById('send-message-btn').addEventListener('click', () => {
-                sendMessage(userId);
-            });
-        } else {
-            // To jest nasz profil
-            document.querySelector('.profile-actions').style.display = 'none';
-        }
-    </script>
 </body>
 </html>

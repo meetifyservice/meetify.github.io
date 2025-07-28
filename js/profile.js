@@ -54,6 +54,28 @@ async function loadUserProfile(userIdFromParam) {
         if (userDoc.exists) {
             const userData = userDoc.data();
             
+            // Rozróżnij własny profil vs cudzy
+            const currentUser = auth.currentUser;
+            const isOwnProfile = !userIdFromParam || (currentUser && currentUser.uid === userIdFromParam);
+            const profileActions = document.querySelector('.profile-actions');
+            const editProfileBtn = document.getElementById('edit-profile-btn');
+            if (isOwnProfile) {
+                if (profileActions) profileActions.style.display = 'none';
+                if (editProfileBtn) editProfileBtn.style.display = '';
+            } else {
+                if (profileActions) profileActions.style.display = 'flex';
+                if (editProfileBtn) editProfileBtn.style.display = 'none';
+                // Obsługa kliknięć akcji
+                const addFriendBtn = document.getElementById('add-friend-btn');
+                if (addFriendBtn) {
+                    addFriendBtn.onclick = () => addFriend(userIdFromParam);
+                }
+                const sendMessageBtn = document.getElementById('send-message-btn');
+                if (sendMessageBtn) {
+                    sendMessageBtn.onclick = () => sendMessage(userIdFromParam);
+                }
+            }
+            
             // Wczytaj zdjęcie profilowe
             const profileImage = document.getElementById('profile-image');
             if (profileImage) {
