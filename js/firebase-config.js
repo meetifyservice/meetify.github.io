@@ -2,7 +2,7 @@
 window.firebaseInitialized = false;
 
 // Konfiguracja Firebase
-const firebaseConfig = {
+if (!window.firebaseConfig) window.firebaseConfig = {
     apiKey: "AIzaSyDbRBqhDdj05vXy8oDhpDrU9l2RT3Iz3xs",
     authDomain: "meetify-bf45c.firebaseapp.com",
     projectId: "meetify-bf45c",
@@ -10,6 +10,7 @@ const firebaseConfig = {
     messagingSenderId: "824652857715",
     appId: "1:824652857715:web:e4a4d0a0546490fcb58506"
 };
+const firebaseConfig = window.firebaseConfig;
 
 // Inicjalizacja Firebase
 async function initializeFirebase() {
