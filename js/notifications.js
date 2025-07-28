@@ -84,6 +84,19 @@ async function markAsRead(notificationId) {
 
 // Inicjalizacja po załadowaniu strony
 document.addEventListener('DOMContentLoaded', () => {
+    // Obsługa nawigacji do wiadomości i profilu
+    const messagesBtn = document.getElementById('messages-btn');
+    if (messagesBtn) {
+        messagesBtn.addEventListener('click', () => {
+            window.location.href = 'messages.html';
+        });
+    }
+    const profileBtn = document.getElementById('profile-btn');
+    if (profileBtn) {
+        profileBtn.addEventListener('click', () => {
+            window.location.href = 'profile.html';
+        });
+    }
     // Ładowanie powiadomień
     loadNotifications();
 

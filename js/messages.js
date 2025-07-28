@@ -67,6 +67,19 @@ async function sendMessage(chatId, content) {
 
 // Inicjalizacja po załadowaniu strony
 document.addEventListener('DOMContentLoaded', () => {
+    // Obsługa nawigacji do powiadomień i profilu
+    const notificationsBtn = document.getElementById('notifications-btn');
+    if (notificationsBtn) {
+        notificationsBtn.addEventListener('click', () => {
+            window.location.href = 'notifications.html';
+        });
+    }
+    const profileBtn = document.getElementById('profile-btn');
+    if (profileBtn) {
+        profileBtn.addEventListener('click', () => {
+            window.location.href = 'profile.html';
+        });
+    }
     // Obsługa wysyłania wiadomości
     const messageInput = document.getElementById('message-input');
     const sendBtn = document.querySelector('.send-btn');

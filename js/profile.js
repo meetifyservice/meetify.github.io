@@ -255,6 +255,19 @@ async function savePost(content, image) {
 
 // Inicjalizacja po załadowaniu strony
 window.addEventListener('DOMContentLoaded', () => {
+    // Obsługa nawigacji do wiadomości i powiadomień
+    const messagesBtn = document.getElementById('messages-btn');
+    if (messagesBtn) {
+        messagesBtn.addEventListener('click', () => {
+            window.location.href = 'messages.html';
+        });
+    }
+    const notificationsBtn = document.getElementById('notifications-btn');
+    if (notificationsBtn) {
+        notificationsBtn.addEventListener('click', () => {
+            window.location.href = 'notifications.html';
+        });
+    }
     console.log('Strona załadowana, inicjalizacja event listenerów');
     
     // Czekaj na zainicjalizowanie Firebase
