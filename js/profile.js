@@ -1,3 +1,6 @@
+// Upewnij się, że korzystasz z globalnych auth/db
+console.log('profile.js: window.auth:', window.auth, 'window.db:', window.db);
+
 // Funkcje pomocnicze
 function formatDate(date) {
     return new Date(date).toLocaleString();
