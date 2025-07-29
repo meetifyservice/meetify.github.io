@@ -332,7 +332,31 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Zamiast pojedynczego sprawdzenia, nasłuchuj eventu firebase-initialized
+        // Inicjalizacja profilu – działa zarówno gdy Firebase już gotowe,
+// jak i gdy zdarzenie "firebase-initialized" dopiero nastąpi.
+function startProfileFlow() {
+    if (!window.auth || typeof window.auth.onAuthStateChanged !== 'function') {
+        console.error('[Profile] Firebase Auth jeszcze niedostępne');
+        return;
+    }
+    window.auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+        await loadUserProfile(userId);
+    });
+}
+
+// Jeśli Firebase już się zainicjalizowało przed załadowaniem profile.js
+if (window.firebaseInitialized && window.auth) {
+    startProfileFlow();
+} else {
+    // W innym przypadku czekaj na zdarzenie
+    window.addEventListener('firebase-initialized', startProfileFlow, { once: true });
+}
         window.addEventListener('firebase-initialized', () => {
             if (window.auth && typeof window.auth.onAuthStateChanged === 'function') {
                 window.auth.onAuthStateChanged(async (user) => {
