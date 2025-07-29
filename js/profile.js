@@ -332,21 +332,20 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Sprawdź czy użytkownik jest zalogowany
-        if (auth && typeof auth.onAuthStateChanged === 'function') {
-            auth.onAuthStateChanged(async (user) => {
-                if (!user) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-
-                // Pobierz userId z URL jeśli jest
-                const urlParams = new URLSearchParams(window.location.search);
-                const userId = urlParams.get('userId');
-                await loadUserProfile(userId);
-            });
-        } else {
-            console.error('auth lub onAuthStateChanged nie jest dostępne', auth);
-        }
+        // Zamiast pojedynczego sprawdzenia, nasłuchuj eventu firebase-initialized
+        window.addEventListener('firebase-initialized', () => {
+            if (window.auth && typeof window.auth.onAuthStateChanged === 'function') {
+                window.auth.onAuthStateChanged(async (user) => {
+                    if (!user) {
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    // Pobierz userId z URL jeśli jest
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const userId = urlParams.get('userId');
+                    await loadUserProfile(userId);
+                });
+            }
+        });
     });
 });
