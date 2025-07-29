@@ -59,7 +59,7 @@ async function loadUserProfile(userIdFromParam) {
             
             // Rozróżnij własny profil vs cudzy
             const currentUser = auth.currentUser;
-            const isOwnProfile = !userIdFromParam || (currentUser && currentUser.uid === userIdFromParam);
+            const isOwnProfile = currentUser && currentUser.uid === uid;
             const profileActions = document.querySelector('.profile-actions');
             const editProfileBtn = document.getElementById('edit-profile-btn');
             if (isOwnProfile) {
