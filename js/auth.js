@@ -221,6 +221,14 @@ async function register(username, email, password, day, month, year, firstName, 
             throw new Error('Wszystkie pola są wymagane');
         }
 
+        // Upewnij się, że zmienne auth i db są zainicjalizowane
+        if (!auth || typeof auth.createUserWithEmailAndPassword !== 'function') {
+            initializeFirebaseReferences();
+            if (!auth || typeof auth.createUserWithEmailAndPassword !== 'function') {
+                throw new Error('Nie udało się uzyskać referencji Firebase Auth');
+            }
+        }
+
         // Sprawdź czy rok jest poprawny
         const birthDate = new Date(year, month - 1, day);
         if (birthDate > new Date()) {
