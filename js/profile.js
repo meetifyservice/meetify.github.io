@@ -1,6 +1,10 @@
 // Upewnij się, że korzystasz z globalnych auth/db
 console.log('profile.js: window.auth:', window.auth, 'window.db:', window.db);
 
+// Use global Firebase instances consistently
+const auth = window.auth;
+const db = window.db;
+
 // Funkcje pomocnicze
 function formatDate(date) {
     return new Date(date).toLocaleString();
